@@ -27,6 +27,12 @@
   https://www.guru99.com/testng-report.html
   https://www.toolsqa.com/testng/testng-asserts/
   
+  Tutoriales Selenium
+  -------------------
+  https://www.guru99.com/selenium-tutorial.html
+  https://www.tutorialselenium.com/2018/09/20/xpath-selenium-webdriver-tutorial/
+  
+  
   Interesante leer para seguir con el desarrollo y tenerlo en cuenta.
   ----------------------
   https://howtodoinjava.com/testng/testng-test-groups/ -> Grupos de tests
