@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="ClienteSuite">
+  
+  <test thread-count="5" name="Creación de nuevo cliente" enabled="false" >
+	  <parameter name="resultadoEsperado" value="true"/>
+	  <parameter name="aceptoTerminos" value="true"/>
+	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa"/>
+	  <parameter name="expectedTitle" value="PortalRest2"/>
+	  <parameter name="classExpected" value = "shop-data-title"/>
+	    <classes>
+	    <class name="utils.AbrirUrl"/>
+	    <class name="AbrePortalRestPackage.VerificarFichaRestaurante"/>
+	    <class name="AbrePortalRestPackage.VerificarCookies"/>
+	    <class name="ClientesPackage.AbrirPaginaRegistro"/>
+	    <class name="ClientesPackage.CrearCliente"/>
+	    <class name="AbrePortalRestPackage.VerificarFichaRestaurante"/>
+	    </classes>
+  </test> <!-- CreaCliente -->
+  
+   <test thread-count="5" name="Logea un cliente con éxito" enabled="true" >
+	  <parameter name="resultadoEsperado" value="true"/>
+	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa"/>
+	  <parameter name="expectedTitle" value="PortalRest2"/>
+	  <parameter name="classExpected" value = "shop-data-title"/>
+	  <parameter name="email" value = "portaltest88@yopmail.com"/>
+	  <parameter name="password" value = ".1234abcd"/>
+	    <classes>
+	    <class name="utils.AbrirUrl"/>
+	    <class name="AbrePortalRestPackage.VerificarFichaRestaurante"/>
+	    <class name="AbrePortalRestPackage.VerificarCookies"/>
+	    <class name="ClientesPackage.AbrirPaginaLogin"/>
+	    <class name="ClientesPackage.LoginCliente"/>
+	    <class name="AbrePortalRestPackage.VerificarFichaRestaurante"/>
+	    </classes>
+  </test> <!-- CreaCliente -->
+  
+  
+</suite> <!-- ClienteSuite -->

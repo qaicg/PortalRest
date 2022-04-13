@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="4" total="8" passed="4" failed="0" skipped="0">
+<testng-results ignored="8" total="14" passed="6" failed="0" skipped="0">
   <reporter-output>
     <line>
       <![CDATA[Página Cargada - Title: PortalRest2]]>
@@ -8,7 +8,7 @@
       <![CDATA[Titulo de la página actual: PortalRest2]]>
     </line>
     <line>
-      <![CDATA[Hemos encontrado 7 familias ]]>
+      <![CDATA[Hemos encontrado la classe shop-data-title con valor: Cafeteria ICG PortalTest]]>
     </line>
     <line>
       <![CDATA[Titulo de la página actual: PortalRest2]]>
@@ -25,20 +25,43 @@
     <line>
       <![CDATA[Titulo de la página actual: PortalRest2]]>
     </line>
+    <line>
+      <![CDATA[Hacemos clic en: Registrarme/Iniciar sesión<div matripple="" class="mat-ripple mat-menu-ripple"></div>]]>
+    </line>
+    <line>
+      <![CDATA[Titulo de la página actual: PortalRest2]]>
+    </line>
+    <line>
+      <![CDATA[Haciendo login con usuario: portaltest88@yopmail.com y password .1234abcd]]>
+    </line>
+    <line>
+      <![CDATA[Titulo de la página actual: PortalRest2]]>
+    </line>
   </reporter-output>
-  <suite started-at="2022-04-05T17:34:34 CEST" name="AbrePortalRestSuite" finished-at="2022-04-05T17:34:42 CEST" duration-ms="8525">
+  <suite started-at="2022-04-13T11:59:24 CEST" name="ClienteSuite" finished-at="2022-04-13T11:59:37 CEST" duration-ms="12975">
     <groups>
     </groups>
-    <test started-at="2022-04-05T17:34:34 CEST" name="Carta Restaurante (Solo consulta)" finished-at="2022-04-05T17:34:42 CEST" duration-ms="8525">
-      <class name="AbrePortalRestPackage.VerificarCookies">
-        <test-method signature="verificarCookies()[pri:1, instance:AbrePortalRestPackage.VerificarCookies@729d991e]" started-at="2022-04-05T17:34:40 CEST" name="verificarCookies" description="Verifica si sale o no la ventana de aceptación de cookies" finished-at="2022-04-05T17:34:40 CEST" duration-ms="16" status="PASS">
+    <test started-at="2022-04-13T11:59:24 CEST" name="Logea un cliente con éxito" finished-at="2022-04-13T11:59:37 CEST" duration-ms="12975">
+      <class name="utils.AbrirUrl">
+        <test-method is-config="true" signature="initialize()[pri:0, instance:utils.AbrirUrl@3e11f9e9]" started-at="2022-04-13T11:59:17 CEST" name="initialize" finished-at="2022-04-13T11:59:24 CEST" duration-ms="6902" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initialize -->
+        <test-method signature="AbrirURL(java.lang.String)[pri:0, instance:utils.AbrirUrl@3e11f9e9]" started-at="2022-04-13T11:59:24 CEST" name="AbrirURL" finished-at="2022-04-13T11:59:27 CEST" duration-ms="2410" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa]]>
+              </value>
+            </param>
+          </params>
           <reporter-output>
             <line>
-              <![CDATA[Hemos encontrado la classe cookies-info-content]]>
+              <![CDATA[Página Cargada - Title: PortalRest2]]>
             </line>
           </reporter-output>
-        </test-method> <!-- verificarCookies -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@729d991e]" started-at="2022-04-05T17:34:40 CEST" name="verifyHomepageTitle" finished-at="2022-04-05T17:34:41 CEST" duration-ms="1017" status="PASS">
+        </test-method> <!-- AbrirURL -->
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:utils.AbrirUrl@3e11f9e9]" started-at="2022-04-13T11:59:27 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:28 CEST" duration-ms="1019" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -52,14 +75,81 @@
             </line>
           </reporter-output>
         </test-method> <!-- verifyHomepageTitle -->
-        <test-method signature="aceptaCookies()[pri:2, instance:AbrePortalRestPackage.VerificarCookies@729d991e]" started-at="2022-04-05T17:34:41 CEST" name="aceptaCookies" description="Acepta cookies" finished-at="2022-04-05T17:34:41 CEST" depends-on-methods="AbrePortalRestPackage.VerificarCookies.verificarCookies" duration-ms="122" status="PASS">
+        <test-method is-config="true" signature="endSession()[pri:0, instance:utils.AbrirUrl@3e11f9e9]" started-at="2022-04-13T11:59:37 CEST" name="endSession" finished-at="2022-04-13T11:59:39 CEST" duration-ms="1748" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- endSession -->
+      </class> <!-- utils.AbrirUrl -->
+      <class name="ClientesPackage.LoginCliente">
+        <test-method signature="loginCliente(boolean,java.lang.String,java.lang.String)[pri:0, instance:ClientesPackage.LoginCliente@23c30a20]" started-at="2022-04-13T11:59:34 CEST" name="loginCliente" finished-at="2022-04-13T11:59:36 CEST" duration-ms="2456" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[true]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[portaltest88@yopmail.com]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[.1234abcd]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+            <line>
+              <![CDATA[Haciendo login con usuario: portaltest88@yopmail.com y password .1234abcd]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- loginCliente -->
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:ClientesPackage.LoginCliente@23c30a20]" started-at="2022-04-13T11:59:36 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:37 CEST" duration-ms="1013" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[PortalRest2]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+            <line>
+              <![CDATA[Titulo de la página actual: PortalRest2]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- verifyHomepageTitle -->
+      </class> <!-- ClientesPackage.LoginCliente -->
+      <class name="AbrePortalRestPackage.VerificarCookies">
+        <test-method signature="verificarCookies()[pri:1, instance:AbrePortalRestPackage.VerificarCookies@7bab3f1a]" started-at="2022-04-13T11:59:30 CEST" name="verificarCookies" description="Verifica si sale o no la ventana de aceptación de cookies" finished-at="2022-04-13T11:59:30 CEST" duration-ms="25" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Hemos encontrado la classe cookies-info-content]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- verificarCookies -->
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@7bab3f1a]" started-at="2022-04-13T11:59:30 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:31 CEST" duration-ms="1011" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[PortalRest2]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+            <line>
+              <![CDATA[Titulo de la página actual: PortalRest2]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- verifyHomepageTitle -->
+        <test-method signature="aceptaCookies()[pri:2, instance:AbrePortalRestPackage.VerificarCookies@7bab3f1a]" started-at="2022-04-13T11:59:31 CEST" name="aceptaCookies" description="Acepta cookies" finished-at="2022-04-13T11:59:31 CEST" depends-on-methods="AbrePortalRestPackage.VerificarCookies.verificarCookies" duration-ms="104" status="PASS">
           <reporter-output>
             <line>
               <![CDATA[Hemos aceptado las cookies]]>
             </line>
           </reporter-output>
         </test-method> <!-- aceptaCookies -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@729d991e]" started-at="2022-04-05T17:34:41 CEST" name="verifyHomepageTitle" finished-at="2022-04-05T17:34:42 CEST" duration-ms="1014" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@7bab3f1a]" started-at="2022-04-13T11:59:31 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:32 CEST" duration-ms="1018" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -74,46 +164,8 @@
           </reporter-output>
         </test-method> <!-- verifyHomepageTitle -->
       </class> <!-- AbrePortalRestPackage.VerificarCookies -->
-      <class name="AbrePortalRestPackage.AbrirUrl">
-        <test-method is-config="true" signature="initialize()[pri:0, instance:AbrePortalRestPackage.AbrirUrl@3a44431a]" started-at="2022-04-05T17:34:28 CEST" name="initialize" finished-at="2022-04-05T17:34:34 CEST" duration-ms="6131" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- initialize -->
-        <test-method signature="AbrirURL(java.lang.String)[pri:0, instance:AbrePortalRestPackage.AbrirUrl@3a44431a]" started-at="2022-04-05T17:34:34 CEST" name="AbrirURL" finished-at="2022-04-05T17:34:36 CEST" duration-ms="2081" status="PASS">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSM4IDM0ETP0NXZSRWa]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-            <line>
-              <![CDATA[Página Cargada - Title: PortalRest2]]>
-            </line>
-          </reporter-output>
-        </test-method> <!-- AbrirURL -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.AbrirUrl@3a44431a]" started-at="2022-04-05T17:34:36 CEST" name="verifyHomepageTitle" finished-at="2022-04-05T17:34:37 CEST" duration-ms="1014" status="PASS">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[PortalRest2]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-            <line>
-              <![CDATA[Titulo de la página actual: PortalRest2]]>
-            </line>
-          </reporter-output>
-        </test-method> <!-- verifyHomepageTitle -->
-        <test-method is-config="true" signature="endSession()[pri:0, instance:AbrePortalRestPackage.AbrirUrl@3a44431a]" started-at="2022-04-05T17:34:42 CEST" name="endSession" finished-at="2022-04-05T17:34:44 CEST" duration-ms="1537" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- endSession -->
-      </class> <!-- AbrePortalRestPackage.AbrirUrl -->
-      <class name="AbrePortalRestPackage.VerificarCartaRestaurante">
-        <test-method signature="verificarCartaRestaurante(java.lang.String,java.lang.String)[pri:1, instance:AbrePortalRestPackage.VerificarCartaRestaurante@6404f418]" started-at="2022-04-05T17:34:37 CEST" name="verificarCartaRestaurante" description="Este test abre la URL proporcionada para abrir PortalRest" finished-at="2022-04-05T17:34:39 CEST" duration-ms="2179" status="PASS">
+      <class name="AbrePortalRestPackage.VerificarFichaRestaurante">
+        <test-method signature="verificaFichaRestaurante(java.lang.String,java.lang.String)[pri:1, instance:AbrePortalRestPackage.VerificarFichaRestaurante@550dbc7a]" started-at="2022-04-13T11:59:28 CEST" name="verificaFichaRestaurante" description="Este test abre la URL proporcionada para abrir PortalRest" finished-at="2022-04-13T11:59:29 CEST" duration-ms="1175" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -122,17 +174,17 @@
             </param>
             <param index="1">
               <value>
-                <![CDATA[//*[@class='familyItem ng-star-inserted']]]>
+                <![CDATA[shop-data-title]]>
               </value>
             </param>
           </params>
           <reporter-output>
             <line>
-              <![CDATA[Hemos encontrado 7 familias ]]>
+              <![CDATA[Hemos encontrado la classe shop-data-title con valor: Cafeteria ICG PortalTest]]>
             </line>
           </reporter-output>
-        </test-method> <!-- verificarCartaRestaurante -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCartaRestaurante@6404f418]" started-at="2022-04-05T17:34:39 CEST" name="verifyHomepageTitle" finished-at="2022-04-05T17:34:40 CEST" duration-ms="1008" status="PASS">
+        </test-method> <!-- verificaFichaRestaurante -->
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarFichaRestaurante@550dbc7a]" started-at="2022-04-13T11:59:29 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:30 CEST" duration-ms="1020" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -146,7 +198,30 @@
             </line>
           </reporter-output>
         </test-method> <!-- verifyHomepageTitle -->
-      </class> <!-- AbrePortalRestPackage.VerificarCartaRestaurante -->
-    </test> <!-- Carta Restaurante (Solo consulta) -->
-  </suite> <!-- AbrePortalRestSuite -->
+      </class> <!-- AbrePortalRestPackage.VerificarFichaRestaurante -->
+      <class name="ClientesPackage.AbrirPaginaLogin">
+        <test-method signature="abrePaginaLogin()[pri:1, instance:ClientesPackage.AbrirPaginaLogin@437da279]" started-at="2022-04-13T11:59:32 CEST" name="abrePaginaLogin" finished-at="2022-04-13T11:59:33 CEST" duration-ms="622" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Hacemos clic en: Registrarme/Iniciar sesión<div matripple="" class="mat-ripple mat-menu-ripple"></div>]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- abrePaginaLogin -->
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:ClientesPackage.AbrirPaginaLogin@437da279]" started-at="2022-04-13T11:59:33 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:34 CEST" duration-ms="1010" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[PortalRest2]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+            <line>
+              <![CDATA[Titulo de la página actual: PortalRest2]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- verifyHomepageTitle -->
+      </class> <!-- ClientesPackage.AbrirPaginaLogin -->
+    </test> <!-- Logea un cliente con éxito -->
+  </suite> <!-- ClienteSuite -->
 </testng-results>

@@ -10,6 +10,8 @@ import org.testng.Reporter;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import utils.TestBase;
+
 public class VerificarFichaRestaurante extends TestBase {
   
 	@Test(description="Este test abre la URL proporcionada para abrir PortalRest", priority=1)

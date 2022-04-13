@@ -3,17 +3,18 @@
 <suite name="Failed suite [AbrePortalRestSuite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Carta Restaurante (Solo consulta)(failed)">
     <parameter name="expectedTitle" value="PortalRest2"/>
-    <parameter name="classExpected" value="familyItem ng-star-inserted"/>
-    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSM4IDM0ETP0NXZSRWa"/>
+    <parameter name="xpathExpected" value="//*[@class=&#039;familyItem ng-star-inserted&#039;]"/>
+    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSOzYDMwITP0NXZSRWa"/>
     <classes>
-      <class name="AbrePortalRestPackage.VerificarCartaRestaurante">
+      <class name="AbrePortalRestPackage.VerificarCookies">
         <methods>
-          <include name="verificarCartaRestaurante" invocation-numbers="0"/>
           <include name="endSession"/>
-          <include name="verifyHomepageTitle"/>
           <include name="initialize"/>
+          <include name="aceptaCookies"/>
+          <include name="verificarCookies"/>
+          <include name="verifyHomepageTitle"/>
         </methods>
-      </class> <!-- AbrePortalRestPackage.VerificarCartaRestaurante -->
+      </class> <!-- AbrePortalRestPackage.VerificarCookies -->
     </classes>
   </test> <!-- Carta Restaurante (Solo consulta)(failed) -->
 </suite> <!-- Failed suite [AbrePortalRestSuite] -->
