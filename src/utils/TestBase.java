@@ -24,21 +24,19 @@ public class TestBase {
 	protected static WebDriver driver ; 
 	protected static HashMap<String,String> biblioteca;
 	ExtentReports extent;
-
-
 	
 	@BeforeSuite
 	public void initialize() {
 		  System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
 		  driver = new ChromeDriver(); 
 		  driver.manage().timeouts().setScriptTimeout(10,TimeUnit.SECONDS);
-		  
-		  ExtentAventReporter avent = new ExtentAventReporter("/report/");
-
-		  extent = new ExtentReports();
-		  extent.attachReporter(avent);
-		  extent.createTest("MyFirstTest", "Test Description").pass("details");
-		 	
+		  /*ExtentReports extent = new ExtentReports();
+		  ExtentSparkReporter spark = new ExtentSparkReporter("target/Spark.html");
+		  extent.attachReporter(spark);
+		  extent.createTest("MyFirstTest")
+		    .log(Status.PASS, "This is a logging event for MyFirstTest, and it passed!");
+		  extent.flush();
+		  https://www.extentreports.com/docs/versions/5/java/index.html*/ 
 	}
 	
 	@AfterMethod
@@ -54,7 +52,7 @@ public class TestBase {
 	  public void endSession() {
 		  System.out.println("After Suite");
 		  espera();
-		  extent.flush();
+		  //extent.flush();
 		  driver.manage().deleteAllCookies();
 		  driver.quit();
 		  espera();

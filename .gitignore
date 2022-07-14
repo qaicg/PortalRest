@@ -6,3 +6,7 @@ test-output/
 bin/
 .metadata/
 .classpath
+.gradle/
+.settings/
+allure-results/
+target/
