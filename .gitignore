@@ -10,3 +10,6 @@ bin/
 .settings/
 allure-results/
 target/
+.project
+.settings/org.eclipse.jdt.core.prefs
+.externalToolBuilders/org.eclipse.buildship.core.gradleprojectbuilder.launch
