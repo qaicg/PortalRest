@@ -38,16 +38,16 @@
       <![CDATA[Titulo de la página actual: PortalRest2]]>
     </line>
   </reporter-output>
-  <suite started-at="2022-04-13T11:59:24 CEST" name="ClienteSuite" finished-at="2022-04-13T11:59:37 CEST" duration-ms="12975">
+  <suite started-at="2022-04-13T18:39:32 CEST" name="ClienteSuite" finished-at="2022-04-13T18:39:52 CEST" duration-ms="19570">
     <groups>
     </groups>
-    <test started-at="2022-04-13T11:59:24 CEST" name="Logea un cliente con éxito" finished-at="2022-04-13T11:59:37 CEST" duration-ms="12975">
+    <test started-at="2022-04-13T18:39:32 CEST" name="Logea un cliente con éxito" finished-at="2022-04-13T18:39:52 CEST" duration-ms="19570">
       <class name="utils.AbrirUrl">
-        <test-method is-config="true" signature="initialize()[pri:0, instance:utils.AbrirUrl@3e11f9e9]" started-at="2022-04-13T11:59:17 CEST" name="initialize" finished-at="2022-04-13T11:59:24 CEST" duration-ms="6902" status="PASS">
+        <test-method is-config="true" signature="initialize()[pri:0, instance:utils.AbrirUrl@37d4349f]" started-at="2022-04-13T18:39:20 CEST" name="initialize" finished-at="2022-04-13T18:39:32 CEST" duration-ms="12317" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initialize -->
-        <test-method signature="AbrirURL(java.lang.String)[pri:0, instance:utils.AbrirUrl@3e11f9e9]" started-at="2022-04-13T11:59:24 CEST" name="AbrirURL" finished-at="2022-04-13T11:59:27 CEST" duration-ms="2410" status="PASS">
+        <test-method signature="abrirURL(java.lang.String)[pri:0, instance:utils.AbrirUrl@37d4349f]" started-at="2022-04-13T18:39:32 CEST" name="abrirURL" finished-at="2022-04-13T18:39:42 CEST" duration-ms="9301" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -60,8 +60,8 @@
               <![CDATA[Página Cargada - Title: PortalRest2]]>
             </line>
           </reporter-output>
-        </test-method> <!-- AbrirURL -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:utils.AbrirUrl@3e11f9e9]" started-at="2022-04-13T11:59:27 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:28 CEST" duration-ms="1019" status="PASS">
+        </test-method> <!-- abrirURL -->
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:utils.AbrirUrl@37d4349f]" started-at="2022-04-13T18:39:42 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T18:39:43 CEST" duration-ms="1022" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -75,13 +75,13 @@
             </line>
           </reporter-output>
         </test-method> <!-- verifyHomepageTitle -->
-        <test-method is-config="true" signature="endSession()[pri:0, instance:utils.AbrirUrl@3e11f9e9]" started-at="2022-04-13T11:59:37 CEST" name="endSession" finished-at="2022-04-13T11:59:39 CEST" duration-ms="1748" status="PASS">
+        <test-method is-config="true" signature="endSession()[pri:0, instance:utils.AbrirUrl@37d4349f]" started-at="2022-04-13T18:39:52 CEST" name="endSession" finished-at="2022-04-13T18:39:55 CEST" duration-ms="2790" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- endSession -->
       </class> <!-- utils.AbrirUrl -->
       <class name="ClientesPackage.LoginCliente">
-        <test-method signature="loginCliente(boolean,java.lang.String,java.lang.String)[pri:0, instance:ClientesPackage.LoginCliente@23c30a20]" started-at="2022-04-13T11:59:34 CEST" name="loginCliente" finished-at="2022-04-13T11:59:36 CEST" duration-ms="2456" status="PASS">
+        <test-method signature="loginCliente(boolean,java.lang.String,java.lang.String)[pri:0, instance:ClientesPackage.LoginCliente@316bcf94]" started-at="2022-04-13T18:39:48 CEST" name="loginCliente" finished-at="2022-04-13T18:39:51 CEST" duration-ms="2471" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -105,7 +105,7 @@
             </line>
           </reporter-output>
         </test-method> <!-- loginCliente -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:ClientesPackage.LoginCliente@23c30a20]" started-at="2022-04-13T11:59:36 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:37 CEST" duration-ms="1013" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:ClientesPackage.LoginCliente@316bcf94]" started-at="2022-04-13T18:39:51 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T18:39:52 CEST" duration-ms="1017" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -121,14 +121,14 @@
         </test-method> <!-- verifyHomepageTitle -->
       </class> <!-- ClientesPackage.LoginCliente -->
       <class name="AbrePortalRestPackage.VerificarCookies">
-        <test-method signature="verificarCookies()[pri:1, instance:AbrePortalRestPackage.VerificarCookies@7bab3f1a]" started-at="2022-04-13T11:59:30 CEST" name="verificarCookies" description="Verifica si sale o no la ventana de aceptación de cookies" finished-at="2022-04-13T11:59:30 CEST" duration-ms="25" status="PASS">
+        <test-method signature="verificarCookies()[pri:1, instance:AbrePortalRestPackage.VerificarCookies@ffaa6af]" started-at="2022-04-13T18:39:45 CEST" name="verificarCookies" description="Verifica si sale o no la ventana de aceptación de cookies" finished-at="2022-04-13T18:39:45 CEST" duration-ms="23" status="PASS">
           <reporter-output>
             <line>
               <![CDATA[Hemos encontrado la classe cookies-info-content]]>
             </line>
           </reporter-output>
         </test-method> <!-- verificarCookies -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@7bab3f1a]" started-at="2022-04-13T11:59:30 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:31 CEST" duration-ms="1011" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@ffaa6af]" started-at="2022-04-13T18:39:45 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T18:39:46 CEST" duration-ms="1015" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -142,14 +142,14 @@
             </line>
           </reporter-output>
         </test-method> <!-- verifyHomepageTitle -->
-        <test-method signature="aceptaCookies()[pri:2, instance:AbrePortalRestPackage.VerificarCookies@7bab3f1a]" started-at="2022-04-13T11:59:31 CEST" name="aceptaCookies" description="Acepta cookies" finished-at="2022-04-13T11:59:31 CEST" depends-on-methods="AbrePortalRestPackage.VerificarCookies.verificarCookies" duration-ms="104" status="PASS">
+        <test-method signature="aceptaCookies()[pri:2, instance:AbrePortalRestPackage.VerificarCookies@ffaa6af]" started-at="2022-04-13T18:39:46 CEST" name="aceptaCookies" description="Acepta cookies" finished-at="2022-04-13T18:39:46 CEST" depends-on-methods="AbrePortalRestPackage.VerificarCookies.verificarCookies" duration-ms="169" status="PASS">
           <reporter-output>
             <line>
               <![CDATA[Hemos aceptado las cookies]]>
             </line>
           </reporter-output>
         </test-method> <!-- aceptaCookies -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@7bab3f1a]" started-at="2022-04-13T11:59:31 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:32 CEST" duration-ms="1018" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@ffaa6af]" started-at="2022-04-13T18:39:46 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T18:39:47 CEST" duration-ms="1014" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -165,7 +165,7 @@
         </test-method> <!-- verifyHomepageTitle -->
       </class> <!-- AbrePortalRestPackage.VerificarCookies -->
       <class name="AbrePortalRestPackage.VerificarFichaRestaurante">
-        <test-method signature="verificaFichaRestaurante(java.lang.String,java.lang.String)[pri:1, instance:AbrePortalRestPackage.VerificarFichaRestaurante@550dbc7a]" started-at="2022-04-13T11:59:28 CEST" name="verificaFichaRestaurante" description="Este test abre la URL proporcionada para abrir PortalRest" finished-at="2022-04-13T11:59:29 CEST" duration-ms="1175" status="PASS">
+        <test-method signature="verificaFichaRestaurante(java.lang.String,java.lang.String)[pri:1, instance:AbrePortalRestPackage.VerificarFichaRestaurante@17497425]" started-at="2022-04-13T18:39:43 CEST" name="verificaFichaRestaurante" description="Este test abre la URL proporcionada para abrir PortalRest" finished-at="2022-04-13T18:39:43 CEST" duration-ms="647" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -184,7 +184,7 @@
             </line>
           </reporter-output>
         </test-method> <!-- verificaFichaRestaurante -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarFichaRestaurante@550dbc7a]" started-at="2022-04-13T11:59:29 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:30 CEST" duration-ms="1020" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarFichaRestaurante@17497425]" started-at="2022-04-13T18:39:43 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T18:39:45 CEST" duration-ms="1049" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -200,14 +200,14 @@
         </test-method> <!-- verifyHomepageTitle -->
       </class> <!-- AbrePortalRestPackage.VerificarFichaRestaurante -->
       <class name="ClientesPackage.AbrirPaginaLogin">
-        <test-method signature="abrePaginaLogin()[pri:1, instance:ClientesPackage.AbrirPaginaLogin@437da279]" started-at="2022-04-13T11:59:32 CEST" name="abrePaginaLogin" finished-at="2022-04-13T11:59:33 CEST" duration-ms="622" status="PASS">
+        <test-method signature="abrePaginaLogin()[pri:1, instance:ClientesPackage.AbrirPaginaLogin@53ce1329]" started-at="2022-04-13T18:39:47 CEST" name="abrePaginaLogin" finished-at="2022-04-13T18:39:47 CEST" duration-ms="685" status="PASS">
           <reporter-output>
             <line>
               <![CDATA[Hacemos clic en: Registrarme/Iniciar sesión<div matripple="" class="mat-ripple mat-menu-ripple"></div>]]>
             </line>
           </reporter-output>
         </test-method> <!-- abrePaginaLogin -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:ClientesPackage.AbrirPaginaLogin@437da279]" started-at="2022-04-13T11:59:33 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T11:59:34 CEST" duration-ms="1010" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:ClientesPackage.AbrirPaginaLogin@53ce1329]" started-at="2022-04-13T18:39:47 CEST" name="verifyHomepageTitle" finished-at="2022-04-13T18:39:48 CEST" duration-ms="1023" status="PASS">
           <params>
             <param index="0">
               <value>

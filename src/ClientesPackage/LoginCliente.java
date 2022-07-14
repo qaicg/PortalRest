@@ -29,7 +29,7 @@ public class LoginCliente extends TestBase {
 		  Reporter.log("Haciendo login con usuario: " + email + " y password " + password);
 	  }else {
 		  //TO DO 
-		  //Determinar expresiones a evaluar cuando queremos testear el registro sin éxito.
+		  //Determinar expresiones a evaluar cuando queremos testear el login sin éxito.
 	  }
 	  
   }

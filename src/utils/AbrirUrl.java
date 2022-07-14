@@ -9,7 +9,7 @@ public class AbrirUrl extends TestBase {
 	
 	 @Test
 	 @Parameters({ "Url"})
-	  public void AbrirURL(String Url) {
+	  public void abrirURL(String Url) {
 		
 		  driver.get(Url);
 		// JavaScript Executor to check ready state

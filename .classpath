@@ -27,12 +27,9 @@
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/jtoml-2.0.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-buffer-4.1.75.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-codec-4.1.75.Final.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-codec-http-4.1.75.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-codec-socks-4.1.75.Final.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-common-4.1.75.Final.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-handler-4.1.75.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-handler-proxy-4.1.75.Final.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-reactive-streams-2.0.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-resolver-4.1.75.Final.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/netty-transport-4.1.75.Final.jar"/>
@@ -56,9 +53,7 @@
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-api-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-api-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-chrome-driver-4.1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-chrome-driver-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-chromium-driver-4.1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-chromium-driver-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-devtools-v85-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-devtools-v85-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-devtools-v97-4.1.3.jar"/>
@@ -73,21 +68,23 @@
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-firefox-driver-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-http-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-http-4.1.3-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-ie-driver-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-ie-driver-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-java-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-java-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-json-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-json-4.1.3-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-opera-driver-4.1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-opera-driver-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-remote-driver-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-remote-driver-4.1.3-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-safari-driver-4.1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-safari-driver-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-server-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-support-4.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/selenium-support-4.1.3-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/slf4j-api-1.7.36.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/mongo-java-driver-3.3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/extentreports-4.0.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/freemarker-2.3.23.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/reportng-1.1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/velocity-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/guice-3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/omanta/eclipse-workspace/PortalRestProject/libs/commons-collections-3.2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

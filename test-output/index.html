@@ -104,12 +104,12 @@
                     <div class="method-list-content passed suite-ClienteSuite">
                       <span>
                         <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-ClienteSuite" title="utils.AbrirUrl" class="method navigator-link" hash-for-method="AbrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)">AbrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)</a> <!-- method navigator-link -->
+                        <a href="#" panel-name="suite-ClienteSuite" title="ClientesPackage.AbrirPaginaLogin" class="method navigator-link" hash-for-method="abrePaginaLogin">abrePaginaLogin</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                       <span>
                         <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-ClienteSuite" title="ClientesPackage.AbrirPaginaLogin" class="method navigator-link" hash-for-method="abrePaginaLogin">abrePaginaLogin</a> <!-- method navigator-link -->
+                        <a href="#" panel-name="suite-ClienteSuite" title="utils.AbrirUrl" class="method navigator-link" hash-for-method="abrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)">abrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                       <span>
@@ -147,32 +147,14 @@
           <div class="suite-ClienteSuite-class-passed">
             <div class="main-panel-header rounded-window-top">
               <img src="passed.png"/>
-              <span class="class-name">AbrePortalRestPackage.VerificarFichaRestaurante</span>
-            </div> <!-- main-panel-header rounded-window-top -->
-            <div class="main-panel-content rounded-window-bottom">
-              <div class="method">
-                <div class="method-content">
-                  <a name="verificaFichaRestaurante(PortalRest2, shop-data-title)">
-                  </a> <!-- verificaFichaRestaurante(PortalRest2, shop-data-title) -->
-                  <span class="method-name">verificaFichaRestaurante</span>
-                  <span class="parameters">(PortalRest2, shop-data-title)</span>
-                  <em>
-(Este test abre la URL proporcionada para abrir PortalRest)                  </em>
-                </div> <!-- method-content -->
-              </div> <!-- method -->
-            </div> <!-- main-panel-content rounded-window-bottom -->
-          </div> <!-- suite-ClienteSuite-class-passed -->
-          <div class="suite-ClienteSuite-class-passed">
-            <div class="main-panel-header rounded-window-top">
-              <img src="passed.png"/>
               <span class="class-name">utils.AbrirUrl</span>
             </div> <!-- main-panel-header rounded-window-top -->
             <div class="main-panel-content rounded-window-bottom">
               <div class="method">
                 <div class="method-content">
-                  <a name="AbrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)">
-                  </a> <!-- AbrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa) -->
-                  <span class="method-name">AbrirURL</span>
+                  <a name="abrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)">
+                  </a> <!-- abrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa) -->
+                  <span class="method-name">abrirURL</span>
                   <span class="parameters">(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)</span>
                 </div> <!-- method-content -->
               </div> <!-- method -->
@@ -205,6 +187,24 @@
                   <a name="abrePaginaLogin">
                   </a> <!-- abrePaginaLogin -->
                   <span class="method-name">abrePaginaLogin</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-ClienteSuite-class-passed -->
+          <div class="suite-ClienteSuite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">AbrePortalRestPackage.VerificarFichaRestaurante</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="verificaFichaRestaurante(PortalRest2, shop-data-title)">
+                  </a> <!-- verificaFichaRestaurante(PortalRest2, shop-data-title) -->
+                  <span class="method-name">verificaFichaRestaurante</span>
+                  <span class="parameters">(PortalRest2, shop-data-title)</span>
+                  <em>
+(Este test abre la URL proporcionada para abrir PortalRest)                  </em>
                 </div> <!-- method-content -->
               </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
@@ -300,34 +300,34 @@ data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
 data.addRows(6);
 data.setCell(0, 0, 0)
-data.setCell(0, 1, 'loginCliente')
-data.setCell(0, 2, 'ClientesPackage.LoginCliente')
-data.setCell(0, 3, 2456);
+data.setCell(0, 1, 'abrirURL')
+data.setCell(0, 2, 'utils.AbrirUrl')
+data.setCell(0, 3, 9301);
 data.setCell(1, 0, 1)
-data.setCell(1, 1, 'AbrirURL')
-data.setCell(1, 2, 'utils.AbrirUrl')
-data.setCell(1, 3, 2410);
+data.setCell(1, 1, 'loginCliente')
+data.setCell(1, 2, 'ClientesPackage.LoginCliente')
+data.setCell(1, 3, 2471);
 data.setCell(2, 0, 2)
-data.setCell(2, 1, 'verificaFichaRestaurante')
-data.setCell(2, 2, 'AbrePortalRestPackage.VerificarFichaRestaurante')
-data.setCell(2, 3, 1175);
+data.setCell(2, 1, 'abrePaginaLogin')
+data.setCell(2, 2, 'ClientesPackage.AbrirPaginaLogin')
+data.setCell(2, 3, 685);
 data.setCell(3, 0, 3)
-data.setCell(3, 1, 'abrePaginaLogin')
-data.setCell(3, 2, 'ClientesPackage.AbrirPaginaLogin')
-data.setCell(3, 3, 622);
+data.setCell(3, 1, 'verificaFichaRestaurante')
+data.setCell(3, 2, 'AbrePortalRestPackage.VerificarFichaRestaurante')
+data.setCell(3, 3, 647);
 data.setCell(4, 0, 4)
 data.setCell(4, 1, 'aceptaCookies')
 data.setCell(4, 2, 'AbrePortalRestPackage.VerificarCookies')
-data.setCell(4, 3, 104);
+data.setCell(4, 3, 169);
 data.setCell(5, 0, 5)
 data.setCell(5, 1, 'verificarCookies')
 data.setCell(5, 2, 'AbrePortalRestPackage.VerificarCookies')
-data.setCell(5, 3, 25);
+data.setCell(5, 3, 23);
 window.suiteTableData['ClienteSuite']= { tableData: data, tableDiv: 'times-div-ClienteSuite'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 6 seconds</span>
+              <span class="suite-total-time">Total running time: 13 seconds</span>
               <div id="times-div-ClienteSuite">
               </div> <!-- times-div-ClienteSuite -->
             </div> <!-- times-div -->
@@ -339,27 +339,9 @@ return data;
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <div class="reporter-method-div">
-              <span class="reporter-method-name">loginCliente(true, portaltest88@yopmail.com, .1234abcd)</span>
-              <div class="reporter-method-output-div">
-                <span class="reporter-method-output">Haciendo login con usuario: portaltest88@yopmail.com y password .1234abcd</span>
-              </div> <!-- reporter-method-output-div -->
-            </div> <!-- reporter-method-div -->
-            <div class="reporter-method-div">
-              <span class="reporter-method-name">verificaFichaRestaurante(PortalRest2, shop-data-title)</span>
-              <div class="reporter-method-output-div">
-                <span class="reporter-method-output">Hemos encontrado la classe shop-data-title con valor: Cafeteria ICG PortalTest</span>
-              </div> <!-- reporter-method-output-div -->
-            </div> <!-- reporter-method-div -->
-            <div class="reporter-method-div">
-              <span class="reporter-method-name">AbrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)</span>
+              <span class="reporter-method-name">abrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)</span>
               <div class="reporter-method-output-div">
                 <span class="reporter-method-output">Página Cargada - Title: PortalRest2</span>
-              </div> <!-- reporter-method-output-div -->
-            </div> <!-- reporter-method-div -->
-            <div class="reporter-method-div">
-              <span class="reporter-method-name">aceptaCookies</span>
-              <div class="reporter-method-output-div">
-                <span class="reporter-method-output">Hemos aceptado las cookies</span>
               </div> <!-- reporter-method-output-div -->
             </div> <!-- reporter-method-div -->
             <div class="reporter-method-div">
@@ -374,6 +356,24 @@ return data;
                 <span class="reporter-method-output">Hacemos clic en: Registrarme/Iniciar sesión<div matripple="" class="mat-ripple mat-menu-ripple"></div></span>
               </div> <!-- reporter-method-output-div -->
             </div> <!-- reporter-method-div -->
+            <div class="reporter-method-div">
+              <span class="reporter-method-name">verificaFichaRestaurante(PortalRest2, shop-data-title)</span>
+              <div class="reporter-method-output-div">
+                <span class="reporter-method-output">Hemos encontrado la classe shop-data-title con valor: Cafeteria ICG PortalTest</span>
+              </div> <!-- reporter-method-output-div -->
+            </div> <!-- reporter-method-div -->
+            <div class="reporter-method-div">
+              <span class="reporter-method-name">aceptaCookies</span>
+              <div class="reporter-method-output-div">
+                <span class="reporter-method-output">Hemos aceptado las cookies</span>
+              </div> <!-- reporter-method-output-div -->
+            </div> <!-- reporter-method-div -->
+            <div class="reporter-method-div">
+              <span class="reporter-method-name">loginCliente(true, portaltest88@yopmail.com, .1234abcd)</span>
+              <div class="reporter-method-output-div">
+                <span class="reporter-method-output">Haciendo login con usuario: portaltest88@yopmail.com y password .1234abcd</span>
+              </div> <!-- reporter-method-output-div -->
+            </div> <!-- reporter-method-div -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
         <div panel-name="ignored-methods-ClienteSuite" class="panel">
@@ -381,15 +381,6 @@ return data;
             <span class="header-content">8 ignored methods</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
-            <div class="ignored-class-div">
-              <span class="ignored-class-name">AbrePortalRestPackage.VerificarFichaRestaurante</span>
-              <div class="ignored-methods-div">
-                <span class="ignored-method-name">endSession</span>
-                <br/>
-                <span class="ignored-method-name">initialize</span>
-                <br/>
-              </div> <!-- ignored-methods-div -->
-            </div> <!-- ignored-class-div -->
             <div class="ignored-class-div">
               <span class="ignored-class-name">ClientesPackage.LoginCliente</span>
               <div class="ignored-methods-div">
@@ -401,6 +392,15 @@ return data;
             </div> <!-- ignored-class-div -->
             <div class="ignored-class-div">
               <span class="ignored-class-name">ClientesPackage.AbrirPaginaLogin</span>
+              <div class="ignored-methods-div">
+                <span class="ignored-method-name">endSession</span>
+                <br/>
+                <span class="ignored-method-name">initialize</span>
+                <br/>
+              </div> <!-- ignored-methods-div -->
+            </div> <!-- ignored-class-div -->
+            <div class="ignored-class-div">
+              <span class="ignored-class-name">AbrePortalRestPackage.VerificarFichaRestaurante</span>
               <div class="ignored-methods-div">
                 <span class="ignored-method-name">endSession</span>
                 <br/>
@@ -431,71 +431,71 @@ return data;
                 <span class="method-start">0 ms</span>
               </div> <!-- configuration-suite before -->
               <div class="test-method">
-                <span class="method-name">AbrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)</span>
-                <span class="method-start">6962 ms</span>
+                <span class="method-name">abrirURL(https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa)</span>
+                <span class="method-start">12387 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">verifyHomepageTitle(PortalRest2)</span>
-                <span class="method-start">9378 ms</span>
+                <span class="method-start">21694 ms</span>
               </div> <!-- configuration-method after -->
             </div> <!-- chronological-class -->
             <div class="chronological-class">
               <div class="chronological-class-name">AbrePortalRestPackage.VerificarFichaRestaurante</div> <!-- chronological-class-name -->
               <div class="test-method">
                 <span class="method-name">verificaFichaRestaurante(PortalRest2, shop-data-title)</span>
-                <span class="method-start">10403 ms</span>
+                <span class="method-start">22752 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">verifyHomepageTitle(PortalRest2)</span>
-                <span class="method-start">11584 ms</span>
+                <span class="method-start">23405 ms</span>
               </div> <!-- configuration-method after -->
             </div> <!-- chronological-class -->
             <div class="chronological-class">
               <div class="chronological-class-name">AbrePortalRestPackage.VerificarCookies</div> <!-- chronological-class-name -->
               <div class="test-method">
                 <span class="method-name">verificarCookies</span>
-                <span class="method-start">12604 ms</span>
+                <span class="method-start">24454 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">verifyHomepageTitle(PortalRest2)</span>
-                <span class="method-start">12631 ms</span>
+                <span class="method-start">24479 ms</span>
               </div> <!-- configuration-method after -->
               <div class="test-method">
                 <span class="method-name">aceptaCookies</span>
-                <span class="method-start">13645 ms</span>
+                <span class="method-start">25498 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">verifyHomepageTitle(PortalRest2)</span>
-                <span class="method-start">13751 ms</span>
+                <span class="method-start">25668 ms</span>
               </div> <!-- configuration-method after -->
             </div> <!-- chronological-class -->
             <div class="chronological-class">
               <div class="chronological-class-name">ClientesPackage.AbrirPaginaLogin</div> <!-- chronological-class-name -->
               <div class="test-method">
                 <span class="method-name">abrePaginaLogin</span>
-                <span class="method-start">14772 ms</span>
+                <span class="method-start">26683 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">verifyHomepageTitle(PortalRest2)</span>
-                <span class="method-start">15396 ms</span>
+                <span class="method-start">27369 ms</span>
               </div> <!-- configuration-method after -->
             </div> <!-- chronological-class -->
             <div class="chronological-class">
               <div class="chronological-class-name">ClientesPackage.LoginCliente</div> <!-- chronological-class-name -->
               <div class="test-method">
                 <span class="method-name">loginCliente(true, portaltest88@yopmail.com, .1234abcd)</span>
-                <span class="method-start">16407 ms</span>
+                <span class="method-start">28394 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">verifyHomepageTitle(PortalRest2)</span>
-                <span class="method-start">18865 ms</span>
+                <span class="method-start">30871 ms</span>
               </div> <!-- configuration-method after -->
             </div> <!-- chronological-class -->
             <div class="chronological-class">
               <div class="chronological-class-name">utils.AbrirUrl</div> <!-- chronological-class-name -->
               <div class="configuration-suite after">
                 <span class="method-name">endSession</span>
-                <span class="method-start">19988 ms</span>
+                <span class="method-start">31973 ms</span>
               </div> <!-- configuration-suite after -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->

@@ -9,14 +9,47 @@
     <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa"/>
     <parameter name="email" value="portaltest88@yopmail.com"/>
     <classes>
+      <class name="utils.AbrirUrl">
+        <methods>
+          <include name="endSession"/>
+          <include name="initialize"/>
+          <include name="abrirURL"/>
+          <include name="verifyHomepageTitle"/>
+        </methods>
+      </class> <!-- utils.AbrirUrl -->
       <class name="ClientesPackage.LoginCliente">
         <methods>
           <include name="endSession"/>
           <include name="initialize"/>
-          <include name="loginCliente" invocation-numbers="0"/>
+          <include name="loginCliente"/>
           <include name="verifyHomepageTitle"/>
         </methods>
       </class> <!-- ClientesPackage.LoginCliente -->
+      <class name="ClientesPackage.AbrirPaginaLogin">
+        <methods>
+          <include name="endSession"/>
+          <include name="initialize"/>
+          <include name="abrePaginaLogin"/>
+          <include name="verifyHomepageTitle"/>
+        </methods>
+      </class> <!-- ClientesPackage.AbrirPaginaLogin -->
+      <class name="AbrePortalRestPackage.VerificarFichaRestaurante">
+        <methods>
+          <include name="endSession"/>
+          <include name="initialize"/>
+          <include name="verificaFichaRestaurante"/>
+          <include name="verifyHomepageTitle"/>
+        </methods>
+      </class> <!-- AbrePortalRestPackage.VerificarFichaRestaurante -->
+      <class name="AbrePortalRestPackage.VerificarCookies">
+        <methods>
+          <include name="endSession"/>
+          <include name="initialize"/>
+          <include name="aceptaCookies"/>
+          <include name="verificarCookies"/>
+          <include name="verifyHomepageTitle"/>
+        </methods>
+      </class> <!-- AbrePortalRestPackage.VerificarCookies -->
     </classes>
   </test> <!-- Logea un cliente con éxito(failed) -->
 </suite> <!-- Failed suite [ClienteSuite] -->
