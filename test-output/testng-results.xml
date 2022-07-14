@@ -26,16 +26,16 @@
       <![CDATA[Titulo de la página actual: PortalRest2]]>
     </line>
   </reporter-output>
-  <suite started-at="2022-07-14T10:40:15 CEST" name="AbrePortalRestSuite" finished-at="2022-07-14T10:40:22 CEST" duration-ms="6866">
+  <suite started-at="2022-07-14T10:42:22 CEST" name="AbrePortalRestSuite" finished-at="2022-07-14T10:42:29 CEST" duration-ms="6633">
     <groups>
     </groups>
-    <test started-at="2022-07-14T10:40:15 CEST" name="Carta Restaurante (Solo consulta)" finished-at="2022-07-14T10:40:22 CEST" duration-ms="6866">
+    <test started-at="2022-07-14T10:42:22 CEST" name="Carta Restaurante (Solo consulta)" finished-at="2022-07-14T10:42:29 CEST" duration-ms="6633">
       <class name="utils.AbrirUrl">
-        <test-method is-config="true" signature="initialize()[pri:0, instance:utils.AbrirUrl@316bcf94]" started-at="2022-07-14T10:40:10 CEST" name="initialize" finished-at="2022-07-14T10:40:15 CEST" duration-ms="4892" status="PASS">
+        <test-method is-config="true" signature="initialize()[pri:0, instance:utils.AbrirUrl@316bcf94]" started-at="2022-07-14T10:42:17 CEST" name="initialize" finished-at="2022-07-14T10:42:22 CEST" duration-ms="4709" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initialize -->
-        <test-method signature="abrirURL(java.lang.String)[pri:0, instance:utils.AbrirUrl@316bcf94]" started-at="2022-07-14T10:40:15 CEST" name="abrirURL" finished-at="2022-07-14T10:40:18 CEST" duration-ms="2501" status="PASS">
+        <test-method signature="abrirURL(java.lang.String)[pri:0, instance:utils.AbrirUrl@316bcf94]" started-at="2022-07-14T10:42:22 CEST" name="abrirURL" finished-at="2022-07-14T10:42:24 CEST" duration-ms="1541" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -49,7 +49,7 @@
             </line>
           </reporter-output>
         </test-method> <!-- abrirURL -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:utils.AbrirUrl@316bcf94]" started-at="2022-07-14T10:40:18 CEST" name="verifyHomepageTitle" finished-at="2022-07-14T10:40:19 CEST" duration-ms="1016" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:utils.AbrirUrl@316bcf94]" started-at="2022-07-14T10:42:24 CEST" name="verifyHomepageTitle" finished-at="2022-07-14T10:42:25 CEST" duration-ms="1011" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -63,20 +63,20 @@
             </line>
           </reporter-output>
         </test-method> <!-- verifyHomepageTitle -->
-        <test-method is-config="true" signature="endSession()[pri:0, instance:utils.AbrirUrl@316bcf94]" started-at="2022-07-14T10:40:22 CEST" name="endSession" finished-at="2022-07-14T10:40:25 CEST" duration-ms="2465" status="PASS">
+        <test-method is-config="true" signature="endSession()[pri:0, instance:utils.AbrirUrl@316bcf94]" started-at="2022-07-14T10:42:29 CEST" name="endSession" finished-at="2022-07-14T10:42:31 CEST" duration-ms="2490" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- endSession -->
       </class> <!-- utils.AbrirUrl -->
       <class name="AbrePortalRestPackage.VerificarCookies">
-        <test-method signature="verificarCookies()[pri:1, instance:AbrePortalRestPackage.VerificarCookies@21282ed8]" started-at="2022-07-14T10:40:20 CEST" name="verificarCookies" description="Verifica si sale o no la ventana de aceptación de cookies" finished-at="2022-07-14T10:40:20 CEST" duration-ms="28" status="PASS">
+        <test-method signature="verificarCookies()[pri:1, instance:AbrePortalRestPackage.VerificarCookies@21282ed8]" started-at="2022-07-14T10:42:27 CEST" name="verificarCookies" description="Verifica si sale o no la ventana de aceptación de cookies" finished-at="2022-07-14T10:42:27 CEST" duration-ms="24" status="PASS">
           <reporter-output>
             <line>
               <![CDATA[Hemos encontrado la classe cookies-info-content]]>
             </line>
           </reporter-output>
         </test-method> <!-- verificarCookies -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@21282ed8]" started-at="2022-07-14T10:40:20 CEST" name="verifyHomepageTitle" finished-at="2022-07-14T10:40:21 CEST" duration-ms="1009" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@21282ed8]" started-at="2022-07-14T10:42:27 CEST" name="verifyHomepageTitle" finished-at="2022-07-14T10:42:28 CEST" duration-ms="1022" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -90,14 +90,14 @@
             </line>
           </reporter-output>
         </test-method> <!-- verifyHomepageTitle -->
-        <test-method signature="aceptaCookies()[pri:2, instance:AbrePortalRestPackage.VerificarCookies@21282ed8]" started-at="2022-07-14T10:40:21 CEST" name="aceptaCookies" description="Acepta cookies" finished-at="2022-07-14T10:40:21 CEST" depends-on-methods="AbrePortalRestPackage.VerificarCookies.verificarCookies" duration-ms="106" status="PASS">
+        <test-method signature="aceptaCookies()[pri:2, instance:AbrePortalRestPackage.VerificarCookies@21282ed8]" started-at="2022-07-14T10:42:28 CEST" name="aceptaCookies" description="Acepta cookies" finished-at="2022-07-14T10:42:28 CEST" depends-on-methods="AbrePortalRestPackage.VerificarCookies.verificarCookies" duration-ms="100" status="PASS">
           <reporter-output>
             <line>
               <![CDATA[Hemos aceptado las cookies]]>
             </line>
           </reporter-output>
         </test-method> <!-- aceptaCookies -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@21282ed8]" started-at="2022-07-14T10:40:21 CEST" name="verifyHomepageTitle" finished-at="2022-07-14T10:40:22 CEST" duration-ms="1011" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCookies@21282ed8]" started-at="2022-07-14T10:42:28 CEST" name="verifyHomepageTitle" finished-at="2022-07-14T10:42:29 CEST" duration-ms="1012" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -113,7 +113,7 @@
         </test-method> <!-- verifyHomepageTitle -->
       </class> <!-- AbrePortalRestPackage.VerificarCookies -->
       <class name="AbrePortalRestPackage.VerificarCartaRestaurante">
-        <test-method signature="verificarCartaRestaurante(java.lang.String,java.lang.String)[pri:1, instance:AbrePortalRestPackage.VerificarCartaRestaurante@4dbb42b7]" started-at="2022-07-14T10:40:19 CEST" name="verificarCartaRestaurante" description="Este test abre la URL proporcionada para abrir PortalRest" finished-at="2022-07-14T10:40:19 CEST" duration-ms="109" status="PASS">
+        <test-method signature="verificarCartaRestaurante(java.lang.String,java.lang.String)[pri:1, instance:AbrePortalRestPackage.VerificarCartaRestaurante@4dbb42b7]" started-at="2022-07-14T10:42:25 CEST" name="verificarCartaRestaurante" description="Este test abre la URL proporcionada para abrir PortalRest" finished-at="2022-07-14T10:42:26 CEST" duration-ms="795" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -132,7 +132,7 @@
             </line>
           </reporter-output>
         </test-method> <!-- verificarCartaRestaurante -->
-        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCartaRestaurante@4dbb42b7]" started-at="2022-07-14T10:40:19 CEST" name="verifyHomepageTitle" finished-at="2022-07-14T10:40:20 CEST" duration-ms="1019" status="PASS">
+        <test-method is-config="true" signature="verifyHomepageTitle(java.lang.String)[pri:0, instance:AbrePortalRestPackage.VerificarCartaRestaurante@4dbb42b7]" started-at="2022-07-14T10:42:26 CEST" name="verifyHomepageTitle" finished-at="2022-07-14T10:42:27 CEST" duration-ms="1028" status="PASS">
           <params>
             <param index="0">
               <value>
