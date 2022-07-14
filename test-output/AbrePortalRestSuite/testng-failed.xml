@@ -6,11 +6,30 @@
     <parameter name="xpathExpected" value="//*[@class=&#039;familyItem ng-star-inserted&#039;]"/>
     <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSOzYDMwITP0NXZSRWa"/>
     <classes>
+      <class name="AbrePortalRestPackage.VerificarCartaRestaurante">
+        <methods>
+          <include name="endSession"/>
+          <include name="initialize"/>
+          <include name="verificarCartaRestaurante" invocation-numbers="0"/>
+          <include name="afterTest"/>
+          <include name="verifyHomepageTitle"/>
+        </methods>
+      </class> <!-- AbrePortalRestPackage.VerificarCartaRestaurante -->
+      <class name="utils.AbrirUrl">
+        <methods>
+          <include name="endSession"/>
+          <include name="initialize"/>
+          <include name="afterTest"/>
+          <include name="abrirURL" invocation-numbers="0"/>
+          <include name="verifyHomepageTitle"/>
+        </methods>
+      </class> <!-- utils.AbrirUrl -->
       <class name="AbrePortalRestPackage.VerificarCookies">
         <methods>
           <include name="endSession"/>
           <include name="initialize"/>
           <include name="aceptaCookies"/>
+          <include name="afterTest"/>
           <include name="verificarCookies"/>
           <include name="verifyHomepageTitle"/>
         </methods>

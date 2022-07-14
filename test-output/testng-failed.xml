@@ -1,55 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Failed suite [ClienteSuite]" guice-stage="DEVELOPMENT">
-  <test thread-count="5" name="Logea un cliente con éxito(failed)">
-    <parameter name="password" value=".1234abcd"/>
-    <parameter name="resultadoEsperado" value="true"/>
+<suite name="Failed suite [AbrePortalRestSuite]" guice-stage="DEVELOPMENT">
+  <test thread-count="5" name="Carta Restaurante (Solo consulta)(failed)">
     <parameter name="expectedTitle" value="PortalRest2"/>
-    <parameter name="classExpected" value="shop-data-title"/>
-    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa"/>
-    <parameter name="email" value="portaltest88@yopmail.com"/>
+    <parameter name="xpathExpected" value="//*[@class=&#039;familyItem ng-star-inserted&#039;]"/>
+    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSOzYDMwITP0NXZSRWa"/>
     <classes>
+      <class name="AbrePortalRestPackage.VerificarCartaRestaurante">
+        <methods>
+          <include name="endSession"/>
+          <include name="initialize"/>
+          <include name="verificarCartaRestaurante" invocation-numbers="0"/>
+          <include name="afterTest"/>
+          <include name="verifyHomepageTitle"/>
+        </methods>
+      </class> <!-- AbrePortalRestPackage.VerificarCartaRestaurante -->
       <class name="utils.AbrirUrl">
         <methods>
           <include name="endSession"/>
           <include name="initialize"/>
-          <include name="abrirURL"/>
+          <include name="afterTest"/>
+          <include name="abrirURL" invocation-numbers="0"/>
           <include name="verifyHomepageTitle"/>
         </methods>
       </class> <!-- utils.AbrirUrl -->
-      <class name="ClientesPackage.LoginCliente">
-        <methods>
-          <include name="endSession"/>
-          <include name="initialize"/>
-          <include name="loginCliente"/>
-          <include name="verifyHomepageTitle"/>
-        </methods>
-      </class> <!-- ClientesPackage.LoginCliente -->
-      <class name="ClientesPackage.AbrirPaginaLogin">
-        <methods>
-          <include name="endSession"/>
-          <include name="initialize"/>
-          <include name="abrePaginaLogin"/>
-          <include name="verifyHomepageTitle"/>
-        </methods>
-      </class> <!-- ClientesPackage.AbrirPaginaLogin -->
-      <class name="AbrePortalRestPackage.VerificarFichaRestaurante">
-        <methods>
-          <include name="endSession"/>
-          <include name="initialize"/>
-          <include name="verificaFichaRestaurante"/>
-          <include name="verifyHomepageTitle"/>
-        </methods>
-      </class> <!-- AbrePortalRestPackage.VerificarFichaRestaurante -->
       <class name="AbrePortalRestPackage.VerificarCookies">
         <methods>
           <include name="endSession"/>
           <include name="initialize"/>
           <include name="aceptaCookies"/>
+          <include name="afterTest"/>
           <include name="verificarCookies"/>
           <include name="verifyHomepageTitle"/>
         </methods>
       </class> <!-- AbrePortalRestPackage.VerificarCookies -->
     </classes>
-  </test> <!-- Logea un cliente con éxito(failed) -->
-</suite> <!-- Failed suite [ClienteSuite] -->
+  </test> <!-- Carta Restaurante (Solo consulta)(failed) -->
+</suite> <!-- Failed suite [AbrePortalRestSuite] -->

@@ -2,7 +2,7 @@
 ************A TENER EN CUENTA************
 *****************************************
 
-1.El fichero testng.Xml es el que se encarga de definir el flujo y conjunto de tests que se van a ejecutar.
+1.El fichero testng.Xml de cada TestSuite (El nombre se puede modificar) es el que se encarga de definir el flujo y conjunto de tests que se van a ejecutar.
   Los parametros a usar en el testsuite o en los testcases pueden ser pasados desde el fichero mismo.
   Se ejecutan los test que esten habilitados, más info aquí: https://howtodoinjava.com/testng/testng-disable-ignore-tests/
 

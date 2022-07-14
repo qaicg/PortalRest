@@ -3,7 +3,7 @@
 
 <suite name="AbrePortalRestSuite">
 
-	<test thread-count="5" enabled="true" name="Ficha Restaurante" >
+	<test thread-count="5" enabled="false" name="Ficha Restaurante" >
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="classExpected" value = "shop-data-title"/>

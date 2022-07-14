@@ -19,10 +19,6 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentAventReporter;
 import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 
-
-
-
-
 public class TestBase {
 	
 	protected static WebDriver driver ; 
@@ -56,9 +52,12 @@ public class TestBase {
 	
 	 @AfterSuite
 	  public void endSession() {
+		  System.out.println("After Suite");
 		  espera();
 		  extent.flush();
+		  driver.manage().deleteAllCookies();
 		  driver.quit();
+		  espera();
 	  }
 	 
 	
