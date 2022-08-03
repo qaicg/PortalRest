@@ -1,4 +1,4 @@
-package AbrePortalRestPackage;
+package Verificaciones;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.Test;
@@ -15,11 +15,11 @@ import utils.TestBase;
 
 public class VerificarCookies extends TestBase {
 	
-	 @Test (description="Verifica si sale o no la ventana de aceptación de cookies", priority=1)
+	 @Test (description="Verifica si sale o no la ventana de aceptaciï¿½n de cookies", priority=1)
 	  public void verificarCookies() {
 		  WebDriverWait w = new WebDriverWait(driver,Duration.ofSeconds(2));
 		  w.until(ExpectedConditions.presenceOfElementLocated (By.className("cookies-info-content")));
-		  Reporter.log("Hemos encontrado la classe cookies-info-content");
+		  log("Hemos encontrado la classe cookies-info-content");
 		  
 	  }
 	 
@@ -28,6 +28,6 @@ public class VerificarCookies extends TestBase {
 	  public void aceptaCookies() {
 		  WebElement aceptarCookies = driver.findElement(By.className("btn-confirm"));
 		  aceptarCookies.click();
-		  Reporter.log("Hemos aceptado las cookies");  
+		  log("Hemos aceptado las cookies");  
 	  }
 }

@@ -4,15 +4,15 @@
 
 1.El fichero testng.Xml de cada TestSuite (El nombre se puede modificar) es el que se encarga de definir el flujo y conjunto de tests que se van a ejecutar.
   Los parametros a usar en el testsuite o en los testcases pueden ser pasados desde el fichero mismo.
-  Se ejecutan los test que esten habilitados, más info aquí: https://howtodoinjava.com/testng/testng-disable-ignore-tests/
+  Se ejecutan los test que esten habilitados, mï¿½s info aquï¿½: https://howtodoinjava.com/testng/testng-disable-ignore-tests/
 
 2.Se crea un fichero y una clase por cada test. Luego es posible agruparlos desde el fichero testng.xml
 
 3.Existe un fichero con una clase testbase que actua como test padre. Todos los demas extienden de la clase padre para heredar 
   los metodos comunes mas utilizados como los  @before o @after. Los test que se ejecuta siempre son los hijos pero teniendo en cuenta 
-  los metodos que heredan. Más info en: https://howtodoinjava.com/testng/testng-before-and-after-annotations/
+  los metodos que heredan. Mï¿½s info en: https://howtodoinjava.com/testng/testng-before-and-after-annotations/
   
-4.Se está utilizando chrome como navegador para ejecutar el selenium. 
+4.Se estï¿½ utilizando chrome como navegador para ejecutar el selenium. 
   El webdriver debe encontrarse en: C:\\driver\\chromedriver.exe, se puede descargar de: https://chromedriver.chromium.org/downloads
   
   Tutoriales consultados:
@@ -39,6 +39,14 @@
   https://howtodoinjava.com/testng/testng-executing-parallel-tests/ -> Ejecucion paralela de tests
   https://www.toolsqa.com/testng/testng-listeners/ -> TestNG Listeners
   https://api.generadordni.es/api-docs/ -> Obtener datos para pruebas.
+  
+  ------------------NOTAS DEL TEST --------------
+  LOS ARTICULOS CON FORMATO, MODIFICADORES O MENÃšS DEBEN IR SIEMPRE AL FINAL DEL LISTADO DE PORTALREST.
+  SOLO SE PUEDE AÃ‘ADIR UNA UNIDAD DE CADA ARTICULO POR AHORA.
+  QUEDA PENDIENTE:
+  VALIDAR EL RECUERDAME TARJETA.
+  MODICIADORES MINIMOS Y MAXIMOS DE MENUS Y ARTICULOS.
+  PAGOS CON TARJETAS EXPIRADAS
   
   
   

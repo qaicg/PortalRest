@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="AbrePortalRestSuite">
+
+	<test enabled="false" name="Ficha Restaurante" >
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa"/>
+		<parameter name="expectedTitle" value="PortalRest2"/>
+		<parameter name="classExpected" value = "shop-data-title"/>
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl"/>
+      		<class name="Verificaciones.VerificarFichaRestaurante"/>
+      		<class name="Verificaciones.VerificarCookies"/>
+		</classes>
+		
+	</test> <!-- test -->
+	
+
+	
+	<test enabled="false" name="Primera familia de la carta del restaurante">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmMTPtZSOzYDMwITP0NXZSRWa"/>
+		<parameter name="expectedTitle" value="PortalRest2"/>
+		<parameter name="xpathExpected" value = "//div[contains(@class, 'activeFamily')]"/>
+		<parameter name="idioma" value = "es"/>
+		<parameter name="nombrePrimeraFamilia" value = "AGUA Y REFRESCOS"/>
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl"/>
+			<class name="Verificaciones.VerificarCookies"/>
+      		<class name="Verificaciones.VerificarPrimeraFamiliaRestaurante"/>
+      		
+		</classes>
+		
+	</test> <!-- test -->
+	
+		<test enabled="false" name="Carta Restaurante (Solo consulta)">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSOzYDMwITP0NXZSRWa"/>
+		<parameter name="expectedTitle" value="PortalRest2"/>
+		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
+		<parameter name="soloConsulta" value = "true"/>
+		<parameter name="familiasEsperadas" value="6"/>
+		<parameter name="idioma" value = "es"/>
+		<parameter name="ultimoProducto" value = "MENÚ MIDDAY TAKE AWAY"/>
+		<parameter name="articuloConFormatos" value="Sake Kuramoto"/>
+	    <parameter name="articuloConModificadores" value="Oyako Don sin Rebozar"/>
+	    <parameter name="articuloMenu" value="MENÚ MIDDAY TAKE AWAY"/>
+
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl"/>
+			<class name="Verificaciones.VerificarCookies"/>
+      		<class name="Verificaciones.VerificarFamiliasRestaurante"/>	
+      		<class name="Verificaciones.VerificarProductos"/>	
+
+		</classes>
+		
+	</test> <!-- test -->
+	
+
+	<test enabled="true" name="Carta del restaurante">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZSOzYDMwITP0NXZSRWa"/>
+		<parameter name="expectedTitle" value="PortalRest2"/>
+		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
+		<parameter name="familiasEsperadas" value="6"/>
+		<parameter name="idioma" value = "es"/>
+		<parameter name="ultimoProducto" value = "MENÚ MIDDAY TAKE AWAY"/>
+		<parameter name="articuloConFormatos" value="Sake Kuramoto"/>
+	    <parameter name="articuloConModificadores" value="Oyako Don sin Rebozar"/>
+	    <parameter name="articuloMenu" value="MENÚ MIDDAY TAKE AWAY"/>
+		
+
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl"/>
+			<class name="Verificaciones.VerificarCookies"/>
+      		<class name="Verificaciones.VerificarFamiliasRestaurante"/>  
+      		<class name="Verificaciones.VerificarProductos"/>	   		
+		</classes>
+		
+	</test> <!-- test -->
+	
+	
+	
+</suite> 

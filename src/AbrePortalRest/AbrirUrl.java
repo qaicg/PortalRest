@@ -1,21 +1,23 @@
-package utils;
+package AbrePortalRest;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Reporter;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import utils.TestBase;
+
 public class AbrirUrl extends TestBase {
 	
 	 @Test
 	 @Parameters({ "Url"})
 	  public void abrirURL(String Url) {
-		
+		  espera(500);
 		  driver.get(Url);
+		  espera(500);
 		// JavaScript Executor to check ready state
 	      JavascriptExecutor j = (JavascriptExecutor)driver;
-	      if (j.executeScript("return document.readyState").toString().equals("complete")){
-	         System.out.println("Page has loaded");
+	      if (j.executeScript("return document.readyState").toString().equals("complete")){    
 	      }
 		
 	      //iterate 10 times after every one second to verify if in ready state
@@ -27,8 +29,10 @@ public class AbrirUrl extends TestBase {
 	         }
 	         //again check page state
 	         if (j.executeScript("return document.readyState").toString().equals("complete")){
-	        	 Reporter.log("P�gina Cargada - Title: " + driver.getTitle());
+	        	log("Página Cargada - Title: " + driver.getTitle());
 	            break;
+	         }else {
+	        	 System.out.println("Página no cargada todavia");
 	         }
 	      }
 	  }

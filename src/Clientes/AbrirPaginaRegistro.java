@@ -1,4 +1,4 @@
-package ClientesPackage;
+package Clientes;
 
 import java.time.Duration;
 import java.util.List;
@@ -6,27 +6,34 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Reporter;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import graphql.Assert;
 import utils.TestBase;
 
 public class AbrirPaginaRegistro extends TestBase{
-	//TO-DO -> Hay que mejorar los locators que se usan para localizar los elementos por otros más neutros y fijos.
+	//TO-DO -> Hay que mejorar los locators que se usan para localizar los elementos por otros mï¿½s neutros y fijos.
 	@Test (priority=1)
-	  public void abrePaginaRegistro() {
+	@Parameters( "login" )
+	  public void abrePaginaRegistro(String register) {
 		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10));
 
 		  List<WebElement> menuIcons = driver.findElements(By.xpath("//*[@class='header-icon']"));
 		  if (menuIcons.size()>=1) {
 			  menuIcons.get(menuIcons.size()-1).click();
-			  List<WebElement> menuItems= driver.findElements(By.xpath("//button[@role = 'menuitem']"));
-			  Reporter.log("Hacemos clic en: "+ menuItems.get(3).getAttribute("innerHTML") );
-			  menuItems.get(3).click();
+			  WebElement menuItems= driver.findElement(By.xpath("//*[contains(text(), '"+ register +"')]"));
+			  espera(500);
+			  log("Hacemos clic en: "+ register);
+			  menuItems.click();
+			  espera(500);
+			  WebElement create= driver.findElement(By.xpath("//label[@class='btn-hyperlink']"));
+			  String text = create.getAttribute("innerText");
+			  espera(500);
+			  log("Hacemos clic en:"+ text);
 		  }
 		  
 		  else {
-			  Reporter.log("No encuentro la class header-icon");
+			  log("No encuentro la class header-icon");
 			  Assert.assertTrue(false);
 		  }  
 		  
@@ -34,7 +41,7 @@ public class AbrirPaginaRegistro extends TestBase{
 		  WebElement vinculoRegistro = driver.findElement(By.xpath("//*[@class='btn-hyperlink']"));
 		  vinculoRegistro.click();
 		  w.until(ExpectedConditions.presenceOfElementLocated (By.className("generic-title")));
-		  Reporter.log("Pantalla "+ driver.findElement(By.className("generic-title")).getAttribute("innerHTML")+ " encontrada");
+		  log("Pantalla "+ driver.findElement(By.className("generic-title")).getAttribute("innerHTML")+ " encontrada");
 		  Assert.assertTrue(true);
 	  }
 }
