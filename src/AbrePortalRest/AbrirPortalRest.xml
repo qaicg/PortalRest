@@ -58,7 +58,7 @@
 	
 
 	<test enabled="true" name="Carta del restaurante">
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZSOzYDMwITP0NXZSRWa"/>
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
 		<parameter name="familiasEsperadas" value="6"/>

@@ -6,13 +6,41 @@ public class ProductItem {
 	
 	private String nombre, moneda, foto, descripcion;
 	private String precio;
-	private WebElement boton,imagenElement;
+	private WebElement boton,imagenElement,add,minus;
 	private String familia;
 	
 	
 	
 	
 	
+	public WebElement getAddButton() {
+		return add;
+	}
+
+
+
+
+	public void setAddButton(WebElement add) {
+		this.add = add;
+	}
+
+
+
+
+	public WebElement getMinus() {
+		return minus;
+	}
+
+
+
+
+	public void setMinus(WebElement minus) {
+		this.minus = minus;
+	}
+
+
+
+
 	public WebElement getImagenElement() {
 		return imagenElement;
 	}

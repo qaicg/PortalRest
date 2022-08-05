@@ -19,16 +19,14 @@ public class AbrirPaginaLogin extends TestBase {
 		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10));
 		  List<WebElement> menuIcons = driver.findElements(By.xpath("//*[@class='header-icon']"));
 		  if (menuIcons.size()>=1) {
-			  menuIcons.get(menuIcons.size()-1).click();
-			  
+			  menuIcons.get(menuIcons.size()-1).click();			  
 			  WebElement menuItems= driver.findElement(By.xpath("//*[contains(text(), '"+ register +"')]"));
 			  espera(500);
-			  log("Hacemos clic en: "+ register);
 			  menuItems.click();
 		  }
 		  
 		  else {
-			  log("No encuentro la class header-icon");
+			  log("Menu -> No encuentro la class header-icon");
 			  Assert.assertTrue(false);
 		  }  
 		  

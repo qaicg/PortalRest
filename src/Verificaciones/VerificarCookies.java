@@ -17,9 +17,14 @@ public class VerificarCookies extends TestBase {
 	
 	 @Test (description="Verifica si sale o no la ventana de aceptaci�n de cookies", priority=1)
 	  public void verificarCookies() {
-		  WebDriverWait w = new WebDriverWait(driver,Duration.ofSeconds(2));
+		  WebDriverWait w = new WebDriverWait(driver,Duration.ofSeconds(15));
 		  w.until(ExpectedConditions.presenceOfElementLocated (By.className("cookies-info-content")));
-		  log("Hemos encontrado la classe cookies-info-content");
+		  if(isElementPresent(By.className("cookies-info-content"))){
+			  log("Hemos encontrado la classe cookies-info-content");
+		  }else {
+			  log("No Hemos encontrado la classe cookies-info-content");
+		  }
+		 
 		  
 	  }
 	 

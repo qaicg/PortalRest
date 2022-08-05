@@ -40,8 +40,6 @@ public class VerificarFamiliasRestaurante extends TestBase {
 	      if (familiasEsperadasInt!=99 && (familiasEsperadasInt!=familiasRestaurante.size())) {
 	    	  log("Hemos encontrado " +familiasRestaurante.size()+ " familias y esperabamos " + familiasEsperadas); 
 	    	  Assert.assertTrue(false);
-	      }else {
-	    	  log("Hemos encontrado " +familiasRestaurante.size()); 
 	      }
  
 	      	     

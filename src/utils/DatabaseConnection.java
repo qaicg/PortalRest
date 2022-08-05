@@ -61,10 +61,8 @@ public class DatabaseConnection {
 	
 	//REALIZA CONEXIÓN AL ENTORNO CONFIGURADO
 	public void conectar() {
-		 System.out.println("Connecting database...");
 		  try {
 			  connection = DriverManager.getConnection(urlConexion, userName, password); 
-			  System.out.println("Database connected!");
 			} catch (SQLException e) {
 			    throw new IllegalStateException("Cannot connect the database!", e);
 			} 
@@ -92,7 +90,6 @@ public class DatabaseConnection {
 		 try {
 			statement.close();
 			connection.close();
-			System.out.println("Conexión cerrada");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
