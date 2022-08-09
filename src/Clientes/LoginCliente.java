@@ -17,18 +17,32 @@ import utils.cookie;
 
 public class LoginCliente extends TestBase {
   @Test
-  @Parameters({"resultadoEsperado", "email","password","rememberMe","shop" })
-  public void loginCliente(@Optional ("true") String resultadoEsperado, String email, String password, @Optional ("false") String rememberMe, String shop) {
+  @Parameters({"resultadoEsperado", "email","password","rememberMe","shop","loginCheckout","login"})
+  public void loginCliente(@Optional ("true") String resultadoEsperado, String email, String password, @Optional ("false") String rememberMe, 
+		  String shop, @Optional ("false") boolean loginCheckout, String loginString) {
+	
+	  //SI VENIMOS DE UN CHECKOUT HAREMOS UN LOGIN DESDE AQUI
+	  if(loginCheckout) {
+		  WebElement checkoutButton = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'basket-button')]")));
+		  checkoutButton.click();
+	      espera(1000);
+		  clicJS(driver.findElement(By.xpath("//button[contains(text(),'Registrarme')]")));
+		  espera(1000);
+	  }
+	  
+	  w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='email']")));
+	  espera(500);
 	  WebElement inputEmail = driver.findElement(By.xpath("//input[@type='email']"));
 	  WebElement inputPassword = driver.findElement(By.xpath("//input[@type='password']"));
 	  WebElement buttonEntrar = driver.findElement(By.xpath("//button[@class='btn-centered']"));
+	  if(loginCheckout) buttonEntrar = driver.findElement(By.xpath("//app-square-progress-button//button[@class='btn-centered']"));
 	  inputEmail.sendKeys(email);
 	  inputPassword.sendKeys(password);
 	  
 	  if(rememberMe.equalsIgnoreCase("true")) {  //Check if remember me box is true or false
 		WebElement remember = driver.findElement(By.xpath("//div[@class='mat-checkbox-inner-container']"));
 		remember.click();
-		}else {		}  
+		}
 	  
 	  buttonEntrar.click();
 	  

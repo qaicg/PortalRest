@@ -16,7 +16,8 @@ public class SeleccionaDireccion extends TestBase {
 	@Test(description="Selecciona una dirección existente en una venta delivery")
     @Parameters({"direccion","importeMinimo","cargoReparto", "repartoPermitido"})
   public void seleccionaDireccionExistente(String direccion, String importeMinimo, String cargoReparto, @Optional ("true") Boolean repartoPermitido ) {
-    	w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
+    	espera(2000);
+		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
     	List<WebElement> listaDirecciones = driver.findElements(By.xpath("//div[contains(@class,'user-address-container')]"));
     	if(listaDirecciones.size()==0)Assert.assertTrue(false);
     	
@@ -33,32 +34,38 @@ public class SeleccionaDireccion extends TestBase {
     	if(!repartoPermitido) {
     		if (isElementPresent(By.xpath("//div[contains(@class,'generic-dialog-label')]"))) {
     			log("Se informa al usuario de que no repartimos en su zona " + driver.findElement(By.xpath("//div[contains(@class,'generic-dialog-label')][1]")).getAttribute("innerText"));
+    			espera(500);
     			driver.findElement(By.xpath("//div[@class='msg-dialog-buttons']//button[2]")).click();//pulsamos atrás
     			espera(500);
     	    	w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list"))); //Seguimos en el mismo sitio
+    	    	espera(500);
     	    	clicJS(driver.findElement(By.xpath("//button[@class='btn-centered']"))); // PULSO EN CONTINUAR
+    	    	espera(500);
     	    	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'generic-dialog-label')]")));
+    	    	espera(500);
     	    	driver.findElement(By.xpath("//div[@class='msg-dialog-buttons']//button[1]")).click();//pulsamos para recoger en local
+    	    	espera(500);
     			log("Se continua el pedido en local");    			
     		}else {
     			log("Error. No se informa al usuario de que no repartimos en su zona ");
     		}
     			
     	}
-    	
-    	if (isElementPresent(By.xpath("//div[contains(@class,'charges-data')]")) &&
+    		espera(1000); 
+    		if (isElementPresent(By.xpath("//div[contains(@class,'charges-data')]")) &&
     			!driver.findElements(By.xpath("//div[contains(@class,'charges-text main-text')]")).get(0).getAttribute("innerText").equalsIgnoreCase("") &&
     			!driver.findElements(By.xpath("//div[contains(@class,'charges-text main-text')]")).get(1).getAttribute("innerText").equalsIgnoreCase("") &&
     			 driver.findElements(By.xpath("//div[contains(@class,'charges-amount')]")).get(0).getAttribute("innerText").equalsIgnoreCase(importeMinimo) &&
     			 driver.findElements(By.xpath("//div[contains(@class,'charges-amount')]")).get(1).getAttribute("innerText").equalsIgnoreCase(cargoReparto)) {
     		log("Se informa correctamente sobre importe minimo y cargo por servicio");
+    		espera(500);
     		clicJS(driver.findElement(By.xpath("//button[contains(@class,'btn-confirm')]"))); //ACEPTO AVISO DE IMPORTE MINIMO Y CARGO POR SERVICIO
     		
     	}
     	else {
     		log("Error. No se informa correctamente sobre importe minimo y cargo por servicio");
     	}
-    	
+    	espera(500);
 		Assert.assertTrue(true);
     	
   }

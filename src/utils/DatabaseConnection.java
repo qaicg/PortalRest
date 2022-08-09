@@ -36,6 +36,8 @@ public class DatabaseConnection {
 			password = "bWD1SIxfvcoS6TrZ";
 			BBDD =  database;
 		}
+		
+		Data.getInstance().setBD(BBDD);
 	}
 	
 	public void defineEntorno(String database) {
@@ -55,6 +57,8 @@ public class DatabaseConnection {
 		}else {
 			System.out.println("NO HAY UN ENTORNO DEFINIDO VÁLIDO");
 		}
+		
+		Data.getInstance().setBD(BBDD);
 	}
 	
 	
@@ -83,6 +87,21 @@ public class DatabaseConnection {
 		    e.printStackTrace();
 		    return null;
 		} 
+	}
+	
+	public int ejecutaUpdate(String sql, String bd) {
+		
+		try {
+			defineEntorno(bd);
+			conectar();
+		    statement = connection.prepareStatement(sql);
+		    return statement.executeUpdate(sql);
+
+		} catch (Exception e) {
+		    e.printStackTrace();
+		    return 0;
+		} 
+	
 	}
 		
 	//EJECUTA DESONCEXION DE BASE DE DATOS, SE DEBE LLAMAR AL TERMINAR DE USAR LA CONEXIÓN. NO SE PUEDE LLAMAR ANTES SDE LEER LOS DATOS DEVUELTOS POR LAS CONSULTAS.

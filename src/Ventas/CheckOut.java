@@ -41,7 +41,7 @@ public class CheckOut extends TestBase{
 		this.tipoServicio=tipoServicio;
 		arrayNombres = productos.split(",");
 		//SI ES NUEVO USUARIO EL CORREO QUE NOS VIENE DEL TEST NO ES VÁLIDO.
-		Data.getInstance().setUltimoDocId(getLastDoc__Doc(shop));//RECUPERAMOS ULTIMO DOCDOCID DEL CLIENTE ANTES DE REALIZAR EL PEDIDO
+		Data.getInstance().setUltimoDocId(getLastDoc__Doc(shop));//RECUPERAMOS ULTIMO DOCDOCID DEL CLIENTE ANTES DE REALIZAR EL PEDIDO	
 		WebElement checkoutButton = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'basket-button')]")));
 		checkoutButton.click();
 		espera(1000);
@@ -79,20 +79,25 @@ public class CheckOut extends TestBase{
 	private void validarSaldoRestante(String saldoAnterior, String importeVenta, String miMonedero) { //VALIDA EL SALDO ANTERIOR CON EL NUEVO RESTADO DEL IMPORTE DE LA VENTA.
 		log("Validando saldo restante en la tarjeta...");
 		abrirMiMonedero(miMonedero);
+		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Saldo disponible']/following::span[1]")));
 		String saldoActual = driver.findElement(By.xpath("//span[text()='Saldo disponible']/following::span[1]")).getAttribute("innerText");
-		saldoActual = saldoActual.replaceAll("€", "").trim();
-		saldoAnterior = saldoAnterior.replaceAll("€", "").trim();
-		importeVenta = importeVenta.replaceAll("€", "").trim();
-		double saldoActualDouble = sGetDecimalStringAnyLocaleAsDouble(saldoActual); //validar esto
-		double saldoAnteriorDouble = sGetDecimalStringAnyLocaleAsDouble(saldoAnterior); //validar esto
-		double importeVentaDouble = sGetDecimalStringAnyLocaleAsDouble(importeVenta); //validar esto
+		saldoActual = saldoActual.replaceAll("€", "").replace(".","").trim();
+		saldoAnterior = saldoAnterior.replaceAll("€", "").replace(".","").trim();
+		importeVenta = importeVenta.replaceAll("€", "").replace(".","").trim();
+		
+		double saldoActualDouble = 0,saldoAnteriorDouble = 0,importeVentaDouble = 0;
+		saldoActualDouble = Double.parseDouble(saldoActual.replace(',', '.'));
+		saldoAnteriorDouble = Double.parseDouble(saldoAnterior.replace(',', '.'));
+		importeVentaDouble = Double.parseDouble(importeVenta.replace(',', '.'));
+		
+		
 		back();
 
-		if((saldoAnteriorDouble-importeVentaDouble)!=round(saldoActualDouble,1) ) {
-			log("Saldo incorrecto despues de realizar venta - Saldo Actual: " + saldoActualDouble + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);
+		if((saldoAnteriorDouble-importeVentaDouble)!=(round(saldoActualDouble,1))) {
+			log("Saldo incorrecto despues de realizar venta - Saldo Actual: " + (saldoActualDouble) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);
 			Assert.assertTrue(false);
 		}else {
-			log("Saldo correcto despues de realizar venta - Saldo Actual: " + saldoActualDouble + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);		
+			log("Saldo correcto despues de realizar venta - Saldo Actual: " + (saldoActualDouble) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);		
 		}
 
 
@@ -230,12 +235,14 @@ public class CheckOut extends TestBase{
 		}
 		
 
+		 w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'generic-subtitle')]")));
 		//VALIDAMOS QUE TENEMOS TITULO DE SELECCIÓN DE FORMAS DE PAGO
 		if (driver.findElement(By.xpath("//div[contains(@class,'generic-subtitle')]")).getAttribute("innerText").equalsIgnoreCase("")) {
 			log("- Error. No tenemos titulo en sección de Formas de Pago.");
 			return false;
 		}
 
+		espera(1000);
 		List<WebElement> payMenMeans = driver.findElements(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(@class,'payment-name')]"));
 		if (payMenMeans.size()==0) {
 			log("- Error. No tenemos formas de pago visibles.");

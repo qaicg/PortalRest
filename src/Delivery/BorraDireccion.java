@@ -30,13 +30,17 @@ public class BorraDireccion  extends TestBase{
 	        			espera(500);
 	        			clicJS(driver.findElement(By.xpath("//div[@class='msg-dialog-buttons']//button[2]"))); //CONFIRMO QUE QUIERO BORRAR
 	        			log("Dirección "+addressLine+" borrada");
+	        			espera(500);
 	        			break;
 	        		}
 	        	}		
 	    	}
 	    	atras();
+	    	espera(500);
 	    	atras();
+	    	espera(500);
 	    	abrirMisDirecciones(miPefil,misDireccoines);
+	    	espera(500);
 	    	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//app-simple-address-list")));
 	    	List<WebElement> listaDirecciones = driver.findElements(By.xpath("//div[contains(@class,'user-address-container')]"));
 	    	

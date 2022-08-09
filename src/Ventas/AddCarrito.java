@@ -139,9 +139,16 @@ public class AddCarrito extends TestBase{
 				}
 				if(productosEncontrados==arrayNombres.length)log("Todos los productos encontrados y añadidos al carrito " + Arrays.toString(arrayNombres));
 			}
-
-			JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
-			javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);",elements.get(elements.size()-1));
+			
+			espera(500);
+			
+			try {
+				JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+				javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);",elements.get(elements.size()-1));
+			}catch(Exception e) {
+				log("Warning. La lista de elementos ha sido invalidada y no podemos seguir haciendo scroll, se vuelve a capturar.");
+				elements = driver.findElements(By.xpath("//span[contains(@class,'test-product-item')]"));
+			}
 
 			vueltas++;	 
 		}  

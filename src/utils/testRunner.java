@@ -14,28 +14,16 @@ import org.testng.collections.Lists;
 import AbrePortalRest.AbrirUrl;
 
 public class testRunner {
-	
-	
-	public static void main(String[] args) {		// Create object of TestNG Class
+
+	public static void main(String[] args) {
 		TestNG runner=new TestNG();
-
-		// Create a list of String 
 		List<String> suitefiles=new ArrayList<String>();
-		Class[] testClasses = {AbrirUrl.class};
-
-		// Add xml file which you have to execute
-		//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\AbrePortalRest\\AbrirPortalRest.xml"); 
-		runner.setTestClasses(testClasses);
+		// TESTS DE VENTAS //
+		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml"); 
+		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml"); 
+		 //EJECUTA EL TEST SIN VENTANAS DE NAVEGADOR, MODO SILENCIOSO.
+		Data.getInstance().setModoSinVentana(true);
 		runner.setTestSuites(suitefiles);
-
-		// finally execute the runner using run method
 		runner.run();
 		}
-	
-
 	}
-
-
-	
-
-

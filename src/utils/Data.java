@@ -5,8 +5,20 @@ public class Data {
 	private static Data INSTANCE;
     private int ultimoDocId;
     private String newUserMail;
+    private boolean modoSinVentana;
+    private String BD;
     
-    private Data() {        
+    
+    
+    public String getBD() {
+		return BD;
+	}
+
+	public void setBD(String bD) {
+		BD = bD;
+	}
+
+	private Data() {        
     }
     
     public static Data getInstance() {
@@ -17,7 +29,17 @@ public class Data {
         return INSTANCE;
     }
     
-    public int getUltimoDocIdPlus() {
+    
+    
+    public boolean isModoSinVentana() {
+		return modoSinVentana;
+	}
+
+	public void setModoSinVentana(boolean modoSinVentana) {
+		this.modoSinVentana = modoSinVentana;
+	}
+
+	public int getUltimoDocIdPlus() {
     	return ultimoDocId+1;
     }
 
