@@ -89,15 +89,14 @@ public class CheckOut extends TestBase{
 		saldoActualDouble = Double.parseDouble(saldoActual.replace(',', '.'));
 		saldoAnteriorDouble = Double.parseDouble(saldoAnterior.replace(',', '.'));
 		importeVentaDouble = Double.parseDouble(importeVenta.replace(',', '.'));
-		
-		
+	
 		back();
 
-		if((saldoAnteriorDouble-importeVentaDouble)!=(round(saldoActualDouble,1))) {
-			log("Saldo incorrecto despues de realizar venta - Saldo Actual: " + (saldoActualDouble) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);
+		if(( round((saldoAnteriorDouble-importeVentaDouble),1))!=(round(saldoActualDouble,1))) {
+			log("Saldo incorrecto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble,1)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);
 			Assert.assertTrue(false);
 		}else {
-			log("Saldo correcto despues de realizar venta - Saldo Actual: " + (saldoActualDouble) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);		
+			log("Saldo correcto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble,1)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);		
 		}
 
 
@@ -131,14 +130,10 @@ public class CheckOut extends TestBase{
 		clicJS(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")));
 		espera(5000);
 
-		String actualTitle = driver.getTitle();
-		if(!actualTitle.equalsIgnoreCase("RedSys")) {
-			log("No he encontrado la pantalla de Redsys");
-			Assert.assertTrue(false);
-		}
-
+		
 		//TENEMOS PANTALLA DE REDSYS ABIERTA.
 		if (nuevaTarjeta) {
+			w2.until(ExpectedConditions.presenceOfElementLocated(By.id("inputCard")));
 			log("- La tarjeta es nueva " + testCardNumber);
 			driver.findElement(By.id("inputCard")).sendKeys(testCardNumber);
 			driver.findElement(By.id("cad1")).sendKeys(cad1);
@@ -147,8 +142,12 @@ public class CheckOut extends TestBase{
 			driver.findElement(By.id("divImgAceptar")).click();
 			w.until(ExpectedConditions.presenceOfElementLocated(By.id("boton"))).click(); //ACEPTAMOS SIMULADOR FINANET
 		}
+		
+		
 
 		w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'result-header')]")));
+		
+		
 
 		if(isElementPresent(By.xpath("//div[contains(@class,'result-code ok')]"))) {
 			log("- Respuesta de cobro correcta");
@@ -164,7 +163,7 @@ public class CheckOut extends TestBase{
 	private void validarReciboCheckout(String pedidoConfirmadoString) {
 		// ESTA PANTALLA ES UNA MIERDA, NO TIENE CLASES PARA IDENTIFICAR, HABLAR CON RAMON
 		log("Esperando a la pantalla de Recibo electrónico");
-
+		espera();
 		if (!isElementPresent(By.xpath("//div[contains(text(),'"+pedidoConfirmadoString+"')]"))){
 			log("No hemos encontrado pantalla del recibo electrónico");
 			Assert.assertTrue(false);
@@ -172,6 +171,7 @@ public class CheckOut extends TestBase{
 
 		driver.findElement(By.xpath("//div[contains(text(),'"+pedidoConfirmadoString+"')]"));
 		log("Hemos llegado a la pantalla del recibo electrónico -> " + pedidoConfirmadoString);
+		espera();
 		back();
 		Assert.assertTrue(true);
 	}
@@ -235,7 +235,7 @@ public class CheckOut extends TestBase{
 		}
 		
 
-		 w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'generic-subtitle')]")));
+		 w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'generic-subtitle')]")));
 		//VALIDAMOS QUE TENEMOS TITULO DE SELECCIÓN DE FORMAS DE PAGO
 		if (driver.findElement(By.xpath("//div[contains(@class,'generic-subtitle')]")).getAttribute("innerText").equalsIgnoreCase("")) {
 			log("- Error. No tenemos titulo en sección de Formas de Pago.");

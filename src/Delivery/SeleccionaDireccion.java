@@ -32,6 +32,7 @@ public class SeleccionaDireccion extends TestBase {
     	espera(500);
     	
     	if(!repartoPermitido) {
+    		espera(2000);
     		if (isElementPresent(By.xpath("//div[contains(@class,'generic-dialog-label')]"))) {
     			log("Se informa al usuario de que no repartimos en su zona " + driver.findElement(By.xpath("//div[contains(@class,'generic-dialog-label')][1]")).getAttribute("innerText"));
     			espera(500);
@@ -40,14 +41,15 @@ public class SeleccionaDireccion extends TestBase {
     	    	w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list"))); //Seguimos en el mismo sitio
     	    	espera(500);
     	    	clicJS(driver.findElement(By.xpath("//button[@class='btn-centered']"))); // PULSO EN CONTINUAR
-    	    	espera(500);
+    	    	espera(1500);
     	    	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'generic-dialog-label')]")));
-    	    	espera(500);
+    	    	espera(1500);
     	    	driver.findElement(By.xpath("//div[@class='msg-dialog-buttons']//button[1]")).click();//pulsamos para recoger en local
-    	    	espera(500);
+    	    	espera(1500);
     			log("Se continua el pedido en local");    			
     		}else {
     			log("Error. No se informa al usuario de que no repartimos en su zona ");
+    			Assert.assertTrue(false);
     		}
     			
     	}
@@ -63,7 +65,7 @@ public class SeleccionaDireccion extends TestBase {
     		
     	}
     	else {
-    		log("Error. No se informa correctamente sobre importe minimo y cargo por servicio");
+    		log("No se informa sobre importe minimo y cargo por servicio");
     	}
     	espera(500);
 		Assert.assertTrue(true);

@@ -101,12 +101,17 @@ public class CrearCliente extends TestBase {
 	  espera(500); //Wait for main page 
 	  
 	  //Buttons are identified by text in the language of the page
+	  w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//mat-icon[normalize-space()='"+ menu + "']")));
+	  espera();
 	  WebElement menuButton = driver.findElement(By.xpath("//mat-icon[normalize-space()='"+ menu + "']"));
 	  menuButton.click();
+	  espera();
 	  WebElement profileButton = driver.findElement(By.xpath("//*[contains(text(), '"+ profile +"')]"));
 	  profileButton.click();
+	  espera();
 	  WebElement personalInfo = driver.findElement(By.xpath("//*[contains(text(), '"+ personal +"')]"));
 	  personalInfo.click();
+	  espera();
 	  
 	  //obtaining user data from profile info
 	  List<WebElement> userInfoList = driver.findElements(By.xpath("//mat-form-field"));

@@ -64,9 +64,9 @@ public class AddCarrito extends TestBase{
 			if (isElementPresent(By.xpath("//div[contains(@class,'family-title')]"))) {
 				familia = driver.findElement(By.xpath("//div[contains(@class,'family-title')]")).getAttribute("innerText");
 			}		
-
+			espera(2000);
 			for(int i=1;i<= elements.size();i++) { 
-
+				
 				ProductItem currentItem = new ProductItem();	   		 
 				currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')])["+i+"]")).getAttribute("innerText"));		   
 				if (isElementPresent(By.xpath("(//div[contains(@class,'dish-image')])["+i+"]")))
@@ -81,7 +81,7 @@ public class AddCarrito extends TestBase{
 					productosAddeds.add(currentItem);
 					
 					//Validamos si tiene formatos o modificadores
-					espera(500);
+					espera(1000);
 					if (isElementPresent(By.tagName("mat-dialog-container"))) {
 						espera(1000);
 						if (isElementPresent(By.tagName("app-menu-dialog"))) { // ES UN MENÚ
@@ -124,7 +124,7 @@ public class AddCarrito extends TestBase{
 						}
 					}
 					
-					espera(500);
+					espera(1000);
 					log("Producto " + currentItem.getNombre() + " encontrado y añadido a carrito");	
 					productosEncontrados++;
 				}
