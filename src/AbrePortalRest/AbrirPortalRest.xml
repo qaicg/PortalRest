@@ -15,11 +15,9 @@
 		</classes>
 		
 	</test> <!-- test -->
-	
 
-	
 	<test enabled="false" name="Primera familia de la carta del restaurante">
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmMTPtZSOzYDMwITP0NXZSRWa"/>
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmITPsNGcmATPrNXYmMTPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//div[contains(@class, 'activeFamily')]"/>
 		<parameter name="idioma" value = "es"/>
@@ -34,7 +32,7 @@
 		
 	</test> <!-- test -->
 	
-		<test enabled="false" name="Carta Restaurante (Solo consulta)">
+		<test enabled="true" name="Carta Restaurante (Solo consulta)">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>

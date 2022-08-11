@@ -40,6 +40,25 @@
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="shop" value="48777" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
+		<parameter name="totalEsperado" value="27,10€" /> 
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+		</classes>
+	</test>
+	
+	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales con una tarifa distinta al turno cargada desde el QR" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmETPsNGcmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" />
+		<parameter name="productos" value="Coca-Cola Zero 350ml,Fanta Taronja 30 ml" />
+		<parameter name="familiasEsperadas" value="3" /> 
+		<parameter name="totalEsperado" value="2,00€" /> 
 
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
@@ -302,7 +321,7 @@
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="shop" value="48777" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml,Yuzu Chocolate Cup" />
-		<parameter name="totalEsperado" value="32,10€" />
+		<parameter name="totalEsperado" value="31,10€" />
 
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
@@ -339,7 +358,7 @@
 		<parameter name="shop" value="48777" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml,MENÚ MIDDAY TAKE AWAY" />
 		<parameter name="totalEsperado" value="41,10€" />
-		<parameter name="opcionesMenu" value="1,9,11,27,40,57" />
+		<parameter name="opcionesMenu" value="1,9,11,27,41,58" />
 
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />

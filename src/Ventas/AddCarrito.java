@@ -57,14 +57,14 @@ public class AddCarrito extends TestBase{
 
 		while (doScroll) {
 
-			espera(2500);
+			espera(1000);
 			w.until(ExpectedConditions.presenceOfElementLocated (By.xpath("//div[@class='dishItem']")));
 			List<WebElement> elements = driver.findElements(By.xpath("//span[contains(@class,'test-product-item')]"));
 
 			if (isElementPresent(By.xpath("//div[contains(@class,'family-title')]"))) {
 				familia = driver.findElement(By.xpath("//div[contains(@class,'family-title')]")).getAttribute("innerText");
 			}		
-			espera(2000);
+			espera(1000);
 			for(int i=1;i<= elements.size();i++) { 
 				
 				ProductItem currentItem = new ProductItem();	   		 
