@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
 
-<suite name="Pruebas de Login,Registro y validación de clientes de PortalRest" verbose="1">
+<suite name="Pruebas de Clientes en PortalRest -> Login,Registro y validación" verbose="1">
 
 	<listeners>
 		<listener class-name="com.vimalselvam.testng.listener.ExtentTestNgFormatter" />

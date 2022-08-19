@@ -26,22 +26,28 @@ import utils.TestBase;
 public class VerificarFamiliasRestaurante extends TestBase {
 
 	@Test(description="Este test abre la URL proporcionada para abrir PortalRest", priority=1)
-	  @Parameters({"expectedTitle", "xpathExpected" , "soloConsulta", "familiasEsperadas"})
+	  @Parameters({"expectedTitle", "xpathExpected" , "soloConsulta", "familiasEsperadas","cartaContratada"})
 	
-	public void verificarFamiliasRestaurante(String expectedTitle, String xpathExpected, @Optional ("false") String soloConsulta,
-			@Optional ("99") String familiasEsperadas) {	
+	public void verificarFamiliasRestaurante(String expectedTitle, @Optional ("") String xpathExpected, @Optional ("false") String soloConsulta,
+			@Optional ("99") String familiasEsperadas, @Optional ("") String cartaContratada) {	
 		  
-		  int familiasEsperadasInt= new Integer(familiasEsperadas);
+		 if(!cartaContratada.equalsIgnoreCase("")) {
+			 w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'"+cartaContratada+"')]")));
+			 log("Se informa al usuario que la carta no está contratada");
+			 Assert.assertTrue(true);
+		 }else {
+
+			  int familiasEsperadasInt= new Integer(familiasEsperadas);
+		      w.until(ExpectedConditions.presenceOfElementLocated (By.xpath(xpathExpected)));
+		      List<WebElement> familiasRestaurante = driver.findElements(By.xpath(xpathExpected));
+		     
+		      if (familiasEsperadasInt!=99 && (familiasEsperadasInt!=familiasRestaurante.size())) {
+		    	  log("Hemos encontrado " +familiasRestaurante.size()+ " familias y esperabamos " + familiasEsperadas); 
+		    	  Assert.assertTrue(false);
+		      }
+	 
+		 }
 		
-		  
-	      w.until(ExpectedConditions.presenceOfElementLocated (By.xpath(xpathExpected)));
-	      List<WebElement> familiasRestaurante = driver.findElements(By.xpath(xpathExpected));
-	     
-	      if (familiasEsperadasInt!=99 && (familiasEsperadasInt!=familiasRestaurante.size())) {
-	    	  log("Hemos encontrado " +familiasRestaurante.size()+ " familias y esperabamos " + familiasEsperadas); 
-	    	  Assert.assertTrue(false);
-	      }
- 
 	      	     
 	  }	
 

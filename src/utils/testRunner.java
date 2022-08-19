@@ -33,7 +33,7 @@ public class testRunner {
 				 Data.getInstance().setModoSinVentana(true); // EJECUTA EL TEST SIN VENTANAS DE NAVEGADOR, MODO SILENCIOSO.
 			 }
 			 else {
-				 Data.getInstance().setModoSinVentana(false); // EJECUTA EL TEST SIN VENTANAS DE NAVEGADOR, MODO SILENCIOSO.
+				 Data.getInstance().setModoSinVentana(false); // EJECUTA EL TEST CON VENTANAS DE NAVEGADOR
 			 }
 		}
 		

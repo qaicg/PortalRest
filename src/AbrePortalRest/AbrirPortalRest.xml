@@ -32,7 +32,7 @@
 		
 	</test> <!-- test -->
 	
-		<test enabled="true" name="Carta Restaurante (Solo consulta)">
+		<test enabled="false" name="Carta Restaurante (Solo consulta)">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
@@ -55,7 +55,7 @@
 	</test> <!-- test -->
 	
 
-	<test enabled="true" name="Carta del restaurante">
+	<test enabled="false" name="Carta del restaurante">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
@@ -75,6 +75,41 @@
 		</classes>
 		
 	</test> <!-- test -->
+	
+	<test enabled="false" name="Test de contratación - Abre carta de PortalRest sin modulo de pedidos contratado">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZCNwATMyITP0NXZSRWa"/>
+		<parameter name="expectedTitle" value="PortalRest2"/>
+		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
+		<parameter name="familiasEsperadas" value="6"/>
+		<parameter name="idioma" value = "es"/>
+		<parameter name="ultimoProducto" value = "MENÚ MIDDAY TAKE AWAY"/>
+	    <parameter name="articuloMenu" value="MENÚ MIDDAY TAKE AWAY"/>
+	    <parameter name="soloConsulta" value = "true"/>
+	    <parameter name="pedidosContratados" value="No se aceptan pedidos en este momento" />
+
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl"/>
+			<class name="Verificaciones.VerificarCookies"/>
+      		<class name="Verificaciones.VerificarFamiliasRestaurante"/>  
+      		<class name="Verificaciones.VerificarProductos"/>	   		
+		</classes>
+		
+	</test> <!-- test -->
+	
+	<test enabled="true" name="Test de contratación - Abre carta de PortalRest sin modulo de carta electronica contratada">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZiMzETMyITP0NXZSRWa"/>
+		<parameter name="expectedTitle" value="PortalRest2"/>
+		<parameter name="idioma" value = "es"/>
+	    <parameter name="cartaContratada" value="La carta electrónica está desactivada" />
+
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl"/>
+			<class name="Verificaciones.VerificarCookies"/>
+      		<class name="Verificaciones.VerificarFamiliasRestaurante"/>     		
+		</classes>
+		
+	</test> <!-- test -->
+	
 	
 	
 	

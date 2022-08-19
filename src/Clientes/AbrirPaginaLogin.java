@@ -16,7 +16,7 @@ public class AbrirPaginaLogin extends TestBase {
 	@Test (priority=1)
 	@Parameters ("login")
 	  public void abrePaginaLogin(String register) {
-		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10));
+		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30));
 		  List<WebElement> menuIcons = driver.findElements(By.xpath("//*[@class='header-icon']"));
 		  if (menuIcons.size()>=1) {
 			  menuIcons.get(menuIcons.size()-1).click();			  

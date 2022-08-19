@@ -28,9 +28,10 @@ public class VerificarProductos extends TestBase {
 	boolean soloConsultaBool;
 	
   @Test(description="Este test valida productos de PortalRest teniendo en cuenta sus escenarios", priority=1)
-  @Parameters({"soloConsulta", "familiasEsperadas","idioma","ultimoProducto","articuloConFormatos","articuloConModificadores","articuloMenu"})
+  @Parameters({"soloConsulta", "familiasEsperadas","idioma","ultimoProducto","articuloConFormatos","articuloConModificadores","articuloMenu", "pedidosContratados"})
   public void verificaProductos(@Optional ("false") String soloConsulta,
-			@Optional ("99") String familiasEsperadas, @Optional ("es") String idioma, String ultimoProducto, String articuloConFormatos, String articuloConModificadores, String articuloMenu) {
+			@Optional ("99") String familiasEsperadas, @Optional ("es") String idioma, String ultimoProducto, @Optional ("") String articuloConFormatos, @Optional ("") 
+  			String articuloConModificadores, String articuloMenu, @Optional ("") String pedidosContratados) {
 
 	  this.articuloConFormatos=articuloConFormatos;
 	  this.articuloConModificadores = articuloConModificadores;
@@ -49,6 +50,14 @@ public class VerificarProductos extends TestBase {
 	  
 
 	  log("Iteramos todos los productos de la carta en modo consulta= " + soloConsulta + " hasta que lleguemos al último producto " + ultimoProducto);
+	 
+	  if(!pedidosContratados.equalsIgnoreCase("")) {
+		  w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'"+pedidosContratados+"')]")));
+		  log("Se informa al usuario de que el restaurante no acepta pedidios");
+		  clicJS(driver.findElement(By.xpath("//button[contains(@class,'btn-confirm')]")));
+	  }
+	  
+	  espera();
       iterarProductos(ultimoProducto,soloConsulta);
       
   
@@ -104,9 +113,16 @@ public class VerificarProductos extends TestBase {
    			 doScroll=false;
    			 log("Error encontrando último artículo de la carta -> " + ULTIMOPRODUCTO);
    			 Assert.assertTrue(false);
-   		 }else {	 
-   			 JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
-   	   	     javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);",elements.get(elements.size()-2));
+   		 }else {	
+   			 
+   			try {
+				JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+				javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);",elements.get(elements.size()-2));
+			}catch(Exception e) {
+				log("Warning. La lista de elementos ha sido invalidada y no podemos seguir haciendo scroll, se vuelve a capturar.");
+				elements = driver.findElements(By.xpath("//span[contains(@class,'test-product-item')]"));
+			}  			 
+   		
    		 }
    		vueltas++;	 
    	  }
@@ -186,7 +202,7 @@ public class VerificarProductos extends TestBase {
 	    else if(currentItem.getNombre().equalsIgnoreCase(VerificarProductos.articuloConModificadores))validarArticuloConModificadores(currentItem,VerificarProductos.articuloConModificadores,complementosElement);
 	    else if(currentItem.getNombre().equalsIgnoreCase(VerificarProductos.articuloMenu))validarArticuloMenu(currentItem,VerificarProductos.articuloMenu);
 	  
-	    
+	    espera(500);
 		WebElement back = driver.findElements(By.className("header-icon")).get(0);
 		Actions actions = new Actions(driver);
 		espera(500);
