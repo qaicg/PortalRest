@@ -172,7 +172,14 @@ public class CheckOut extends TestBase{
 		driver.findElement(By.xpath("//div[contains(text(),'"+pedidoConfirmadoString+"')]"));
 		log("Hemos llegado a la pantalla del recibo electrónico -> " + pedidoConfirmadoString);
 		espera();
-		back();
+		
+		
+		if(isElementPresent(By.xpath("//button[@class='main-btn basket-button']"))) {
+			driver.findElement(By.xpath("//button[@class='main-btn basket-button']")).click();//Pulsamos en volver al inicio
+		}else {
+			back(); //Desde la versión del 16/09/2022 el el botón de back tiene otro comportamiento y regresa a la ultima pantalla abierta. 
+		}
+			
 		Assert.assertTrue(true);
 	}
 

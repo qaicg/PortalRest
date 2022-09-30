@@ -109,7 +109,7 @@ public class TestBase {
 		w = new WebDriverWait(TestBase.driver, Duration.ofSeconds(10));
 		w2 = new WebDriverWait(TestBase.driver, Duration.ofSeconds(90));
 		actions = new Actions(driver);
-		driver.manage().deleteAllCookies();
+		
 
 		extent = new ExtentReports();
 		spark = new ExtentSparkReporter("target/Spark.html");
@@ -129,7 +129,7 @@ public class TestBase {
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
 		if (result.getStatus() == ITestResult.FAILURE) {
-			driver.manage().deleteAllCookies();
+			
 			log("ERROR. Test fallido, tomando imagen");
 			Calendar calendar = Calendar.getInstance();
 			SimpleDateFormat formater = new SimpleDateFormat("dd_MM_yyyy_hh_mm_ss");

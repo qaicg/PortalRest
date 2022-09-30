@@ -8,11 +8,11 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 	
-	//POR DEFECTO DEJAMOS PARAMETROS DE ENTORNO PRODUCCIÓN
-	private static String urlConexion="jdbc:mysql://213.99.41.243:3306/";
+	//POR DEFECTO DEJAMOS PARAMETROS DE ENTORNO TEST
+	private static String urlConexion="jdbc:mysql://213.99.41.61:3306/";
 	private String BBDD = "";
 	private static String userName="cloud";
-	private static String password="Ve8HhyGigiW4LWsV";
+	private static String password="d4PKLWwrhFcdwnB1";
 	private static Connection connection;
 	private static PreparedStatement statement;
 	
@@ -24,16 +24,16 @@ public class DatabaseConnection {
 	public void defineEntorno(int entorno, String database) {
 		
 		if (entorno == ENTORNOPRODUCION) {
-			urlConexion = "jdbc:mysql://213.99.41.243:3306/"+database;
+			urlConexion = "jdbc:mysql://213.99.41.60:3306/"+database;
 			userName = "cloud";
-			password = "Ve8HhyGigiW4LWsV";
+			password = "H2EAS!!6O1ds";
 			BBDD =  database;
 		}
 		
 		else if (entorno == ENTORNOTEST) {
-			urlConexion = "jdbc:mysql://213.99.41.246:3306/"+database;
+			urlConexion = "jdbc:mysql://213.99.41.61:3306/"+database;
 			userName = "cloud";
-			password = "bWD1SIxfvcoS6TrZ";
+			password = "d4PKLWwrhFcdwnB1";
 			BBDD =  database;
 		}
 		
@@ -43,16 +43,16 @@ public class DatabaseConnection {
 	public void defineEntorno(String database) {
 		
 		if (ENTORNODEFINIDO == ENTORNOPRODUCION) {
-			urlConexion = "jdbc:mysql://213.99.41.243:3306/"+database;
+			urlConexion = "jdbc:mysql://213.99.41.60:3306/"+database;
 			userName = "cloud";
-			password = "Ve8HhyGigiW4LWsV";
+			password = "H2EAS!!6O1ds";
 			BBDD =  database;
 		}
 		
 		else if (ENTORNODEFINIDO == ENTORNOTEST) {
-			urlConexion = "jdbc:mysql://213.99.41.246:3306/"+database;
+			urlConexion = "jdbc:mysql://213.99.41.61:3306/"+database;
 			userName = "cloud";
-			password = "bWD1SIxfvcoS6TrZ";
+			password = "d4PKLWwrhFcdwnB1";
 			BBDD =  database;
 		}else {
 			System.out.println("NO HAY UN ENTORNO DEFINIDO VÁLIDO");

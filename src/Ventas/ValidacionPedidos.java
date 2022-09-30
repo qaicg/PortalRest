@@ -44,9 +44,12 @@ public class ValidacionPedidos extends TestBase {
   		} catch (Exception e) {
   			// TODO Auto-generated catch block
   			e.printStackTrace();
+  			Assert.assertTrue(false);
   		}finally {
   			databaseConnection.desconectar();
   		}
-  	 }	  
+  	 }else {
+  		 Assert.assertTrue(false);
+  	 }
   }
 }

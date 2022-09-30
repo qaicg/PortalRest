@@ -14,16 +14,16 @@ public class VerificarClientes extends TestBase {
 	public void validateUser(String email, String menu, String profile, String personal) {
 		espera(500); // Wait for main page
 
-		// Buttons are identified by text in the language of the page
+		// Buttons are identified by text in page language
 		WebElement menuButton = driver.findElement(By.xpath("//mat-icon[normalize-space()='" + menu + "']"));
 		menuButton.click();
-		espera(2000); // Wait for main page
+		espera(2000); // Wait for menu button
 		WebElement profileButton = driver.findElement(By.xpath("//*[contains(text(), '" + profile + "')]"));
 		profileButton.click();
-		espera(2000); // Wait for main page
+		espera(2000); // Wait for profile button
 		WebElement personalInfo = driver.findElement(By.xpath("//*[contains(text(), '" + personal + "')]"));
 		personalInfo.click();
-		espera(2000);
+		espera(2000); // Wait for personaldata button
 		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='mat-input-5']")));
 		WebElement userEmail = driver.findElement(By.xpath("//input[@id='mat-input-5']")); // obtaining the user email
 		String user = userEmail.getAttribute("value");

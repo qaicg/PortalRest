@@ -5,18 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import org.testng.ISuite;
-import org.testng.ISuiteListener;
-import org.testng.ITestContext;
 import org.testng.TestNG;
-import org.testng.annotations.BeforeSuite;
-import org.testng.collections.Lists;
-
-import AbrePortalRest.AbrirUrl;
 
 public class testRunner {
+	//POR DEFECTO EJECUTA LOS TESTS DE LA VERSIÓN MASTER DE PORTALREST (QA08)
 
 	public static void main(String[] args) {
 		
@@ -24,7 +16,7 @@ public class testRunner {
 		List<String> suitefiles = new ArrayList<String>();
 		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml"); // SE AÑADEN FICHEROS XML DE TESTS																					
 		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
-		Data.getInstance().setModoSinVentana(true); // EJECUTA EL TEST SIN VENTANAS DE NAVEGADOR, MODO SILENCIOSO. 
+		Data.getInstance().setModoSinVentana(false); // EJECUTA EL TEST SIN VENTANAS DE NAVEGADOR, MODO SILENCIOSO. 
 		
 		if(args.length != 0){
 			 String firstParam = args[0]; 
