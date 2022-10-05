@@ -164,7 +164,7 @@ public class TestBase {
 		try {
 			log("Ejecución de pruebas finalizada");
 			td.displayTray("Ejecución de pruebas finalizada");
-			File htmlFile = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report.html");
+			//File htmlFile = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report"+new Date().getTime()+".html");
 			// espera(2000);
 			// Desktop.getDesktop().browse(htmlFile.toURI());
 		} catch (AWTException e) {

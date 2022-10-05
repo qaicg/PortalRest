@@ -7,6 +7,7 @@ public class Data {
     private String newUserMail;
     private boolean modoSinVentana;
     private String BD;
+    private String reportDirectory;
     
     
     
@@ -17,6 +18,7 @@ public class Data {
 	public void setBD(String bD) {
 		BD = bD;
 	}
+	
 
 	private Data() {        
     }
