@@ -19,8 +19,13 @@ public class BorraDireccion  extends TestBase{
 	    	espera(1500);
 	    	if(isElementPresent(By.xpath("//div[contains(@class,'user-address-add')]"))) {
 	    		atras();
-	    		abrirMisDirecciones(miPefil,misDireccoines);
-	    		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//app-simple-address-list")));
+	    		abrirMisDirecciones(miPefil,misDireccoines);	    		
+	    		espera(2000);
+	        	if (!isElementPresent(By.xpath("//div[contains(@class,'user-address-container')]"))) {   		
+	        		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
+	        	}
+	        	
+	        	
 	    		List<WebElement> listaDirecciones = driver.findElements(By.xpath("//div[contains(@class,'user-address-container')]"));
 	    		
 	    		for(int i=0;i<listaDirecciones.size();i++) {
@@ -41,7 +46,11 @@ public class BorraDireccion  extends TestBase{
 	    	espera(500);
 	    	abrirMisDirecciones(miPefil,misDireccoines);
 	    	espera(500);
-	    	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//app-simple-address-list")));
+
+	    	if (!isElementPresent(By.xpath("//div[contains(@class,'user-address-container')]"))) {   		
+	    		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
+	    	}
+	    	
 	    	List<WebElement> listaDirecciones = driver.findElements(By.xpath("//div[contains(@class,'user-address-container')]"));
 	    	
 	    	for(int i=0;i<listaDirecciones.size();i++) {

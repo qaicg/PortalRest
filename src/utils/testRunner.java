@@ -12,19 +12,20 @@ public class testRunner {
 	 //POR DEFECTO EJECUTA LOS TESTS DE LA VERSIÓN MASTER DE PORTALREST (QA08)
 	//VARIABLES DE SELECCIÓN DE ENTORNO DE EJECUCIÓN//
 	
-	//-------------------************--------------------------//
-	static boolean SINVENTANA=false;
-	static boolean ENTORNOTEST=true;
-	//-------------------************---------------------------//
+																		//-------------------**********DEFINIDIR CONSTANTES***********--------------------------//
+																							static boolean SINVENTANA=false;
+																							static boolean ENTORNOTEST=false;
+																	   //-------------------******************************************--------------------------//
 
 	public static void main(String[] args) {
 		
 		TestNG runner = new TestNG();
 		List<String> suitefiles = new ArrayList<String>();
+		Data.getInstance().setEntornoTest(ENTORNOTEST);
 		
-		if(ENTORNOTEST) {
+		if(ENTORNOTEST) {			
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");																				
-			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
+			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
 		}else {
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml"); 																				
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
@@ -48,6 +49,7 @@ public class testRunner {
 		runner.run();
 		abrirReport(); // MUESTRA EL REPORT CON LOS RESULTADOS AL FINALIZAR.
 	}
+	
 
 	private static void abrirReport() {
 		File oldFilePath = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report.html");

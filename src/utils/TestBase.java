@@ -38,6 +38,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -66,9 +67,15 @@ public class TestBase {
 	ChromeOptions options;
 
 	@BeforeClass
-	public void configure() {
+	@Parameters({"test"})
+	public void configure(@Optional ("true") boolean test) {
+		
+		if(test) {
+			databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOTEST;
 
-		databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOTEST;
+		}else {
+			databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOPRODUCION;
+		}
 	}
 
 	@BeforeSuite

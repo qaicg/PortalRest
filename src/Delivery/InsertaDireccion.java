@@ -31,7 +31,11 @@ public class InsertaDireccion extends TestBase{
     	espera(500);
     	w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@class='btn-confirm']"))).click();
     	espera(500);
-    	w.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
+    	
+  
+    	if (!isElementPresent(By.xpath("//div[contains(@class,'user-address-container')]"))) {   		
+    		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
+    	}
     	
     }
 

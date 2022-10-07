@@ -26,7 +26,7 @@ public class DatabaseConnection {
 		if (entorno == ENTORNOPRODUCION) {
 			urlConexion = "jdbc:mysql://213.99.41.60:3306/"+database;
 			userName = "cloud";
-			password = "H2EAS!!6O1ds";
+			password = "gKeQf6xfsIHLJXVy";
 			BBDD =  database;
 		}
 		
@@ -45,7 +45,7 @@ public class DatabaseConnection {
 		if (ENTORNODEFINIDO == ENTORNOPRODUCION) {
 			urlConexion = "jdbc:mysql://213.99.41.60:3306/"+database;
 			userName = "cloud";
-			password = "H2EAS!!6O1ds";
+			password = "gKeQf6xfsIHLJXVy";
 			BBDD =  database;
 		}
 		

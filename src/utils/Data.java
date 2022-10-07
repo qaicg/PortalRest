@@ -8,12 +8,27 @@ public class Data {
     private boolean modoSinVentana;
     private String BD;
     private String reportDirectory;
+    private boolean entornoTest=true;
     
     
     
     public String getBD() {
 		return BD;
 	}
+    
+    
+
+	public boolean isEntornoTest() {
+		return entornoTest;
+	}
+
+
+
+	public void setEntornoTest(boolean entornoTest) {
+		this.entornoTest = entornoTest;
+	}
+
+
 
 	public void setBD(String bD) {
 		BD = bD;

@@ -17,7 +17,10 @@ public class SeleccionaDireccion extends TestBase {
     @Parameters({"direccion","importeMinimo","cargoReparto", "repartoPermitido"})
   public void seleccionaDireccionExistente(String direccion, String importeMinimo, String cargoReparto, @Optional ("true") Boolean repartoPermitido ) {
     	espera(2000);
-		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
+    	if (!isElementPresent(By.xpath("//div[contains(@class,'user-address-container')]"))) {   		
+    		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
+    	}
+		
     	List<WebElement> listaDirecciones = driver.findElements(By.xpath("//div[contains(@class,'user-address-container')]"));
     	if(listaDirecciones.size()==0)Assert.assertTrue(false);
     	
@@ -38,7 +41,9 @@ public class SeleccionaDireccion extends TestBase {
     			espera(500);
     			driver.findElement(By.xpath("//div[@class='msg-dialog-buttons']//button[2]")).click();//pulsamos atrás
     			espera(500);
-    	    	w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list"))); //Seguimos en el mismo sitio
+    			if (!isElementPresent(By.xpath("//div[contains(@class,'user-address-container')]"))) {   		
+    	    		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
+    	    	}
     	    	espera(500);
     	    	clicJS(driver.findElement(By.xpath("//button[@class='btn-centered']"))); // PULSO EN CONTINUAR
     	    	espera(1500);
