@@ -173,7 +173,8 @@ public class CheckOut extends TestBase{
 		log("Hemos llegado a la pantalla del recibo electrónico -> " + pedidoConfirmadoString);
 		espera();
 		
-		
+		String numPedido = driver.findElement(By.xpath("//ul/preceding::div[1]")).getText();
+		Data.getInstance().setPedidoActual(numPedido);
 		if(isElementPresent(By.xpath("//button[@class='main-btn basket-button']"))) {
 			driver.findElement(By.xpath("//button[@class='main-btn basket-button']")).click();//Pulsamos en volver al inicio
 		}else {

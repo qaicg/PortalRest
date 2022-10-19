@@ -9,6 +9,7 @@ public class Data {
     private String BD;
     private String reportDirectory;
     private boolean entornoTest=true;
+    private String pedidoActual;
     
     
     
@@ -20,6 +21,19 @@ public class Data {
 
 	public boolean isEntornoTest() {
 		return entornoTest;
+	}
+
+
+	
+
+	public String getPedidoActual() {
+		return pedidoActual;
+	}
+
+
+
+	public void setPedidoActual(String pedidoActual) {
+		this.pedidoActual = pedidoActual;
 	}
 
 
