@@ -33,8 +33,9 @@ public class AddCarrito extends TestBase{
 	int productosEncontrados;
 
 	@Test (description="Este test busca un producto dado en el PortalRest actual" , priority=1)
-	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts"})
-	public void addCart(String productos, String totalEsperado, @Optional ("") String opcionesMenu, @Optional ("") String unidades, @Optional ("") String goBack, @Optional ("") String firstOrderProducts) {
+	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts", "goBackByAddOrderButton"})
+	public void addCart(String productos, String totalEsperado, @Optional ("") String opcionesMenu, @Optional ("") String unidades,
+						@Optional ("") String goBack, @Optional ("") String firstOrderProducts,  @Optional ("") String goBackByAddOrderButton) {
 		arrayNombres = productos.split(",");
 		
 		ArrayList<ProductItem> productosAddeds = new ArrayList<ProductItem> ();
@@ -169,6 +170,11 @@ public class AddCarrito extends TestBase{
 			if(goBack.equalsIgnoreCase("true")) {
 				productosEncontrados += fOrderProducts.length;
 			}
+			
+			if(goBackByAddOrderButton.equalsIgnoreCase("true") && goBack.equalsIgnoreCase("false")) {
+				fOrderProducts = firstOrderProducts.split(",");
+				productosEncontrados += fOrderProducts.length;
+			} 
 			
 			Assert.assertTrue(validaCarritoFlotante((Integer.toString(productosEncontrados)),totalEsperado));  	  
 		}

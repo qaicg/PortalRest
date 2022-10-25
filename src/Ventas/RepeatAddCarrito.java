@@ -41,9 +41,9 @@ public class RepeatAddCarrito extends TestBase {
 	
 	
 	@Test(description="Este test permite repetir el pedido manualmente con otros productos" , priority=1)
-	@Parameters({"repeatProductos","repeatProductosTotalPrice","opcionesMenu","unidades", "goBack", "productos", "totalEsperado", "preciototalEsperado"})
+	@Parameters({"repeatProductos","repeatProductosTotalPrice","opcionesMenu","unidades", "goBack", "productos", "totalEsperado", "preciototalEsperado", "goBackByAddOrderButton"})
 	public void addCartPedido(String repeatProductos, String repeatProductosTotalPrice, @Optional ("") String opcionesMenu, @Optional ("") String unidades, 
-			@Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado, @Optional ("") String preciototalEsperado) {
+			@Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado, @Optional ("") String preciototalEsperado, @Optional ("") String goBackByAddOrderButton) {
 		
 		String firstOrderProducts = productos;
 		
@@ -55,21 +55,22 @@ public class RepeatAddCarrito extends TestBase {
 		}
 				
 		AddCarrito	repeatPedido = new AddCarrito();
-		repeatPedido.addCart(repeatProductos, repeatProductosTotalPrice, opcionesMenu, unidades, goBack, firstOrderProducts);
+		repeatPedido.addCart(repeatProductos, repeatProductosTotalPrice, opcionesMenu, unidades, goBack, firstOrderProducts, goBackByAddOrderButton);
 	}
 	
 	@Test(description="Este test permite el checkout del pedido repetido manualmente" , priority=1)
 	@Parameters({"repeatProductos","repeatProductosTotalPrice","formaPago","nuevaTarjeta","testCardNumber","cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
-		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", "totalEsperado"})
+		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", "totalEsperado", "goBackByAddOrderButton"})
 	public void checkOutPedido(String repeatProductos, String repeatProductosTotalPrice, String formaPago,
 			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv, String pedidoConfirmadoString, 
 			String shop, String customerMail, @Optional ("")String miMonederoString, @Optional ("") String formaPago2, 
 			String tipoServicio, @Optional ("") String unidades, @Optional ("") String mesa, @Optional ("") String totalEsperadoMasCargos,
-			@Optional ("true") String repartoPermitido,  @Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado) {
+			@Optional ("true") String repartoPermitido,  @Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado, @Optional ("") String goBackByAddOrderButton) {
 		
-		if( goBack.equalsIgnoreCase("true") ) {		
+		if( goBack.equalsIgnoreCase("true") || goBackByAddOrderButton.equalsIgnoreCase("true")) {		
 			goBack = "false";
+			goBackByAddOrderButton = "false";
 			//Los productos del pedido
 			repeatProductos = repeatOrderProducts;
 			//el precio total esperado despues de repetir el pedido
@@ -78,7 +79,7 @@ public class RepeatAddCarrito extends TestBase {
 		
 		CheckOut	checkout = new CheckOut();
 		checkout.finalizarPedido(repeatProductos, repeatProductosTotalPrice, formaPago, nuevaTarjeta, testCardNumber, cad1, cad2, cvv, pedidoConfirmadoString, 
-				shop, customerMail, miMonederoString, formaPago2, tipoServicio, unidades, mesa, totalEsperadoMasCargos, repartoPermitido, goBack);
+				shop, customerMail, miMonederoString, formaPago2, tipoServicio, unidades, mesa, totalEsperadoMasCargos, repartoPermitido, goBack, goBackByAddOrderButton);
 	}
 	
 	

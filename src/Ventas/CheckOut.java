@@ -29,13 +29,13 @@ public class CheckOut extends TestBase{
 
 	@Test(description="Se encarga de gestionar la parte de checkout una vez los productos ya están añadidos al carrito", priority=1)
 	@Parameters({"productos","totalEsperado","formaPago","nuevaTarjeta","testCardNumber","cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
-		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack"})
+		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "goBackByAddOrderButton"})
 	public void finalizarPedido(String productos, String totalEsperado, String formaPago,
 			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv, String pedidoConfirmadoString, 
 			String shop, String customerMail, @Optional ("")String miMonederoString, @Optional ("") String formaPago2, 
 			String tipoServicio, @Optional ("") String unidades, @Optional ("") String mesa, @Optional ("") String totalEsperadoMasCargos,
-			@Optional ("true") String repartoPermitido, @Optional ("") String goBack) {
+			@Optional ("true") String repartoPermitido, @Optional ("") String goBack, @Optional ("") String goBackByAddOrderButton) {
 
 		String[] arrayNombres;
 		this.tipoServicio=tipoServicio;
@@ -54,7 +54,14 @@ public class CheckOut extends TestBase{
 		
 		// Usar back para añadi mas productos al final del proceso de la venta.
 		if(goBack.equalsIgnoreCase("true")) {
-			driver.navigate().back();
+			if(goBackByAddOrderButton.equalsIgnoreCase("true")) {
+				w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'more-units-wrapper')]/child::mat-icon")));
+				WebElement addOrderBackButton = driver.findElement(By.xpath("//div[contains(@class,'more-units-wrapper')]/child::mat-icon"));
+				addOrderBackButton.click();
+				espera(1000); // Wait for go back by using add order button
+			} else {	
+				driver.navigate().back();
+			}
 			Assert.assertTrue(true);
 		} else {
 		
