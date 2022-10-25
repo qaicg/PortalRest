@@ -29,13 +29,13 @@ public class CheckOut extends TestBase{
 
 	@Test(description="Se encarga de gestionar la parte de checkout una vez los productos ya están añadidos al carrito", priority=1)
 	@Parameters({"productos","totalEsperado","formaPago","nuevaTarjeta","testCardNumber","cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
-		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido"})
+		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack"})
 	public void finalizarPedido(String productos, String totalEsperado, String formaPago,
 			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv, String pedidoConfirmadoString, 
 			String shop, String customerMail, @Optional ("")String miMonederoString, @Optional ("") String formaPago2, 
 			String tipoServicio, @Optional ("") String unidades, @Optional ("") String mesa, @Optional ("") String totalEsperadoMasCargos,
-			@Optional ("true") String repartoPermitido) {
+			@Optional ("true") String repartoPermitido, @Optional ("") String goBack) {
 
 		String[] arrayNombres;
 		this.tipoServicio=tipoServicio;
@@ -46,16 +46,26 @@ public class CheckOut extends TestBase{
 		checkoutButton.click();
 		espera(1000);
 		
+		
+		
 		w2 = new WebDriverWait(TestBase.driver,Duration.ofSeconds(60)); // LE DAMOS 60 SEGUNDOS PARA HACER EL CHECKOUT.
 		if((customerMail.equalsIgnoreCase("") || customerMail.equalsIgnoreCase("invitado@portalrest.com")) && formaPago.equalsIgnoreCase("Redsys Test"))nuevaTarjeta="true"; //SI NO TENEMOS CLIENTE SIGNIFICA QUE ES NUEVO Y NECESITAREMOS TARJETA NUEVA
 		if(!(validaPantalla(arrayNombres,totalEsperado,unidades,totalEsperadoMasCargos,repartoPermitido)))Assert.assertTrue(false);
-		if(formaPago.equalsIgnoreCase("Redsys Test"))
-			pagarPedidoConTarjeta(formaPago, nuevaTarjeta.equalsIgnoreCase("true"),testCardNumber,cad1,cad2,cvv,pedidoConfirmadoString);
-		if (formaPago.equalsIgnoreCase("Pagar a la entrega"))
-			pagarPedidoPagarEnCaja(formaPago,pedidoConfirmadoString);
-		if (formaPago.equalsIgnoreCase("saldo"))
-			pagarPedidoSaldo(formaPago,formaPago2,pedidoConfirmadoString,totalEsperado, miMonederoString);
-		Assert.assertTrue(true);	  
+		
+		// Usar back para añadi mas productos al final del proceso de la venta.
+		if(goBack.equalsIgnoreCase("true")) {
+			driver.navigate().back();
+			Assert.assertTrue(true);
+		} else {
+		
+			if(formaPago.equalsIgnoreCase("Redsys Test"))
+				pagarPedidoConTarjeta(formaPago, nuevaTarjeta.equalsIgnoreCase("true"),testCardNumber,cad1,cad2,cvv,pedidoConfirmadoString);
+			if (formaPago.equalsIgnoreCase("Pagar a la entrega"))
+				pagarPedidoPagarEnCaja(formaPago,pedidoConfirmadoString);
+			if (formaPago.equalsIgnoreCase("saldo"))
+				pagarPedidoSaldo(formaPago,formaPago2,pedidoConfirmadoString,totalEsperado, miMonederoString);
+			Assert.assertTrue(true);	
+		}
 	}
 
 	private void pagarPedidoSaldo(String formaPago, String formaPago2, String pedidoConfirmadoString, String totalEsperado , String miMonederoString) {

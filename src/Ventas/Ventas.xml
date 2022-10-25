@@ -61,8 +61,8 @@
 	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos y verificar el pedido en el apartado mis pedidos"  enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="shop" value="48777" />
-		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
-		<parameter name="totalEsperado" value="27,10€" /> 
+		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don" />
+		<parameter name="totalEsperado" value="24,15€" /> 
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarCookies" />
@@ -99,6 +99,46 @@
 			<class name="Ventas.RepeatAddCarrito">
 				<methods>
 		        	<include name="addCartPedido" />
+		          	<include name="checkOutPedido" />
+		          	<parameter name="totalEsperado" value="27,10€" /> 
+		          	<include name="validarPedido" />
+        		</methods>
+			</class>
+		
+		</classes>
+	</test>	
+	
+	<test name="Al final del proceso de una venta hacer back para añadir mas productos y luego totalizar" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" />
+		<parameter name="productos" value="Coca-Cola Zero 350ml,Fanta Taronja 30 ml" />
+		<parameter name="totalEsperado" value="5,90€" /> 
+		
+		<parameter name="repeatProductos" value="Kirin TA,Inedit Damm,Oyako Don" />
+		<parameter name="repeatProductosTotalPrice" value="24,15€" /> 
+		
+		<parameter name="preciototalEsperado" value="30,05€" /> 
+		
+		<parameter name="goBack" value="false" /> 
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Ventas.AddCarrito" />
+			
+			<class name="Ventas.CheckOut">
+				<parameter name="goBack" value="true" /> 
+			</class>
+									
+			<!-- Repetir el pedido manualmente con productos diferentes del primero pedido -->
+			<class name="Ventas.RepeatAddCarrito">
+				<methods>
+					<parameter name="goBack" value="true" />
+		        	<include name="addCartPedido" />
+		        	<parameter name="totalEsperado" value="30,05€" />
 		          	<include name="checkOutPedido" />
 		          	<include name="validarPedido" />
         		</methods>

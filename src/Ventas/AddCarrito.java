@@ -29,28 +29,36 @@ import utils.TestBase;
 //ESTA FUNCION BUSCA UN PRODUCTO EN LA CARTA DE PORTALREST UTILIZANDO SU NOMBRE.
 public class AddCarrito extends TestBase{
 	String[] arrayNombres;
+	String[] fOrderProducts;
 	int productosEncontrados;
 
 	@Test (description="Este test busca un producto dado en el PortalRest actual" , priority=1)
-	@Parameters({"productos","totalEsperado","opcionesMenu","unidades"})
-	public void addCart(String productos, String totalEsperado, @Optional ("") String opcionesMenu, @Optional ("") String unidades) {
+	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts"})
+	public void addCart(String productos, String totalEsperado, @Optional ("") String opcionesMenu, @Optional ("") String unidades, @Optional ("") String goBack, @Optional ("") String firstOrderProducts) {
 		arrayNombres = productos.split(",");
-		w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30));
-		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(@class,'familyItem')]")));	
-		List<WebElement> familias;
-		productosEncontrados=0;
+		
 		ArrayList<ProductItem> productosAddeds = new ArrayList<ProductItem> ();
-
-		familias  = driver.findElements(By.xpath("//li[contains(@class,'familyItem')]"));
-		//ENTRO EN LA PRIMERA FAMILIA
-		if (familias.size()>0) {
-			WebElement nombreFamilia = familias.get(0).findElement(By.xpath("//div[contains(@class,'familyName')]"));
-			log("Entro en primera familia " + nombreFamilia.getAttribute("innerText"));
-			espera(1000);
-			clicJS(nombreFamilia);
-
+		
+		if(goBack.equalsIgnoreCase("true")) {
+			fOrderProducts = firstOrderProducts.split(",");			
+		} else {			
+			w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30));
+			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(@class,'familyItem')]")));	
+			List<WebElement> familias;
+			productosEncontrados=0;
+			//ArrayList<ProductItem> productosAddeds = new ArrayList<ProductItem> ();
+			
+			familias  = driver.findElements(By.xpath("//li[contains(@class,'familyItem')]"));
+			//ENTRO EN LA PRIMERA FAMILIA
+			if (familias.size()>0) {
+				WebElement nombreFamilia = familias.get(0).findElement(By.xpath("//div[contains(@class,'familyName')]"));
+				log("Entro en primera familia " + nombreFamilia.getAttribute("innerText"));
+				espera(1000);
+				clicJS(nombreFamilia);
+				
+			}
 		}
-
+		
 		boolean doScroll=true;
 		int vueltas=0;
 		String familia = "";
@@ -137,6 +145,7 @@ public class AddCarrito extends TestBase{
 					log("No he encontrado todos los productos " + Arrays.toString(arrayNombres) + " productos encontrados "+productosEncontrados  +" vueltas " + vueltas);
 					Assert.assertTrue(false);
 				}
+				
 				if(productosEncontrados==arrayNombres.length)log("Todos los productos encontrados y añadidos al carrito " + Arrays.toString(arrayNombres));
 			}
 			
@@ -156,6 +165,11 @@ public class AddCarrito extends TestBase{
 		espera(1000);
 		
 		if(unidades.equalsIgnoreCase("")) { //SOLO VALIDO CARRITO FLOTANTE SI NO TRABAJAMOS CON UNIDADES MULTIPLES
+			
+			if(goBack.equalsIgnoreCase("true")) {
+				productosEncontrados += fOrderProducts.length;
+			}
+			
 			Assert.assertTrue(validaCarritoFlotante((Integer.toString(productosEncontrados)),totalEsperado));  	  
 		}
 	}
