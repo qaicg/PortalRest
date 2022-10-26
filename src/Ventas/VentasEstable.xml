@@ -76,6 +76,32 @@
 		</classes>
 	</test>
 	
+	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos y repetir el pedido al final de la venta"  enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
+		<parameter name="shop" value="52704" />
+		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
+		<parameter name="totalEsperado" value="27,10€" /> 
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+			<!--class name="Verificaciones.VerificarPedidos" /-->
+			
+			<class name="Ventas.RepeatAddCarrito">
+				<methods>
+		        	<include name="repeatOrder" />	        	
+		          	<include name="checkOutPedido" />
+		          	<include name="validarPedido" />
+        		</methods>
+			</class>
+		</classes>
+	</test>
+	
 	<test name=" Prueba de ventas consecutivas usando back al final del pedido" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />

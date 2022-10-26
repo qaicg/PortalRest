@@ -19,12 +19,13 @@ import utils.Data;
 import utils.TestBase;
 
 public class VerificarPedidos  extends TestBase {
-	@Test(description="Verificar el pedido en el apartado Mis pedidos", priority=1)
+	public String testResult = "false";
 	
-	@Parameters({"ultimoPedido", "menu", "profile", "pedidos", "productos", "totalEsperado" })
+	@Test(description="Verificar el pedido en el apartado Mis pedidos", priority=1)
+	@Parameters({"ultimoPedido", "menu", "profile", "pedidos", "productos", "totalEsperado"})
 	public void VerificarPedidos (@Optional ("true") String ultimoPedido, String menu, String profile, String pedidos, String productos, String totalEsperado) {
 		espera(500); // Wait for main page
-
+		
 		// Buttons are identified by text in page language
 		WebElement menuButton = driver.findElement(By.xpath("//mat-icon[normalize-space()='" + menu + "']"));
 		menuButton.click();
@@ -121,10 +122,21 @@ public class VerificarPedidos  extends TestBase {
 				Assert.assertTrue(false);
 			}
 			
+			testResult = "true";
 			log(" Se ha validao el pedido: "+ numeroPedidoActual+ " correctamente.");
-
+			
 		}
 		
+	}
+	
+	@Test(description="Nos permite saber si el test de la fuccion ha sido bien o non")
+	@Parameters()
+	public boolean resulTest() {
+		if (testResult.equalsIgnoreCase("true")) {
+			return true;
+		}
+		
+		return false;
 	}
 	 
 }
