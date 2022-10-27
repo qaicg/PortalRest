@@ -534,10 +534,6 @@
 	</test>
 
 
-	<!-- PENDIENTES DE IMPLEMENTAR A CAUSA DE UNA INCIDENCIA EN PORTALREST, HAY TAREA ENTRADA EN OPENPROJECT-->
-
-
-	<!--#26686
  <test  name="Prueba de venta simple con registro de nuevo usuario de ICGCLoud con 4 artículos normales"  enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZyMzEzNxITP0NXZSRWa"/>  
    <parameter name="shop" value="51983"/>
@@ -554,7 +550,9 @@
 	      	<class name="Ventas.ValidacionPedidos"/>
 	    </classes>
  </test> 
- -->
+
+	<!-- PENDIENTES DE IMPLEMENTAR A CAUSA DE UNA INCIDENCIA EN PORTALREST, HAY TAREA ENTRADA EN OPENPROJECT-->
+
 	<!--#26724
   <test  name="Prueba de venta simple haciendo login en ICGCLoud realizando carga de tarjeta con forma de pago de saldo y Redsys en pago combinado con 4 artículos normales"  enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZyMzEzNxITP0NXZSRWa"/>  
