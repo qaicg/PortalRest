@@ -47,6 +47,7 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentAventReporter;
 import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.mysql.cj.util.StringUtils;
 import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
 
 import Cadenas.Es;
@@ -236,6 +237,13 @@ public class TestBase {
 		espera(500);
 	}
 
+	public void abrirMisPedidos(String miPerfil, String misPedidos) {
+		clicJS(driver.findElement(By.xpath("//mat-icon[text()='menu']")));
+		clicJS(driver.findElement(By.xpath("//button[text()='" + miPerfil + "']")));
+		clicJS(driver.findElement(By.xpath("//button[contains(text(),'" + misPedidos + "')]")));
+		espera(500);
+	}
+	
 	public void clicAction(WebElement element) {
 		espera(500);
 		actions.moveToElement(element).click().build().perform();
@@ -258,5 +266,12 @@ public class TestBase {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isNullOrEmpty(String variable) {
+	   if(StringUtils.isNullOrEmpty(variable))
+		   return true;
+	   else
+		   return false;
 	}
 }

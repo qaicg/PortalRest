@@ -20,26 +20,34 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.mysql.cj.util.StringUtils;
+
 import utils.Data;
 import utils.TestBase;
 
 public class CheckOut extends TestBase{
 
 	String tipoServicio="";
+	String validarImporteMinimoPedido = null;
+	String importeMinimo = null;
+	String totalEsperado = null;
+	
 
 	@Test(description="Se encarga de gestionar la parte de checkout una vez los productos ya están añadidos al carrito", priority=1)
 	@Parameters({"productos","totalEsperado","formaPago","nuevaTarjeta","testCardNumber","cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
-		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "goBackByAddOrderButton"})
+		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "goBackByAddOrderButton", "importeMinimo", "validarImporteMinimo"})
 	public void finalizarPedido(String productos, String totalEsperado, String formaPago,
 			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv, String pedidoConfirmadoString, 
 			String shop, String customerMail, @Optional ("")String miMonederoString, @Optional ("") String formaPago2, 
 			String tipoServicio, @Optional ("") String unidades, @Optional ("") String mesa, @Optional ("") String totalEsperadoMasCargos,
-			@Optional ("true") String repartoPermitido, @Optional ("") String goBack, @Optional ("") String goBackByAddOrderButton) {
+			@Optional ("true") String repartoPermitido, @Optional ("") String goBack, @Optional ("") String goBackByAddOrderButton, @Optional ("") String importeMinimo, @Optional ("") String validarImporteMinimo) {
 
 		String[] arrayNombres;
 		this.tipoServicio=tipoServicio;
 		arrayNombres = productos.split(",");
+		this.importeMinimo = importeMinimo;
+		this.totalEsperado = totalEsperado;
 		//SI ES NUEVO USUARIO EL CORREO QUE NOS VIENE DEL TEST NO ES VÁLIDO.
 		Data.getInstance().setUltimoDocId(getLastDoc__Doc(shop));//RECUPERAMOS ULTIMO DOCDOCID DEL CLIENTE ANTES DE REALIZAR EL PEDIDO	
 		WebElement checkoutButton = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'basket-button')]")));
@@ -64,13 +72,15 @@ public class CheckOut extends TestBase{
 			}
 			Assert.assertTrue(true);
 		} else {
-		
+			
+			
 			if(formaPago.equalsIgnoreCase("Redsys Test"))
-				pagarPedidoConTarjeta(formaPago, nuevaTarjeta.equalsIgnoreCase("true"),testCardNumber,cad1,cad2,cvv,pedidoConfirmadoString);
+				pagarPedidoConTarjeta(formaPago, nuevaTarjeta.equalsIgnoreCase("true"),testCardNumber,cad1,cad2,cvv,pedidoConfirmadoString, validarImporteMinimo);
 			if (formaPago.equalsIgnoreCase("Pagar a la entrega"))
 				pagarPedidoPagarEnCaja(formaPago,pedidoConfirmadoString);
 			if (formaPago.equalsIgnoreCase("saldo"))
 				pagarPedidoSaldo(formaPago,formaPago2,pedidoConfirmadoString,totalEsperado, miMonederoString);
+			
 			Assert.assertTrue(true);	
 		}
 	}
@@ -109,11 +119,11 @@ public class CheckOut extends TestBase{
 	
 		back();
 
-		if(( round((saldoAnteriorDouble-importeVentaDouble),1))!=(round(saldoActualDouble,1))) {
-			log("Saldo incorrecto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble,1)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);
+		if(( round((saldoAnteriorDouble - importeVentaDouble), 1)) != (round(saldoActualDouble, 1))) {
+			log("Saldo incorrecto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble, 1)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);
 			Assert.assertTrue(false);
 		}else {
-			log("Saldo correcto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble,1)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);		
+			log("Saldo correcto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble, 1)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);		
 		}
 
 
@@ -133,7 +143,7 @@ public class CheckOut extends TestBase{
 
 	}
 
-	private void pagarPedidoConTarjeta(String formaPago, boolean nuevaTarjeta, String testCardNumber, String cad1, String cad2, String cvv, String pedidoConfirmado) {
+	private void pagarPedidoConTarjeta(String formaPago, boolean nuevaTarjeta, String testCardNumber, String cad1, String cad2, String cvv, String pedidoConfirmado, String validarImporteMinimo) {
 
 		log("Se paga el pedido con tarjeta");
 		clicJS(driver.findElement(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]"))); //SELECCIONO FORMA DE PAGO
@@ -145,6 +155,18 @@ public class CheckOut extends TestBase{
 		
 		//clicJS(driver.findElement(By.xpath("//div[contains(@class,'mat-checkbox-inner-container')]"))); // MARCO CHECK DE ACEPTO CONDICIONES
 		clicJS(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")));
+		
+		// Validar el importe minimo de delivery
+		if((!StringUtils.isNullOrEmpty(this.tipoServicio) ) && !StringUtils.isNullOrEmpty(this.importeMinimo) && (!StringUtils.isNullOrEmpty(validarImporteMinimo) && validarImporteMinimo.equalsIgnoreCase("true"))) {
+			espera(1000);
+			validarImporteMinimoPedido(this.importeMinimo, this.totalEsperado);
+			
+			if(validarImporteMinimoPedido.equalsIgnoreCase("false")) {
+				return;
+			}
+		}
+		
+		
 		espera(5000);
 
 		
@@ -168,8 +190,17 @@ public class CheckOut extends TestBase{
 
 		if(isElementPresent(By.xpath("//div[contains(@class,'result-code ok')]"))) {
 			log("- Respuesta de cobro correcta");
+			
 			driver.findElement(By.xpath("//input[contains(@class,'btn-continue')]")).click();//CLIC EN CONTINUAR
-			w2.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
+			
+			//.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
+			
+			if(isElementPresent(By.id("orderReceiptHeader"))) {
+				w2.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
+			} else {
+				w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'ticket-background')]")));				
+			}
+						
 			validarReciboCheckout(pedidoConfirmado);
 		}else {
 			log("- No encuentro el resutlado ok en la pantalla de redsys");
@@ -180,6 +211,7 @@ public class CheckOut extends TestBase{
 	private void validarReciboCheckout(String pedidoConfirmadoString) {
 		// ESTA PANTALLA ES UNA MIERDA, NO TIENE CLASES PARA IDENTIFICAR, HABLAR CON RAMON
 		log("Esperando a la pantalla de Recibo electrónico");
+		String numPedido = null;
 		espera();
 		if (!isElementPresent(By.xpath("//div[contains(text(),'"+pedidoConfirmadoString+"')]"))){
 			log("No hemos encontrado pantalla del recibo electrónico");
@@ -190,8 +222,19 @@ public class CheckOut extends TestBase{
 		log("Hemos llegado a la pantalla del recibo electrónico -> " + pedidoConfirmadoString);
 		espera();
 		
-		String numPedido = driver.findElement(By.xpath("//ul/preceding::div[1]")).getText();
+		if(isElementPresent(By.xpath("//ul/preceding::div[5]"))){
+			numPedido = driver.findElement(By.xpath("//ul/preceding::div[5]")).getText();//driver.findElement(By.xpath("//ul/preceding::div[1]")).getText();
+		} else if(isElementPresent(By.id("ticket2-orderNumber"))) {
+			numPedido = driver.findElement(By.id("ticket2-orderNumber")).getText();
+		}
+		
+		if(isNullOrEmpty(numPedido)) {
+			log("No se ha encontrado el numero de pedido");
+			Assert.assertTrue(false);
+		}
+		
 		Data.getInstance().setPedidoActual(numPedido);
+		log("el numero de pedido actual a comprobar:" + numPedido);
 		if(isElementPresent(By.xpath("//button[@class='main-btn basket-button']"))) {
 			driver.findElement(By.xpath("//button[@class='main-btn basket-button']")).click();//Pulsamos en volver al inicio
 		}else {
@@ -251,12 +294,37 @@ public class CheckOut extends TestBase{
 
 		if (tipoServicio.equalsIgnoreCase("3") && repartoPermitido.equalsIgnoreCase("true")) { //TIPO DELIVERY
 			
-			driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'Total')]"));
-			driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'"+totalEsperadoMasCargos+"')]"));
+			//driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'Total')]"));
+			
+			if(isElementPresent(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'Total')]"))) {
+				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'Total')]"));
+			} else {
+				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line price-breakdown-total')]"));
+			}
+			
+			
+			//driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'"+totalEsperadoMasCargos+"')]"));
+			
+			if(isElementPresent(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'"+totalEsperadoMasCargos+"')]"))) {
+				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'"+totalEsperadoMasCargos+"')]"));
+			} else {
+				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line price-breakdown-total')]/child::div[2]"));
+			}
+			
 	
 		}else {
-			driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][2]//div[contains(text(),'Total')]"));
-			driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][2]//div[contains(text(),'"+totalEsperado+"')]"));
+			
+			if(isElementPresent(By.xpath("//div[contains(@class,'price-breakdown-line')][2]//div[contains(text(),'Total')]"))) {
+				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][2]//div[contains(text(),'Total')]"));
+			} else { 
+			 driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line price-breakdown-total')][1]//div[contains(text(),'Total')]"));
+			}
+			
+			if(isElementPresent(By.xpath("//div[contains(@class,'price-breakdown-line')][2]//div[contains(text(),'"+totalEsperado+"')]"))) {
+				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][2]//div[contains(text(),'"+totalEsperado+"')]"));
+			} else {
+				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line price-breakdown-total')][1]//div[contains(text(),'"+totalEsperado+"')]"));
+			}
 		}
 		
 
@@ -387,5 +455,66 @@ public class CheckOut extends TestBase{
 		
 	
 	}
+	
+	public void validarImporteMinimoPedido(String importeMinimo, String totalEsperado) {
+		validarImporteMinimoPedido = "true";
+		Double iMinimo = null;
+		Double sTotal = null;
+		Double saldoACompletar = null;
+		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'price-breakdown-line')]/child::div[2]")));
+		List<WebElement> allPrice = driver.findElements(By.xpath("//div[contains(@class, 'price-breakdown-line')]/child::div[2]"));
+		
+		if(allPrice.size() != 0 && allPrice.size() >= 0){
+			
+			WebElement subTotalWeb = allPrice.get(0);
+			String subTotal = subTotalWeb.getAttribute("innerText");
+			subTotal = subTotal.replaceAll("€", "").replace(",",".").trim();
+			sTotal = Double.parseDouble(subTotal);
+			iMinimo = Double.parseDouble(importeMinimo.replaceAll("€", "").replace(",",".").trim());
+			
+			WebElement deliveryChargeWeb = allPrice.get(1);
+			String deliveryCharge = deliveryChargeWeb.getAttribute("innerText");
+			deliveryCharge = deliveryCharge.replaceAll("€", "").replace(",",".").trim();
+			
+			
+			WebElement TotalPriceWeb = allPrice.get(2);
+			String TotalPrice = TotalPriceWeb.getAttribute("innerText");
+			TotalPrice = TotalPrice.replaceAll("€", "").replace(",",".").trim();
+			
+			if(sTotal < iMinimo) {
+				saldoACompletar = iMinimo - sTotal;
+				validarImporteMinimoPedido = "false";
+				log("la venta no cumple el requesito del importe minimo ("+ importeMinimo +") esperado  para entregrar el pedido");
+				log("la venta falta la cantidad de ( "+ String.valueOf(saldoACompletar) +"€ ) esperado  para entregrar el pedido");
+			}
+			
+		} else {
+			validarImporteMinimoPedido = "false";
+			log("no tenemos todos los precios para verificar el importe minimo");
+			Assert.assertTrue(false);
+		}
+		
+		if(validarImporteMinimoPedido.equalsIgnoreCase("false") && (sTotal < iMinimo)) {
+			String saldoCompletar = String.valueOf(saldoACompletar);
+			saldoCompletar = saldoCompletar + "€";
+			
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//app-showmessage//div[contains(@class, 'msg-dialog-text main-text')]"))); // message
+			
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//app-showmessage//div[contains(@class, 'msg-dialog-buttons')]/child::button[contains(@class, 'btn-confirm')]"))); //button aceptar
+			
+			WebElement messageWeb = driver.findElement(By.xpath("//app-showmessage//div[contains(@class, 'msg-dialog-text main-text')]"));
+			String message = messageWeb.getAttribute("innerText");
+			
+			WebElement buttonAccept = driver.findElement(By.xpath("//app-showmessage//div[contains(@class, 'msg-dialog-buttons')]/child::button[contains(@class, 'btn-confirm')]"));
 
+			if(message.split(saldoCompletar).length > 0 ) {
+				buttonAccept.click();
+				log("la cantidad ("+ saldoCompletar +") que falta existe en el mensaje");
+			} else {
+				log("la cantidad ("+ saldoCompletar +") que falta no existe en el mensaje");
+			}
+			
+		} 
+		
+	}
 }

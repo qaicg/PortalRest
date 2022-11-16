@@ -63,14 +63,17 @@ public class RepeatAddCarrito extends TestBase {
 	}
 	
 	@Test(description="Este test permite el checkout del pedido repetido manualmente" , priority=1)
-	@Parameters({"repeatProductos","repeatProductosTotalPrice","formaPago","nuevaTarjeta","testCardNumber","cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
-		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", "totalEsperado", "goBackByAddOrderButton"})
+	@Parameters({"repeatProductos","repeatProductosTotalPrice","formaPago","nuevaTarjeta","testCardNumber",
+		"cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
+		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", "totalEsperado", "goBackByAddOrderButton", "importeMinimo","validarImporteMinimo"})
+	
 	public void checkOutPedido(@Optional ("") String repeatProductos, @Optional ("") String repeatProductosTotalPrice, String formaPago,
 			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv, String pedidoConfirmadoString, 
 			String shop, String customerMail, @Optional ("")String miMonederoString, @Optional ("") String formaPago2, 
 			String tipoServicio, @Optional ("") String unidades, @Optional ("") String mesa, @Optional ("") String totalEsperadoMasCargos,
-			@Optional ("true") String repartoPermitido,  @Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado, @Optional ("") String goBackByAddOrderButton) {
+			@Optional ("true") String repartoPermitido,  @Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado,
+			@Optional ("") String goBackByAddOrderButton, @Optional ("") String importeMinimo, @Optional ("") String validarImporteMinimo) {
 		
 		if( goBack.equalsIgnoreCase("true") || goBackByAddOrderButton.equalsIgnoreCase("true")) {		
 			goBack = "false";
@@ -90,7 +93,7 @@ public class RepeatAddCarrito extends TestBase {
 		
 		CheckOut	checkout = new CheckOut();
 		checkout.finalizarPedido(repeatProductos, repeatProductosTotalPrice, formaPago, nuevaTarjeta, testCardNumber, cad1, cad2, cvv, pedidoConfirmadoString, 
-				shop, customerMail, miMonederoString, formaPago2, tipoServicio, unidades, mesa, totalEsperadoMasCargos, repartoPermitido, goBack, goBackByAddOrderButton);
+				shop, customerMail, miMonederoString, formaPago2, tipoServicio, unidades, mesa, totalEsperadoMasCargos, repartoPermitido, goBack, goBackByAddOrderButton, importeMinimo, validarImporteMinimo);
 	}
 	
 	
@@ -113,18 +116,25 @@ public class RepeatAddCarrito extends TestBase {
 		if(order.resulTest()) {
 			// recuperamos el numedo del pedido que sera repetido y el precio total
 			
-			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//ul/preceding::div[1]")));
+			//versio actual
+			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//ul/preceding::div[5]")));
 			
-			String numeroPedidoActual = driver.findElement(By.xpath("//ul/preceding::div[1]")).getText();
+			//versio estable
+			//w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//ul/preceding::div[1]")));
+			
+			//versio actual
+			String numeroPedidoActual = driver.findElement(By.xpath("//ul/preceding::div[5]")).getText();
+			
+			//versio estable
+			//String numeroPedidoActual = driver.findElement(By.xpath("//ul/preceding::div[1]")).getText();
 			
 			// test de verificar pedido ha ido bien
 			log("la verificacion del pedido con numero " + numeroPedidoActual + " ha ido bien");
 			
 			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'btn-centered')]/child::div")));
 			repeatOrderButton = driver.findElement(By.xpath("//button[contains(@class,'btn-centered')]/child::div"));
-			
-			
 			repeatOrderButton.click();
+			
 			log("Vuelver a repetir el pedido  " + numeroPedidoActual + " con los productos " + productos + " y precio " + totalEsperado);
 			espera(1000); // Wait for go by using repeat order button
 			

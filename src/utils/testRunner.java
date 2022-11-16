@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.testng.Reporter;
 import org.testng.TestNG;
 
 public class testRunner {
@@ -13,24 +15,44 @@ public class testRunner {
 	//VARIABLES DE SELECCIÓN DE ENTORNO DE EJECUCIÓN//
 	
 																		//-------------------**********DEFINIDIR CONSTANTES***********--------------------------//
+																							static boolean RUNALLTESTS = true;
 																							static boolean SINVENTANA=false;
-																							static boolean ENTORNOTEST=false;
+																							static boolean ENTORNOTEST=true;
 																	   //-------------------******************************************--------------------------//
 
 	public static void main(String[] args) {
 		
 		TestNG runner = new TestNG();
 		List<String> suitefiles = new ArrayList<String>();
-		Data.getInstance().setEntornoTest(ENTORNOTEST);
-		
-		if(ENTORNOTEST) {			
+				
+		if(RUNALLTESTS) { // EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA08) Y DESPUES EN LA VERSION ESTABLE (QA07)
+			log("EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA08) Y DESPUES EN LA VERSION ESTABLE (QA07)");
+			Data.getInstance().setRunAllTests(RUNALLTESTS);
+			// EJECUTA LOS TESTS EN LA VERSION MASTER (QA08)
+			
+			log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA08)");
+
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");																				
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
-		}else {
+			
+			// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA07)
+			log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA07)");
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml"); 																				
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
+			
+		} else {
+			Data.getInstance().setEntornoTest(ENTORNOTEST);
+			
+			if(ENTORNOTEST) {	
+				// EJECUTA LOS TESTS EN LA VERSION MASTER (QA08)
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");																				
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
+			}else {
+				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA07)
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml"); 																				
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
+			}
 		}
-		
 		
 		Data.getInstance().setModoSinVentana(SINVENTANA); // EJECUTA EL TEST SIN VENTANAS DE NAVEGADOR, MODO SILENCIOSO. 
 		
@@ -63,6 +85,11 @@ public class testRunner {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static void log(String s) {
+		System.out.println(s);
+		Reporter.log(s + "<br>");	
 	}
 
 }

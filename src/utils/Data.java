@@ -9,6 +9,7 @@ public class Data {
     private String BD;
     private String reportDirectory;
     private boolean entornoTest=true;
+    private boolean runAllTests=true;
     private String pedidoActual;
     
     
@@ -22,7 +23,10 @@ public class Data {
 	public boolean isEntornoTest() {
 		return entornoTest;
 	}
-
+	
+	public boolean isRunAllTest() {
+		return runAllTests;
+	}
 
 	
 
@@ -40,6 +44,10 @@ public class Data {
 
 	public void setEntornoTest(boolean entornoTest) {
 		this.entornoTest = entornoTest;
+	}
+	
+	public void setRunAllTests(boolean runAllTests) {
+		this.runAllTests = runAllTests;
 	}
 
 
