@@ -1,5 +1,6 @@
 package Ventas;
 
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -76,31 +78,91 @@ public class CheckOut extends TestBase{
 			
 			if(formaPago.equalsIgnoreCase("Redsys Test"))
 				pagarPedidoConTarjeta(formaPago, nuevaTarjeta.equalsIgnoreCase("true"),testCardNumber,cad1,cad2,cvv,pedidoConfirmadoString, validarImporteMinimo);
+			
 			if (formaPago.equalsIgnoreCase("Pagar a la entrega"))
 				pagarPedidoPagarEnCaja(formaPago,pedidoConfirmadoString);
-			if (formaPago.equalsIgnoreCase("saldo"))
-				pagarPedidoSaldo(formaPago,formaPago2,pedidoConfirmadoString,totalEsperado, miMonederoString);
+			
+			if (formaPago.equalsIgnoreCase("saldo") || formaPago.equalsIgnoreCase("combinado"))
+				pagarPedidoSaldo(formaPago,formaPago2,pedidoConfirmadoString,totalEsperado, miMonederoString, validarImporteMinimo);
 			
 			Assert.assertTrue(true);	
 		}
 	}
 
-	private void pagarPedidoSaldo(String formaPago, String formaPago2, String pedidoConfirmadoString, String totalEsperado , String miMonederoString) {
+	private void pagarPedidoSaldo(String formaPago, String formaPago2, String pedidoConfirmadoString, String totalEsperado , String miMonederoString, String validarImporteMinimo) {
 		log("Se paga el pedido con "+ formaPago);
+		
+		if(!isElementPresent(By.xpath("//div[contains(@class,'loyalty-card-info')]"))) {
+			log("No se puede combinar dos formas de pago: La tarjeta de fidelizacion no tiene saldo");
+			log("Primero, Cargar la tarjet de fidelizacion antes de combinar la forma de pago!!!");
+			Assert.assertTrue(false);
+		}
+		
 		String saldoActual = driver.findElements(By.xpath("//div[contains(@class,'loyalty-card-info')]")).get(1).getAttribute("innerText");
 		log("- El saldo actual de la tarjeta es  " + saldoActual);
 		String caducidad = driver.findElements(By.xpath("//div[contains(@class,'loyalty-card-info')]")).get(0).getAttribute("innerText");
 		log("- La caducidad de la tarjeta es  " + caducidad);
 
-		if(!formaPago2.equalsIgnoreCase("")) {
+		if(formaPago.equalsIgnoreCase("combinado")) {
+			log("Forma de pago: Combinado");
 			//TODO  Pendiente de implementar el pago en dos formas de pago. Saldo y Redsys. Crear cliente nuevo primero, hacer carga de poco saldo y usar en venta.
-		}
+			
+			clicJS(driver.findElement(By.xpath("//div[contains(@class,'gift-card-logo')]")));//SELECCIONO FORMA DE PAGO
+			
+			String saldo = saldoActual.replaceAll("€", "").replace(",",".").trim();
+			Double saldoDisponible = Double.parseDouble(saldo);
+			
+			String totalAPagar = totalEsperado.replaceAll("€", "").replace(",",".").trim();
+			Double precioTotal = Double.parseDouble(totalAPagar);
+			
+			Double faltaPagar = precioTotal - saldoDisponible;
+			DecimalFormat formato1 = new DecimalFormat("#.00");
+			
+			saldo = formato1.format(saldoDisponible);
+			saldo = String.valueOf(saldoDisponible).replace(".", ",") + "€";
+			
+			String precioFalta = formato1.format(faltaPagar);
+			precioFalta = precioFalta.replace(".", ",") + "€";
+			
+			//Si estamos con pago combinado(Saldo tarjeta de fidelizacion inferior al precio del pedido a pagar) se mostra la pantalla de dialogo que nos pide confirmar
+			if(isElementPresent(By.xpath("//div[contains(@class,'dialog-container')]")) && faltaPagar > 0) {				
+				w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'"+saldoActual+"')][contains(text(),'"+precioFalta+"')]")));
+				
+				driver.findElement(By.xpath("//div[contains(text(),'"+saldoActual+"')][contains(text(),'"+precioFalta+"')]"));
+				espera(500);
+				w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'btn-confirm btn-centered')]")));
+				clicJS(driver.findElement(By.xpath("//button[contains(@class,'btn-confirm btn-centered')]")));  //Aceptar
+				
+				log("Añadir la secunda forma de pago tarjeta Redsys a combinar");
+				pagarPedidoConTarjeta(formaPago2, false, "", "", "", "", pedidoConfirmadoString, validarImporteMinimo);
+				
+				//Validar el saldo restante si es "0,00€", despues de realizar la venta.
+				log("Validando saldo restante en la tarjeta...");
+				abrirMiMonedero(miMonederoString);
+				String saldoRestante = "0,00€";
+				w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Saldo disponible']/following::span[1]")));
+				String saldoReal = driver.findElement(By.xpath("//span[text()='Saldo disponible']/following::span[1]")).getAttribute("innerText");
+				if(!saldoReal.equalsIgnoreCase(saldoRestante)) {
+					log("El Saldo("+ saldoReal +") encuentrado despues de realizar la venta no es correcto y debe ser " + saldoRestante);
+					Assert.assertTrue(false);
+				}
+				
+				log("El Saldo("+ saldoReal +") encuentrado despues de realizar la venta es correcto");
+				Assert.assertTrue(true);
+				
+			} else {
+				log("No se puede combinar dos formas de pago: El Saldo de la tarjeta de fidelizacion es suficiente.");
+				Assert.assertTrue(false);
+			}
 
-		clicJS(driver.findElement(By.xpath("//div[contains(@class,'gift-card-logo')]")));//SELECCIONO FORMA DE PAGO
-		clicJS(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")));
-		w2.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
-		validarReciboCheckout(pedidoConfirmadoString);
-		validarSaldoRestante(saldoActual,totalEsperado, miMonederoString);
+		} else if(formaPago.equalsIgnoreCase("saldo")){
+			clicJS(driver.findElement(By.xpath("//div[contains(@class,'gift-card-logo')]")));//SELECCIONO FORMA DE PAGO - TARJETA DE FIDELIZACION
+			clicJS(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")));
+			w2.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
+			validarReciboCheckout(pedidoConfirmadoString);
+			validarSaldoRestante(saldoActual,totalEsperado, miMonederoString);
+		}
+		
 	}
 
 	private void validarSaldoRestante(String saldoAnterior, String importeVenta, String miMonedero) { //VALIDA EL SALDO ANTERIOR CON EL NUEVO RESTADO DEL IMPORTE DE LA VENTA.
@@ -145,7 +207,8 @@ public class CheckOut extends TestBase{
 
 	private void pagarPedidoConTarjeta(String formaPago, boolean nuevaTarjeta, String testCardNumber, String cad1, String cad2, String cvv, String pedidoConfirmado, String validarImporteMinimo) {
 
-		log("Se paga el pedido con tarjeta");
+		log("Se paga el pedido con tarjeta formaPago " + formaPago);
+		w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]"))); //ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
 		clicJS(driver.findElement(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]"))); //SELECCIONO FORMA DE PAGO
 
 		List<WebElement> checkBoxes = driver.findElements(By.xpath("//div[contains(@class,'mat-checkbox-inner-container')]"));

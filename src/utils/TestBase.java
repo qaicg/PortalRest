@@ -27,6 +27,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.ITestContext;
@@ -47,6 +48,7 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentAventReporter;
 import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
 import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
 
@@ -192,6 +194,7 @@ public class TestBase {
 	public boolean isElementPresent(By by) {
 		try {
 			List<WebElement> elements;
+			//w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 			elements = driver.findElements(by);
 			if (elements.size() == 0)
 				return false;
@@ -213,6 +216,20 @@ public class TestBase {
 			JavascriptExecutor executor = (JavascriptExecutor) driver;
 			executor.executeScript("arguments[0].click();", element);
 		}
+	}
+	
+	public boolean setInputValueJS(By by, String value) {
+		if(isElementPresent(by)) {
+			WebElement elment = driver.findElement(by);		
+			if(!isNullOrEmpty(elment.getAttribute("value"))){				
+				elment.clear();
+			}
+			elment.sendKeys(value);			
+				
+			return true;
+		}
+		
+		return false;
 	}
 
 	protected void atras() {
