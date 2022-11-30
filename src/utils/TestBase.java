@@ -225,7 +225,6 @@ public class TestBase {
 				elment.clear();
 			}
 			elment.sendKeys(value);			
-				
 			return true;
 		}
 		
@@ -254,11 +253,44 @@ public class TestBase {
 		espera(500);
 	}
 
-	public void abrirMisPedidos(String miPerfil, String misPedidos) {
-		clicJS(driver.findElement(By.xpath("//mat-icon[text()='menu']")));
-		clicJS(driver.findElement(By.xpath("//button[text()='" + miPerfil + "']")));
-		clicJS(driver.findElement(By.xpath("//button[contains(text(),'" + misPedidos + "')]")));
+	public void abrirMisPedidos(@Optional("") String miPerfil, @Optional("") String misPedidos, @Optional("true") boolean fromMenu) {
+		if(fromMenu) {
+			clicJS(driver.findElement(By.xpath("//mat-icon[text()='menu']")));
+			espera(500);
+			clicJS(driver.findElement(By.xpath("//button[text()='" + miPerfil + "']")));
+			espera(500);
+			clicJS(driver.findElement(By.xpath("//button[contains(text(),'" + misPedidos + "')]")));
+			espera(500);
+		} else {
+			//Validar si estamos en la ficha principal del restaurante
+			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'rounded-buttons-wrapper')]")));
+			
+			if(isElementPresent(By.xpath("//div[contains(@class, 'rounded-buttons-wrapper')]"))) {
+				w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[contains(@class, 'main-text')  and text()='" + misPedidos + "']//ancestor::app-circle-progress-button")));
+				if(isElementPresent(By.xpath("//label[contains(@class, 'main-text')  and text()='" + misPedidos + "']//ancestor::app-circle-progress-button"))) {
+					clicJS(driver.findElement(By.xpath("//label[contains(@class, 'main-text')  and text()='" + misPedidos + "']//ancestor::app-circle-progress-button")));
+					espera(500);
+				} else {
+					log("No hay el botón Mis pedidos en la ficha principal del restaurante.");
+					Assert.assertTrue(false);
+				}
+				
+			} else {
+				log("No estamos en la ficha principal del restaurante para repetir el pedido");
+				Assert.assertTrue(false);
+			}
+			
+		}
 		espera(500);
+	}
+	
+	public void abrirInformacionPersonal(String miPerfil, String personal) {
+		clicJS(driver.findElement(By.xpath("//mat-icon[text()='menu']")));
+		espera(1000);
+		clicJS(driver.findElement(By.xpath("//button[text()='" + miPerfil + "']")));
+		espera(1000);
+		clicJS(driver.findElement(By.xpath("//button[contains(text(),'" + personal + "')]")));
+		espera(1000);
 	}
 	
 	public void clicAction(WebElement element) {

@@ -24,8 +24,11 @@ import org.testng.annotations.Test;
 
 import com.mysql.cj.util.StringUtils;
 
+import Clientes.AbrirPaginaRegistro;
+import Clientes.CrearCliente;
 import utils.Data;
 import utils.TestBase;
+import utils.getDummyData;
 
 public class CheckOut extends TestBase{
 
@@ -56,10 +59,43 @@ public class CheckOut extends TestBase{
 		checkoutButton.click();
 		espera(1000);
 		
+		if(customerMail.equalsIgnoreCase("comoInvitado")) {
+			//Ne debe aparecer una forma de pago pendiente
+			if(isElementPresent(By.xpath("//div[contains(@class, 'payment-name line-clamp-2') and contains(text(), 'Pagar a la entrega')]"))) {
+				log("No debe aparecer una forma de pago pendiente!!!");
+				Assert.assertTrue(false);
+			}
+			
+			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'login-ask-wrapper')]/child::button[2]")));
+			clicJS(driver.findElement(By.xpath("//div[contains(@class, 'login-ask-wrapper')]/child::button[2]")));
+			espera(1000);
+		}
+		
+		if(isNullOrEmpty(customerMail)) { //Registrar el ususario y recuperar su email antes de continuar la venta
+			
+			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'login-ask-wrapper')]/child::button[1]")));
+			clicJS(driver.findElement(By.xpath("//div[contains(@class, 'login-ask-wrapper')]/child::button[1]")));
+			espera(2000);
+			
+			AbrirPaginaRegistro openSignPage = new AbrirPaginaRegistro();
+			
+			openSignPage.abrePaginaRegistro("");
+			
+			CrearCliente newUser = new CrearCliente();
+			
+			newUser.crearCliente(true, true, false, false, "", "", "");
+			espera(1000);
+			if(newUser.isCreatedUser) {
+				customerMail = Data.getInstance().getNewUserMail();
+			}
+			//crearCliente(@Optional ("true") boolean resultadoEsperado, @Optional ("true") boolean aceptoTerminos, @Optional ("false") boolean IcgCloud, @Optional ("false") boolean validationCliente,
+			//  @Optional("") String menu, @Optional("") String profile, @Optional("") String personal) 
+		}
+		
 		
 		
 		w2 = new WebDriverWait(TestBase.driver,Duration.ofSeconds(60)); // LE DAMOS 60 SEGUNDOS PARA HACER EL CHECKOUT.
-		if((customerMail.equalsIgnoreCase("") || customerMail.equalsIgnoreCase("invitado@portalrest.com")) && formaPago.equalsIgnoreCase("Redsys Test"))nuevaTarjeta="true"; //SI NO TENEMOS CLIENTE SIGNIFICA QUE ES NUEVO Y NECESITAREMOS TARJETA NUEVA
+		if(customerMail.equalsIgnoreCase("comoInvitado") || (customerMail.equalsIgnoreCase("") || customerMail.equalsIgnoreCase("invitado@portalrest.com")) && formaPago.equalsIgnoreCase("Redsys Test"))nuevaTarjeta="true"; //SI NO TENEMOS CLIENTE SIGNIFICA QUE ES NUEVO Y NECESITAREMOS TARJETA NUEVA
 		if(!(validaPantalla(arrayNombres,totalEsperado,unidades,totalEsperadoMasCargos,repartoPermitido)))Assert.assertTrue(false);
 		
 		// Usar back para añadi mas productos al final del proceso de la venta.
@@ -83,13 +119,15 @@ public class CheckOut extends TestBase{
 				pagarPedidoPagarEnCaja(formaPago,pedidoConfirmadoString);
 			
 			if (formaPago.equalsIgnoreCase("saldo") || formaPago.equalsIgnoreCase("combinado"))
-				pagarPedidoSaldo(formaPago,formaPago2,pedidoConfirmadoString,totalEsperado, miMonederoString, validarImporteMinimo);
+				pagarPedidoSaldo(formaPago, formaPago2, pedidoConfirmadoString, totalEsperado, miMonederoString, validarImporteMinimo, nuevaTarjeta, testCardNumber, cad1, cad2, cvv);
 			
 			Assert.assertTrue(true);	
 		}
 	}
 
-	private void pagarPedidoSaldo(String formaPago, String formaPago2, String pedidoConfirmadoString, String totalEsperado , String miMonederoString, String validarImporteMinimo) {
+	private void pagarPedidoSaldo(String formaPago, String formaPago2, String pedidoConfirmadoString, String totalEsperado , String miMonederoString, String validarImporteMinimo, 
+			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
+			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv) {
 		log("Se paga el pedido con "+ formaPago);
 		
 		if(!isElementPresent(By.xpath("//div[contains(@class,'loyalty-card-info')]"))) {
@@ -134,7 +172,11 @@ public class CheckOut extends TestBase{
 				clicJS(driver.findElement(By.xpath("//button[contains(@class,'btn-confirm btn-centered')]")));  //Aceptar
 				
 				log("Añadir la secunda forma de pago tarjeta Redsys a combinar");
-				pagarPedidoConTarjeta(formaPago2, false, "", "", "", "", pedidoConfirmadoString, validarImporteMinimo);
+				boolean isNewCard = false;
+				if (nuevaTarjeta.equalsIgnoreCase("true"))
+					isNewCard = true;
+				
+				pagarPedidoConTarjeta(formaPago2, isNewCard, testCardNumber, cad1, cad2, cvv, pedidoConfirmadoString, validarImporteMinimo);
 				
 				//Validar el saldo restante si es "0,00€", despues de realizar la venta.
 				log("Validando saldo restante en la tarjeta...");

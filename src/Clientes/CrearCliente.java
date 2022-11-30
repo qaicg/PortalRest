@@ -11,6 +11,8 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import Verificaciones.VerificarClientes;
+import graphql.Assert;
 import utils.Data;
 import utils.TestBase;
 import utils.getDummyData;
@@ -22,10 +24,13 @@ public class CrearCliente extends TestBase {
 	 String dummyPostalCode;
 	 String dummyEmail;
 	 String dummyPassword;
+	 boolean isValidatedInformationPersonalUser = true;
+	 public boolean isCreatedUser = false;
 	
   @Test  (priority=1)
   @Parameters({"resultadoEsperado", "aceptoTerminos", "ICGCloud", "validationCliente", "menu", "profile", "personal" })
-  public void crearCliente(@Optional ("true") boolean resultadoEsperado, @Optional ("true") boolean aceptoTerminos,@Optional ("false") boolean IcgCloud,@Optional ("false") boolean validationCliente, @Optional String menu, @Optional String profile, @Optional String personal) {
+  public void crearCliente(@Optional ("true") boolean resultadoEsperado, @Optional ("true") boolean aceptoTerminos, @Optional ("false") boolean IcgCloud, @Optional ("false") boolean validationCliente,
+		  @Optional("") String menu, @Optional("") String profile, @Optional("") String personal) {
 	  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10));
 	  w.until(ExpectedConditions.presenceOfElementLocated (By.className("generic-title")));
 	  dummyUserName = getDummyData.getDummyUserName();
@@ -75,6 +80,11 @@ public class CrearCliente extends TestBase {
 	  if (resultadoEsperado) {
 		  w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10)); //Le damos 10 segundos para registrar el usuario y salir de la pantalla de registro.
 		  w.until(ExpectedConditions.invisibilityOfElementLocated(By.className("generic-title")));
+		  
+		  if(isElementPresent(By.className("generic-title"))) {
+			  isCreatedUser = true;
+		  }
+		  
 		  log("Cliente a crear -> Nombre: "+ dummyUserName + " email: "+ dummyEmail+ " password: " + dummyPassword);
 	  }else {
 		  //TO DO 
@@ -83,7 +93,11 @@ public class CrearCliente extends TestBase {
 	  }
 	  
 	  if(validationCliente) {
-		  validateNewUser(menu, profile, personal);
+		  //validateNewUser(menu, profile, personal);
+		  //Validation of the saved data in new user
+		  espera(1000);
+		  validatedPersonalInformationUser(IcgCloud, profile, personal, dummyUserName, dummyEmail, dummyTelefono, dummyPostalCode);
+		  espera(1000);
 	  }
   }
   
@@ -137,13 +151,121 @@ public class CrearCliente extends TestBase {
 		     }*/
 	  }
 			 
-}
-  
+  	}
   
   	public void javaScriptExecutor () {
 	JavascriptExecutor js = (JavascriptExecutor) driver;  
 	js.executeScript("var results = []; for(var x=0;x<allInputs.length;x++)if(allInputs[x].value == value)results.push(allInputs[x]);return results;");
   	}
+  	
+	public void validatedPersonalInformationUser (@Optional("false") boolean icgCloud, String profile, String personal, @Optional("") String name, 
+			@Optional("") String email, @Optional("") String telefone, @Optional("") String codigoPostal) {
+		//
+		espera(500); //Wait for information personal page 
+		abrirInformacionPersonal(profile, personal);
+	  
+		//espera(1000);
+	  
+		//Validar la información personal del cliente(usuario connectado en PR.
+		//*************
+		if(!isNullOrEmpty(name)) {
+			w2.until(ExpectedConditions.presenceOfElementLocated( By.xpath("//input[contains(@id, 'mat-input-8')]") ));
+			if( driver.findElement(By.xpath("//input[contains(@id, 'mat-input-8')]")).getAttribute("value").equalsIgnoreCase(name)) {
+				log("El nombre es correcto");
+			} else {
+				log("Cliente erróneo: Nombre entrada " + name + " obtenido " + driver.findElement(By.xpath("//input[contains(@id, 'mat-input-8')]")).getAttribute("value"));
+				isValidatedInformationPersonalUser = false;
+			}
+		}
+		
+		if(!isNullOrEmpty(telefone)) {
+			w2.until(ExpectedConditions.presenceOfElementLocated( By.xpath("//input[contains(@id, 'mat-input-9')]") ));
+			if( driver.findElement(By.xpath("//input[contains(@id, 'mat-input-9')]")).getAttribute("value").equalsIgnoreCase(telefone)) {
+				log("El Teléono es correcto");
+			} else {
+				log("Cliente erróneo: Teléfono entrada " + telefone + " obtenido " + driver.findElement(By.xpath("//input[contains(@id, 'mat-input-9')]")).getAttribute("value"));
+				isValidatedInformationPersonalUser = false;
+			}
+		}
+
+		if(!isNullOrEmpty(codigoPostal)) {
+			w2.until(ExpectedConditions.presenceOfElementLocated( By.xpath("//input[contains(@id, 'mat-input-10')]") ));
+			if(driver.findElement(By.xpath("//input[contains(@id, 'mat-input-10')]")).getAttribute("value").equalsIgnoreCase(codigoPostal)) {
+				log("El código postal es correcto");
+			} else {
+				log("Cliente erróneo: Codigo postal entrada " + codigoPostal + " obtenido " + driver.findElement(By.xpath("//input[contains(@id, 'mat-input-10')]")).getAttribute("value"));
+				isValidatedInformationPersonalUser = false;
+			}
+		}
+
+		if(!isNullOrEmpty(email)) {
+			w2.until(ExpectedConditions.presenceOfElementLocated( By.xpath("//input[contains(@id, 'mat-input-11')]") ));
+			if(driver.findElement(By.xpath("//input[contains(@id, 'mat-input-11')]")).getAttribute("value").equalsIgnoreCase(email)) {
+				log("El correo electrónico es correcto");
+			} else {
+				log("Cliente erróneo: Email entrada " + email + " obtenido " + driver.findElement(By.xpath("//input[contains(@id, 'mat-input-11')]")).getAttribute("value"));
+				isValidatedInformationPersonalUser = false;
+			}
+		}
+		//************
+		
+		//TODO: A decidir si validamos los literales
+	    //validatedLabelsInformationUser (icgCloud) 
+		
+		if(isValidatedInformationPersonalUser) {
+			log("Cliente validado correctamente");
+		} else {
+			log("Hay error en la validacion del cliente ");
+			Assert.assertTrue(false);
+		}
+	}
+	
+	public void validatedLabelsInformationUser (@Optional("") boolean icgCloud) {
+		if(!icgCloud) {
+			if(!isElementPresent(By.xpath("//mat-label[contains(@class, 'app-input-label') and text()='Nombre*']"))) {
+				log("El literal del Nombre no es correcto"); 
+				isValidatedInformationPersonalUser = false;
+			}
+			
+			if(!isElementPresent(By.xpath("//mat-label[contains(@class, 'app-input-label') and text()='Teléfono*']"))) {
+				log("El literal del Teléfono no es correcto"); 
+				isValidatedInformationPersonalUser = false;
+			}
+			
+			if(!isElementPresent(By.xpath("//mat-label[contains(@class, 'app-input-label') and text()='Código postal']"))) {
+				log("El literal del código postal no es correcto"); 
+				isValidatedInformationPersonalUser = false;
+			}
+			
+			if(!isElementPresent(By.xpath("//mat-label[contains(text(), 'Email')]"))) {
+				log("El literal del correo electrónico no es correcto"); 
+				isValidatedInformationPersonalUser = false;
+			}
+		  
+		} else {
+		  
+			if(!isElementPresent(By.xpath ("//mat-label[contains(text(), 'Name')]"))) {
+				log("El literal del nombre no es correcto"); 
+				isValidatedInformationPersonalUser = false;
+			}
+		  
+			if(!isElementPresent(By.xpath ("//mat-label[contains(text(), 'Phone')]"))) {
+				log("El literal del Teléono no es correcto"); 
+				isValidatedInformationPersonalUser = false;
+			}
+			
+			if(!isElementPresent(By.xpath ("//mat-label[contains(text(), 'ZIP')]"))) {
+				log("El literal del código postal no es correcto"); 
+				isValidatedInformationPersonalUser = false;
+			}
+		  
+			if(!isElementPresent(By.xpath ("//mat-label[contains(text(), 'Email')]"))) {
+				log("El literal del correo electrónico no es correcto"); 
+				isValidatedInformationPersonalUser = false;
+			}
+		}
+		
+	}
 }
 
 	

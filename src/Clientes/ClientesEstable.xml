@@ -10,9 +10,21 @@
 
 	<parameter name="login" value="Registrarme" />
 	<parameter name="report.config" value="C:\Users\QA\portalrestproject\test-output\extent-config.xml" />
-	<parameter name="test" value ="true"/> <!-- Entorno de ejecución -->
+	<parameter name="test" value ="false" /> <!-- Entorno de ejecución Produccion-->
+	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
+	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 
-	<test thread-count="5" name="Creación de nuevo cliente PRT" enabled="true">
+	<parameter name="menu" value="menu" /> <!-- Nombre del menú para hacer clic en el-->
+	<parameter name="profile" value="Mi perfil" /> <!-- Nombre de la opción de menú en Español de mi Perfil-->
+	<parameter name="personal" value="Información personal" /> <!-- Nombre de la opcioón de menú en Español Información Personal-->
+	<parameter name="email" value="portaltest88@yopmail.com" /> <!--Email que se usa para hacer login en la venta en caso de ser necesario -->
+	<parameter name="password" value=".1234abcd" /> <!-- Password del del cliente utilizado para hacer login -->
+	<parameter name="ICGCloud" value=""/>
+	
+	<parameter name="miPerfilString" value="Mi perfil" /> <!--Nombre de la opción de menú Mi Perfil en Español -->
+	<parameter name="misDireccionesString" value="Mis direcciones" /> <!--Nombre de la opción de menú Mis Direcciones en Español -->
+
+	<test thread-count="5" name="Creación de nuevo cliente PRT" enabled="false">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="aceptoTerminos" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
@@ -35,7 +47,7 @@
 	</test> <!-- CreaCliente -->
 
 
-	<test thread-count="5" name="Loguea un cliente con éxito con PRT" enabled="true" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente con éxito con PRT" enabled="false" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -55,11 +67,16 @@
 			<class name="Clientes.AbrirPaginaLogin" />
 			<class name="Clientes.LoginCliente" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
-			<class name="Verificaciones.VerificarClientes" />
+			<class name="Verificaciones.VerificarClientes"> 
+				<methods>
+					<include name="validateUser"></include>
+				</methods>
+			</class>
+
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Loguea un cliente erróneo con PRT" enabled="true" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente erróneo con PRT" enabled="false" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -79,7 +96,7 @@
 	</test> <!-- CreaCliente -->
 
 
-	<test thread-count="5" name="Recordar cliente con PRT" enabled="true" preserve-order="true">
+	<test thread-count="5" name="Recordar cliente con PRT" enabled="false" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -101,11 +118,16 @@
 			<class name="Clientes.AbrirPaginaLogin" />
 			<class name="Clientes.LoginCliente" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
-			<class name="Verificaciones.VerificarClientes" />
+			<class name="Verificaciones.VerificarClientes"> 
+				<methods>
+					<include name="validateUser"></include>
+				</methods>
+			</class>
+
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Loguea un cliente con éxito con Google" enabled="true" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente con éxito con Google" enabled="false" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -120,7 +142,7 @@
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Loguea un cliente con éxito con ICGCloud" enabled="true" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente con éxito con ICGCloud" enabled="false" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -141,11 +163,16 @@
 			<class name="Clientes.AbrirPaginaLogin" />
 			<class name="Clientes.LoginCliente" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
-			<class name="Verificaciones.VerificarClientes" />
+			<class name="Verificaciones.VerificarClientes"> 
+				<methods>
+					<include name="validateUser"></include>
+				</methods>
+			</class>
+
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Loguea un cliente erróneo con ICGCloud" enabled="true" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente erróneo con ICGCloud" enabled="false" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -165,7 +192,7 @@
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Recordar cliente con ICGCloud" enabled="true" preserve-order="true">
+	<test thread-count="5" name="Recordar cliente con ICGCloud" enabled="false" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -186,11 +213,16 @@
 			<class name="Clientes.AbrirPaginaLogin" />
 			<class name="Clientes.LoginCliente" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
-			<class name="Verificaciones.VerificarClientes" />
+			<class name="Verificaciones.VerificarClientes"> 
+				<methods>
+					<include name="validateUser"></include>
+				</methods>
+			</class>
+
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Login ICGCloud usuario PRT" enabled="true" preserve-order="true">
+	<test thread-count="5" name="Login ICGCloud usuario PRT" enabled="false" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -209,9 +241,89 @@
 		</classes>
 	</test> <!-- CreaCliente -->
 
+ 	<!--Validar Informacion Personal del cliente logeado en PRT -->
+	<test name="Prueba de Validacion: Información personal del cliente logeado en PRT" enabled="false" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
+		<parameter name="shop" value="52704" />
+		<parameter name="name" value="portaltest88" />
+		<parameter name="telefone" value="999696966" /> 
+		<parameter name="codigoPostal" value="25123" />
+		<parameter name="email" value="portaltest88@yopmail.com" />
+		<parameter name="icgCloud" value="" />
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Verificaciones.VerificarClientes"> 
+				<methods>
+					<include name="validatedPersonalInformationUser"></include>
+				</methods>
+			</class>
+		</classes>
+	</test>	
+ 
+	<!--Validar Informacion Personal del cliente logeado en PRT ICGCLOUD -->
+	<test name="Prueba de Validacion: Información personal del cliente logeado en PRT ICGCLOUD" enabled="false" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
+		<parameter name="shop" value="54066" />
+		
+		<parameter name="name" value="Cliente PortalRest" />
+		<parameter name="telefone" value="645858923" /> 
+		<parameter name="codigoPostal" value="25123" />
+		<parameter name="email" value="clienteprt@yopmail.com" />
+		<parameter name="icgCloud" value="true" />
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Verificaciones.VerificarClientes"> 
+				<methods>
+					<include name="validatedPersonalInformationUser"></include>
+				</methods>
+			</class>
+		</classes>
+	</test>	
+	<!-- -->
+
+  	<test  name="Prueba de registrar un nuevo usuario(ICGCLOUD) y comprobar su informacion personal" enabled="false" preserve-order="true">
+  		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
+		<parameter name="shop" value="54066" />
+  	   	<parameter name="ICGCloud" value="true"/>
+	   	<parameter name="email" value = ""/>
+	   	<parameter name="validationCliente" value="true" />
+   
+	    <classes>
+	   		<class name="AbrePortalRest.AbrirUrl"/>
+			<class name="Verificaciones.VerificarCookies"/>
+	      	<class name="Verificaciones.VerificarFamiliasRestaurante"/>
+	      	<class name="Clientes.AbrirPaginaRegistro"/>
+	        <class name="Clientes.CrearCliente"/>
+	    </classes>
+ 	</test>
+ 
+ 	<test  name="Prueba de registrar un nuevo usuario y comprobar su informacion personal" enabled="false" preserve-order="true">
+	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
+	   	<parameter name="shop" value="52704"/>
+   		<parameter name="ICGCloud" value=""/>
+   		<parameter name="email" value = ""/>
+   		<parameter name="validationCliente" value="true" />
+   		
+	    <classes>
+	   		<class name="AbrePortalRest.AbrirUrl"/>
+			<class name="Verificaciones.VerificarCookies"/>
+	      	<class name="Verificaciones.VerificarFamiliasRestaurante"/>  
+	      	<class name="Clientes.AbrirPaginaRegistro"/>
+	        <class name="Clientes.CrearCliente"/>
+	    </classes>
+ 	</test>
+
 	<!-- FALLA, FALTA IMPLEMENTAR INCIDENCIA #26686
   
-    <test thread-count="5" name="Creación de nuevo cliente ICGCloud" enabled="true" >
+    <test thread-count="5" name="Creación de nuevo cliente ICGCloud" enabled="false" >
 	  <parameter name="resultadoEsperado" value="true"/>
 	  <parameter name="aceptoTerminos" value="true"/>
 	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa"/>
@@ -232,6 +344,87 @@
 	    </classes>
   </test> 
   -->
+	<!-- Registrar direccion -->
+ 	<test  name="Prueba de registrar una direcciones(Creacion de direccion)" enabled="true" preserve-order="true">
+	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
+	   	<parameter name="shop" value="52704"/>
+   		<parameter name="validationCliente" value="true" />
+		<parameter name="direccion" value="Calle Maragall, 7"/>		
+		<parameter name="cp" value="25003" />
+		<parameter name="ciudad" value="Lleida" />
+	    <classes>
+	    	<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<!-- -->
+			<class name="Clientes.DireccionCliente">
+				<methods>
+					<include name="openMyAddresses"></include><!-- Consultar Direcciones del cliente-->
+					<include name="createAddress"></include><!-- Crear Direccion-->
+				</methods>
+			</class>
+	        <!-- -->
+	    </classes>
+ 	</test> <!-- Registrar  direccion -->
 
+	<!-- Modificar direccion -->
+ 	<test  name="Prueba de Modificar direcciones(Modificacion de direccion)" enabled="true" preserve-order="true">
+	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
+	   	<parameter name="shop" value="52704"/>
+   		<parameter name="validationCliente" value="true" />
+		<parameter name="direccion" value="Calle Maragall, 7"/>		
+		<parameter name="cp" value="25003" />
+		<parameter name="ciudad" value="Lleida" />
+	    <classes>
+	    	<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<!-- -->
+			<class name="Clientes.DireccionCliente">
+				<methods>
+					<include name="openMyAddresses"></include><!-- Consultar Direcciones del cliente-->
+					<include name="modifyAddress">
+						<parameter name="cp" value="08253" />		
+						<parameter name="ciudad" value="Barcelona" />
+						<parameter name="bloque" value="11" />
+						<parameter name="escalera" value="5" />
+						<parameter name="escalera" value="1" />
+						<parameter name="planta" value="13" />
+					</include><!-- Modificar Direccion-->
+				</methods>
+			</class>
+	        <!-- -->
+	    </classes>
+ 	</test> <!-- Modificar  direccion -->
+
+	<!-- Eliminar direccion -->
+ 	<test  name="Prueba de Eliminar direcciones(Supprimir direccion)" enabled="true" preserve-order="true">
+	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
+	   	<parameter name="shop" value="52704"/>
+   		<parameter name="validationCliente" value="true" />
+		<parameter name="direccion" value="Calle Maragall, 7"/>		
+		<parameter name="cp" value="25003" />
+		<parameter name="ciudad" value="Lleida" />
+	    <classes>
+	    	<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<!-- -->
+			<class name="Clientes.DireccionCliente">
+				<methods>
+					<include name="openMyAddresses"></include><!-- Consultar Direcciones del cliente-->
+					<include name="deleteAdress"></include><!-- Eliminar Direccion-->
+				</methods>
+			</class>
+	        <!-- -->
+	    </classes>
+ 	</test> <!-- Modificar  direccion -->
+ 
 
 </suite>

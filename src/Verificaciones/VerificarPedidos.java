@@ -31,19 +31,14 @@ public class VerificarPedidos  extends TestBase {
 		WebElement totalPriceTypeWebElm;
 		String totalPrice; 
 		
-		// Buttons are identified by text in page language
-		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//mat-icon[normalize-space()='" + menu + "']")));
-		WebElement menuButton = driver.findElement(By.xpath("//mat-icon[normalize-space()='" + menu + "']"));
-		menuButton.click();
-		espera(2000); // Wait for menu button
-		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[contains(text(), '" + profile + "')]")));
-		WebElement profileButton = driver.findElement(By.xpath("//*[contains(text(), '" + profile + "')]"));
-		profileButton.click();
-		espera(2000); // Wait for profile button
-		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[contains(text(), '" + pedidos + "')]")));
-		WebElement pedidosInfo = driver.findElement(By.xpath("//*[contains(text(), '" + pedidos + "')]"));
-		pedidosInfo.click();
-		espera(2000); // Wait for orders button
+		if(isNullOrEmpty(menu)) {
+			//espera(500);
+			abrirMisPedidos(profile, pedidos, false);
+			espera(2000);
+		} else {
+			abrirMisPedidos(profile, pedidos, true);
+			espera(2000);
+		}
 		
 	
 		if (ultimoPedido.equalsIgnoreCase("true")) {

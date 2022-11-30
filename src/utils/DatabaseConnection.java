@@ -99,7 +99,7 @@ public class DatabaseConnection {
 
 		} catch (Exception e) {
 		    e.printStackTrace();
-		    return 0;
+		    return -1;
 		} 
 	
 	}

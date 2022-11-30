@@ -17,9 +17,9 @@ import utils.cookie;
 
 public class LoginCliente extends TestBase {
   @Test
-  @Parameters({"resultadoEsperado", "email","password","rememberMe","shop","loginCheckout","login"})
+  @Parameters({"resultadoEsperado", "email","password","rememberMe","shop","loginCheckout","login", "realizarPedido", "realizarPedidoString"})
   public void loginCliente(@Optional ("true") String resultadoEsperado, String email, String password, @Optional ("false") String rememberMe, 
-		  String shop, @Optional ("false") boolean loginCheckout, String loginString) {
+		  String shop, @Optional ("false") boolean loginCheckout, String loginString, @Optional("false") boolean realizarPedido, @Optional("") String realizarPedidoString) {
 	
 	  //SI VENIMOS DE UN CHECKOUT HAREMOS UN LOGIN DESDE AQUI
 	  if(loginCheckout) {
@@ -63,6 +63,27 @@ public class LoginCliente extends TestBase {
 		  }else { 
 			  Assert.assertTrue(cookieResult.equalsIgnoreCase("False"));
 			  log("No se ha guardado el usuario en la cookie");
+		  }
+		  
+		  if(realizarPedido) {
+				//Validar si estamos en la ficha principal del restaurante
+				if(isElementPresent(By.xpath("//div[contains(@class, 'rounded-buttons-wrapper')]"))) {
+					espera(500);
+					w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[contains(@class, 'main-text')  and text()='" + realizarPedidoString + "']//ancestor::app-circle-progress-button")));
+					if(isElementPresent(By.xpath("//label[contains(@class, 'main-text')  and text()='" + realizarPedidoString + "']//ancestor::app-circle-progress-button"))) {
+						log("Pulsar el botón Realizar pedido en la ficha principal del restaurante.");
+						clicJS(driver.findElement(By.xpath("//label[contains(@class, 'main-text')  and text()='" + realizarPedidoString + "']//ancestor::app-circle-progress-button")));
+						espera(2000);
+					} else {
+						log("No hay el botón Realizar pedido en la ficha principal del restaurante.");
+						Assert.assertTrue(false);
+					}
+					
+				} else {
+					log("No estamos en la ficha principal del restaurante para repetir el pedido");
+					Assert.assertTrue(false);
+				}
+
 		  }
 		   
 	  }else {

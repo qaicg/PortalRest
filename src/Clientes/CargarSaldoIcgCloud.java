@@ -12,7 +12,9 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import Ventas.AddCarrito;
 import Ventas.CheckOut;
+import Ventas.ValidacionPedidos;
 import utils.TestBase;
 
 public class CargarSaldoIcgCloud extends TestBase {
@@ -43,31 +45,13 @@ public class CargarSaldoIcgCloud extends TestBase {
 		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'btn btn-confirm') and text()='"+cargarSaldoString+"']")));
 		WebElement cargarSaldoButton = driver.findElement(By.xpath("//button[contains(@class,'btn btn-confirm') and text()='"+cargarSaldoString+"']"));
 		cargarSaldoButton.click();
-			
-		//Verificar el precio que queremos cargar / poner el dinero a cargar el la tarjeta por ejemplo 5
-		//espera(500);
-		//if(isElementPresent(By.xpath(("//input[contains(@id, 'mat-input-2')]")))) {	
 		
 		if(isElementPresent(By.xpath("//div[contains(@class, 'mat-form-field-infix')]/child::input"))) {	
 			
-			//WebElement sCargar = driver.findElement(By.xpath("//input[contains(@id, 'mat-input-2')]"));
 			WebElement sCargar = driver.findElement(By.xpath("//div[contains(@class, 'mat-form-field-infix')]/child::input"));
 			String inputValue = sCargar.getAttribute("value");
 							
 			importe +=",00";
-			
-//			if(!isElementPresent(By.xpath("//input[contains(@id, 'mat-input-2') and text()='"+importe+"']"))) {
-//				if(setInputValueJS(By.xpath("//input[contains(@id, 'mat-input-2')]"), importe)) {					
-//					log("Se ha podio introducir el saldo " + importe +"€ a cargar en la tarjete de fidelización!!!");
-//					//Assert.assertTrue(true);
-//				} else {
-//					log("No se ha podio introducir el saldo " + importe +"€ a cargar en la tarjete de fidelización!!!");
-//					Assert.assertTrue(false);
-//				}
-//			}
-			
-
-			//if(!isElementPresent(By.xpath("//input[contains(@id, 'mat-input-2') and text()='"+importe+"']") )) {
 			
 			if(!inputValue.equalsIgnoreCase(importe)) {
 				//if(setInputValueJS(By.xpath("//input[contains(@id, 'mat-input-2')]"), importe)) {	
@@ -100,8 +84,6 @@ public class CargarSaldoIcgCloud extends TestBase {
 			log("Se paga el pedido con tarjeta");
 			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'Redsys Test')]")));
 			cargarSaldoCardBtn = driver.findElement(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'Redsys Test')]"));
-			
-			//clicJS(driver.findElement(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]"))); //SELECCIONO FORMA DE PAGO
 		}
 		
 		espera(500);
@@ -118,10 +100,13 @@ public class CargarSaldoIcgCloud extends TestBase {
 		
 		pagarPedidoConTarjeta(nuevaTarjeta.equalsIgnoreCase("true"), testCardNumber, cad1, cad2, cvv);
 		
-		if(validateChargedBalance.equalsIgnoreCase("true")) {
-			driver.navigate().back();
+		if(validateChargedBalance.equalsIgnoreCase("false")) {
+			log("No hemos podido cargar la tarjeta de fidelización.");
+			Assert.assertTrue(false);
 		}
-		
+		//TODO: Eliminar o comentar las dos siguientes lineas una vez las tareas #29792 #29025 solucionadas. 
+		driver.navigate().back();
+		driver.navigate().refresh();
 	}
 		
 	// pagar el saldo a carga en la tarjeta de fidelizacion al utilizar la tarjeta Redsys
@@ -159,9 +144,9 @@ public class CargarSaldoIcgCloud extends TestBase {
 				balanceAfterLoading = sArray[0];
 				log("balanceAfterLoading: " + balanceAfterLoading);
 			}
-			espera(1000);		
+			espera(500);		
 			validarSaldoCargado(); // valider el saldo cargado en la tarjeta.
-			espera();
+			
 		}else {
 			log("- No encuentro el resutlado ok en la pantalla de redsys");
 			Assert.assertTrue(false);
