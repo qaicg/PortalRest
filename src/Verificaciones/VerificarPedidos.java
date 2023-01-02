@@ -56,7 +56,7 @@ public class VerificarPedidos  extends TestBase {
 				//w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//ul/preceding::div[5]")));
 				//numeroPedidoActual = driver.findElement(By.xpath("//ul/preceding::div[5]")).getText(); 
 				
-				if(isElementPresent(By.xpath("//ul/preceding::div[5]"))){
+				if(isElementPresent(By.xpath("//ul/preceding::div[5]"))) {
 					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//ul/preceding::div[5]")));
 					numeroPedidoActual = driver.findElement(By.xpath("//ul/preceding::div[5]")).getText();
 				} else if(isElementPresent(By.id("ticket2-orderNumber"))) { //(By.xpath("//*[@id='ticket2-orderNumber']")
@@ -186,12 +186,20 @@ public class VerificarPedidos  extends TestBase {
 				Assert.assertTrue(false);
 			}
 			
+			//***Formatar el precio total esperaodo sin € 
+			espera(1000);
+			log("El precio Total esperado: " + totalEsperado);
+			String[] totalEsperadoMount = totalEsperado.split("€");
+			totalEsperado = totalEsperadoMount[0];
+			log("El precio Total esperado sin €: " + totalEsperado);
+			//*************
+			
 			if(checkTicket2Activated.equalsIgnoreCase("true")) {
-				espera(1000);
-				log("El precio Total esperado: " + totalEsperado);
-				String[] totalEsperadoMount = totalEsperado.split("€");
-				totalEsperado = totalEsperadoMount[0];
-				log("El precio Total esperado sin €: " + totalEsperado);
+				//espera(1000);
+				//log("El precio Total esperado: " + totalEsperado);
+				//String[] totalEsperadoMount = totalEsperado.split("€");
+				//totalEsperado = totalEsperadoMount[0];
+				//log("El precio Total esperado sin €: " + totalEsperado);
 				w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@id='ticket2-total-amount'][contains(text(),'"+ totalEsperado +"')]")));
 				totalPriceTypeWebElm =  driver.findElement(By.xpath("//*[@id='ticket2-total-amount'][contains(text(), '"+ totalEsperado +"')]"));
 				totalPrice = totalPriceTypeWebElm.getText();

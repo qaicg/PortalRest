@@ -15,11 +15,30 @@ import utils.TestBase;
 public class AbrirPaginaLogin extends TestBase {
 	@Test (priority=1)
 	@Parameters ("login")
-	  public void abrePaginaLogin(String register) {
+	public void abrePaginaLogin(String register) {
+		
+		//La sesión ha caducado, la página se recargará
+		if(isElementPresent(By.xpath("//div//child::button[contains(@class, 'btn-centered expired-button')"))) {
+			clicJS(driver.findElement(By.xpath("//div//child::button[contains(@class, 'btn-centered expired-button')]")));
+			espera(500);
+		}
+		
 		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30));
 		  List<WebElement> menuIcons = driver.findElements(By.xpath("//*[@class='header-icon']"));
+		  
 		  if (menuIcons.size()>=1) {
-			  menuIcons.get(menuIcons.size()-1).click();			  
+			  menuIcons.get(menuIcons.size()-1).click();	
+			  
+			  if(!isElementPresent(By.xpath("//*[contains(text(), '"+ register +"')]"))) {
+				  List<WebElement> buttonSignOut = driver.findElements(By.xpath("//div[contains(@class, 'mat-menu-content')]//child::button"));
+				  clicJS(buttonSignOut.get(buttonSignOut.size() -1)); //Cerrar la Sesión
+				  
+				  espera(500);
+				  abrirMenu();
+				  espera(500);
+			  }
+			  
+			  espera(500);
 			  WebElement menuItems= driver.findElement(By.xpath("//*[contains(text(), '"+ register +"')]"));
 			  espera(500);
 			  menuItems.click();

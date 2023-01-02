@@ -1,6 +1,9 @@
 package Verificaciones;
 
 import org.testng.annotations.Test;
+
+import graphql.Assert;
+
 import org.testng.annotations.Test;
 import java.time.Duration;
 
@@ -30,8 +33,29 @@ public class VerificarCookies extends TestBase {
 	// Solo se ejecuta si el test de verificar cookies es correcto.
 	@Test(description = "Acepta cookies", dependsOnMethods = "verificarCookies", priority = 2)
 	public void aceptaCookies() {
-		WebElement aceptarCookies = driver.findElement(By.className("btn-confirm"));
-		aceptarCookies.click();
-		log("Hemos aceptado las cookies");
+		String acpetarCookiesBooking = "//div[contains(@class, 'cookies-info-content-button')]//child::button[contains(@class, 'button primary-color')]";
+		WebElement aceptarCookies = null;
+		espera(1000);
+		if(isElementPresent(By.xpath(acpetarCookiesBooking))) {
+			aceptarCookies = driver.findElement(By.xpath(acpetarCookiesBooking));
+		} 
+		
+		espera(1000);
+		if(isElementPresent(By.className("btn-confirm"))) {
+			aceptarCookies = driver.findElement(By.className("btn-confirm"));
+		}
+		
+		if(aceptarCookies.getSize() != null) {
+			aceptarCookies.click();
+			espera(1000);
+			log("Hemos aceptado las cookies");
+		} else {
+			log("No se ha encuentrado el boton aceptar cookies");
+			Assert.assertTrue(false);
+		}
+		
+		//WebElement aceptarCookies = driver.findElement(By.className("btn-confirm"));
+		//aceptarCookies.click();
+		//log("Hemos aceptado las cookies");
 	}
 }

@@ -88,15 +88,18 @@ public class CargarSaldoIcgCloud extends TestBase {
 		
 		espera(500);
 		cargarSaldoCardBtn.click();
+		espera(500);
 		
 		w.until(ExpectedConditions.presenceOfElementLocated (By.xpath("//div[contains(@class,'dialog-content')]")));
 		
 		w.until(ExpectedConditions.presenceOfElementLocated (By.xpath("//input[@type='checkbox']//ancestor::div[@class='mat-checkbox-inner-container']")));
 		WebElement accept = driver.findElement(By.xpath("//input[@type='checkbox']//ancestor::div[@class='mat-checkbox-inner-container']"));
 		accept.click();//MARCAMOS CHECKBOX PARA ACEPTAR PAGO
-	
+		
+		espera(1000);
 		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'main-btn basket-button')]")));
 		clicJS(driver.findElement(By.xpath("//button[contains(@class,'main-btn basket-button')]")));
+		espera(1000);
 		
 		pagarPedidoConTarjeta(nuevaTarjeta.equalsIgnoreCase("true"), testCardNumber, cad1, cad2, cvv);
 		
@@ -104,9 +107,15 @@ public class CargarSaldoIcgCloud extends TestBase {
 			log("No hemos podido cargar la tarjeta de fidelización.");
 			Assert.assertTrue(false);
 		}
+		
+		//driver.navigate().back();
 		//TODO: Eliminar o comentar las dos siguientes lineas una vez las tareas #29792 #29025 solucionadas. 
-		driver.navigate().back();
+		espera();
 		driver.navigate().refresh();
+		//espera();
+		//driver.navigate().back();
+		//driver.navigate().refresh();
+		//TODO: Eliminar o comentar las dos siguientes lineas una vez las tareas #29792 #29025 solucionadas.
 	}
 		
 	// pagar el saldo a carga en la tarjeta de fidelizacion al utilizar la tarjeta Redsys

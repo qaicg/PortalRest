@@ -15,7 +15,7 @@ public class testRunner {
 	//VARIABLES DE SELECCIÓN DE ENTORNO DE EJECUCIÓN//
 	
 																		//-------------------**********DEFINIDIR CONSTANTES***********--------------------------//
-																							static boolean RUNALLTESTS = true;
+																							static boolean RUNALLTESTS = false;
 																							static boolean SINVENTANA=false;
 																							static boolean ENTORNOTEST=true;
 																	   //-------------------******************************************--------------------------//
@@ -32,21 +32,21 @@ public class testRunner {
 			
 			log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA08)");
 
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");																				
+			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");																			
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
 			
 			// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA07)
-			log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA07)");
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml"); 																				
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
+			//log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA07)");
+			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml"); 																			
+			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
 			
 		} else {
 			Data.getInstance().setEntornoTest(ENTORNOTEST);
 			
 			if(ENTORNOTEST) {	
 				// EJECUTA LOS TESTS EN LA VERSION MASTER (QA08)
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");																				
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");																				
 			}else {
 				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA07)
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml"); 																				
@@ -72,7 +72,6 @@ public class testRunner {
 		abrirReport(); // MUESTRA EL REPORT CON LOS RESULTADOS AL FINALIZAR.
 	}
 	
-
 	private static void abrirReport() {
 		File oldFilePath = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report.html");
 		File filePath = new File("C:\\Users\\QA\\portalrestproject\\test-output\\"+ new Date().getTime());

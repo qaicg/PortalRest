@@ -27,6 +27,7 @@ import com.mysql.cj.util.StringUtils;
 import Clientes.AbrirPaginaRegistro;
 import Clientes.CrearCliente;
 import utils.Data;
+import utils.RetryTestsFailed;
 import utils.TestBase;
 import utils.getDummyData;
 
@@ -59,6 +60,11 @@ public class CheckOut extends TestBase{
 		checkoutButton.click();
 		espera(1000);
 		
+		//Recuperar el email del usuario si es un nuevo cliente creado:
+		if(!isNullOrEmpty(Data.getInstance().getNewUserMail()) && isNullOrEmpty(customerMail)) {
+			customerMail= Data.getInstance().getNewUserMail();
+		}
+		
 		if(customerMail.equalsIgnoreCase("comoInvitado")) {
 			//Ne debe aparecer una forma de pago pendiente
 			if(isElementPresent(By.xpath("//div[contains(@class, 'payment-name line-clamp-2') and contains(text(), 'Pagar a la entrega')]"))) {
@@ -71,7 +77,7 @@ public class CheckOut extends TestBase{
 			espera(1000);
 		}
 		
-		if(isNullOrEmpty(customerMail)) { //Registrar el ususario y recuperar su email antes de continuar la venta
+		if(isNullOrEmpty(customerMail) && isNullOrEmpty(Data.getInstance().getNewUserMail())) { //Registrar el ususario y recuperar su email antes de continuar la venta
 			
 			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'login-ask-wrapper')]/child::button[1]")));
 			clicJS(driver.findElement(By.xpath("//div[contains(@class, 'login-ask-wrapper')]/child::button[1]")));
@@ -83,7 +89,7 @@ public class CheckOut extends TestBase{
 			
 			CrearCliente newUser = new CrearCliente();
 			
-			newUser.crearCliente(true, true, false, false, "", "", "");
+			newUser.crearCliente(true, true, false, false, "", "", "", shop, "", "");
 			espera(1000);
 			if(newUser.isCreatedUser) {
 				customerMail = Data.getInstance().getNewUserMail();
@@ -96,12 +102,14 @@ public class CheckOut extends TestBase{
 		
 		w2 = new WebDriverWait(TestBase.driver,Duration.ofSeconds(60)); // LE DAMOS 60 SEGUNDOS PARA HACER EL CHECKOUT.
 		if(customerMail.equalsIgnoreCase("comoInvitado") || (customerMail.equalsIgnoreCase("") || customerMail.equalsIgnoreCase("invitado@portalrest.com")) && formaPago.equalsIgnoreCase("Redsys Test"))nuevaTarjeta="true"; //SI NO TENEMOS CLIENTE SIGNIFICA QUE ES NUEVO Y NECESITAREMOS TARJETA NUEVA
+		
+		espera(1000);
 		if(!(validaPantalla(arrayNombres,totalEsperado,unidades,totalEsperadoMasCargos,repartoPermitido)))Assert.assertTrue(false);
 		
 		// Usar back para añadi mas productos al final del proceso de la venta.
 		if(goBack.equalsIgnoreCase("true")) {
 			if(goBackByAddOrderButton.equalsIgnoreCase("true")) {
-				w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'more-units-wrapper')]/child::mat-icon")));
+				w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'more-units-wrapper')]/child::mat-icon")));
 				WebElement addOrderBackButton = driver.findElement(By.xpath("//div[contains(@class,'more-units-wrapper')]/child::mat-icon"));
 				addOrderBackButton.click();
 				espera(1000); // Wait for go back by using add order button
@@ -110,7 +118,7 @@ public class CheckOut extends TestBase{
 			}
 			Assert.assertTrue(true);
 		} else {
-			
+			espera(1000);
 			
 			if(formaPago.equalsIgnoreCase("Redsys Test"))
 				pagarPedidoConTarjeta(formaPago, nuevaTarjeta.equalsIgnoreCase("true"),testCardNumber,cad1,cad2,cvv,pedidoConfirmadoString, validarImporteMinimo);
@@ -158,12 +166,22 @@ public class CheckOut extends TestBase{
 			
 			saldo = formato1.format(saldoDisponible);
 			saldo = String.valueOf(saldoDisponible).replace(".", ",") + "€";
+			log("Saldo de la tarjeta de fidelización: "+ saldo);
 			
 			String precioFalta = formato1.format(faltaPagar);
 			precioFalta = precioFalta.replace(".", ",") + "€";
+			log("Lo que falta del saldo de la tarjeta de fidelizacion para pagar el pedido : "+ precioFalta);
 			
 			//Si estamos con pago combinado(Saldo tarjeta de fidelizacion inferior al precio del pedido a pagar) se mostra la pantalla de dialogo que nos pide confirmar
-			if(isElementPresent(By.xpath("//div[contains(@class,'dialog-container')]")) && faltaPagar > 0) {				
+			if(faltaPagar == 0) {
+				log("No se puede combinar dos formas de pago: La tarjeta de fidelizacion no tiene saldo.");
+				log("Primero, Cargar la tarjet de fidelizacion antes de combinar la forma de pago!!!");
+				Assert.assertTrue(false);
+			} else if (saldoDisponible > precioTotal) {
+				log("No se puede combinar dos formas de pago: El Saldo de la tarjeta de fidelizacion es suficiente.");
+				log("El Saldo de la tarjeta de fidelizacion: " +saldo);
+				Assert.assertTrue(false);
+			} else if(isElementPresent(By.xpath("//div[contains(@class,'dialog-container')]")) && faltaPagar > 0) {	
 				w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'"+saldoActual+"')][contains(text(),'"+precioFalta+"')]")));
 				
 				driver.findElement(By.xpath("//div[contains(text(),'"+saldoActual+"')][contains(text(),'"+precioFalta+"')]"));
@@ -193,7 +211,7 @@ public class CheckOut extends TestBase{
 				Assert.assertTrue(true);
 				
 			} else {
-				log("No se puede combinar dos formas de pago: El Saldo de la tarjeta de fidelizacion es suficiente.");
+				log("No se puede combinar dos formas de pago: Error. aalgo ha pasado");
 				Assert.assertTrue(false);
 			}
 
@@ -277,6 +295,7 @@ public class CheckOut extends TestBase{
 		
 		//TENEMOS PANTALLA DE REDSYS ABIERTA.
 		if (nuevaTarjeta) {
+			espera(2000);
 			w2.until(ExpectedConditions.presenceOfElementLocated(By.id("inputCard")));
 			log("- La tarjeta es nueva " + testCardNumber);
 			driver.findElement(By.id("inputCard")).sendKeys(testCardNumber);
@@ -284,31 +303,79 @@ public class CheckOut extends TestBase{
 			driver.findElement(By.id("cad2")).sendKeys(cad2);
 			driver.findElement(By.id("codseg")).sendKeys(cvv);
 			driver.findElement(By.id("divImgAceptar")).click();
+			espera(2000);
 			w.until(ExpectedConditions.presenceOfElementLocated(By.id("boton"))).click(); //ACEPTAMOS SIMULADOR FINANET
+			espera(500);
 		}
 		
 		
 
 		w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'result-header')]")));
-		
+		espera(2000);
 		
 
 		if(isElementPresent(By.xpath("//div[contains(@class,'result-code ok')]"))) {
 			log("- Respuesta de cobro correcta");
 			
 			driver.findElement(By.xpath("//input[contains(@class,'btn-continue')]")).click();//CLIC EN CONTINUAR
-			
+			espera(2000);
 			//.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
 			
-			if(isElementPresent(By.id("orderReceiptHeader"))) {
-				w2.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
+			//** Test
+			
+			if(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")) != null) {
+				log("Element is finded");
 			} else {
-				w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'ticket-background')]")));				
+				log("Element not finded");
 			}
-						
+			//**
+			
+			
+			/*
+			if(isElementPresent(By.id("orderReceiptHeader"))) {
+				log("ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO POR ID orderReceiptHeader.");
+				w2.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
+			} else if(isElementPresent(By.xpath("//div[contains(@class, 'ticket-background')]"))) {
+				log("ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO POR class ticket-background.");
+				w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'ticket-background')]")));
+			} else {
+				espera(2000);
+				if(isElementPresent(By.xpath("//img[contains(@alt, 'Redsys')]")) || isElementPresent(By.xpath("//img[contains(@alt, 'Mantemimiento del servicio')]")) || 
+						isElementPresent(By.xpath("//h1[contains(text(), 'Estamos realizando tareas de mantenimiento, vuelva a intentarlo más tarde')]")) || 
+						isElementPresent(By.xpath("//span[contains(text(), 'Disculpen las molestias')]"))) {
+					log("Redsys ha fallado.");
+					log("Pantalla Redsys error | 500 ");
+					espera(1000);
+					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//img[contains(@alt, 'Redsys')]")));
+					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//img[contains(@alt, 'Mantemimiento del servicio')]")));
+				
+					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//h1[contains(text(), 'Estamos realizando tareas de mantenimiento, vuelva a intentarlo más tarde')]")));
+					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//h1[contains(text(), 'We are working on maintenance tasks, please try again later')]")));
+					
+					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[contains(text(), 'Disculpen las molestias')]")));
+					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[contains(text(), 'Apologize for the inconvenience')]")));
+					log("Redsys ha fallado.");
+					log("Pantalla Redsys error | 500 ");
+					Assert.assertTrue(false);
+					
+				}
+			}
+			*/
+			
+			espera(2000);
+			if(validarPantallaRecibo()) {
+				log("Encuentro la pantalla del Recibo electrónico");
+			}
+			espera(2000);
+			//espera(1000);			
 			validarReciboCheckout(pedidoConfirmado);
-		}else {
+		} else {
 			log("- No encuentro el resutlado ok en la pantalla de redsys");
+			if(isElementPresent(By.xpath("//div//child::text[contains(@lngid, 'noSePuedeRealizarOperacion')]"))) {
+				
+				log("No se puede realizar la operación\r\n"
+						+ "El sistema está ocupado, inténtelo más tarde (SIS0038)");
+			}
 			Assert.assertTrue(false);
 		}
 	}
@@ -317,7 +384,7 @@ public class CheckOut extends TestBase{
 		// ESTA PANTALLA ES UNA MIERDA, NO TIENE CLASES PARA IDENTIFICAR, HABLAR CON RAMON
 		log("Esperando a la pantalla de Recibo electrónico");
 		String numPedido = null;
-		espera();
+		//espera(1000);
 		if (!isElementPresent(By.xpath("//div[contains(text(),'"+pedidoConfirmadoString+"')]"))){
 			log("No hemos encontrado pantalla del recibo electrónico");
 			Assert.assertTrue(false);
@@ -414,6 +481,7 @@ public class CheckOut extends TestBase{
 				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line')][3]//div[contains(text(),'"+totalEsperadoMasCargos+"')]"));
 			} else {
 				driver.findElement(By.xpath("//div[contains(@class,'price-breakdown-line price-breakdown-total')]/child::div[2]"));
+				totalEsperadoMasCargos = totalEsperado;
 			}
 			
 	
@@ -621,5 +689,43 @@ public class CheckOut extends TestBase{
 			
 		} 
 		
+	}
+	
+	public boolean validarPantallaRecibo() {
+		espera(2000);
+		if(isElementPresent(By.id("orderReceiptHeader"))) {
+			log("ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO POR ID orderReceiptHeader.");
+			w2.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
+			return true;
+		} 
+		
+		espera(2000);
+		if(isElementPresent(By.xpath("//div[contains(@class, 'ticket-background')]"))) {
+			log("ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO POR class ticket-background.");
+			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'ticket-background')]")));
+			return true;
+		} 
+		
+		espera(2000);	
+		if(isElementPresent(By.xpath("//img[contains(@alt, 'Redsys')]")) || isElementPresent(By.xpath("//img[contains(@alt, 'Mantemimiento del servicio')]")) || 
+				isElementPresent(By.xpath("//h1[contains(text(), 'Estamos realizando tareas de mantenimiento, vuelva a intentarlo más tarde')]")) || 
+				isElementPresent(By.xpath("//span[contains(text(), 'Disculpen las molestias')]"))) {
+			log("Redsys ha fallado.");
+			log("Pantalla Redsys error | 500 ");
+			espera(1000);
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//img[contains(@alt, 'Redsys')]")));
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//img[contains(@alt, 'Mantemimiento del servicio')]")));
+		
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//h1[contains(text(), 'Estamos realizando tareas de mantenimiento, vuelva a intentarlo más tarde')]")));
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//h1[contains(text(), 'We are working on maintenance tasks, please try again later')]")));
+			
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[contains(text(), 'Disculpen las molestias')]")));
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[contains(text(), 'Apologize for the inconvenience')]")));
+			log("Redsys ha fallado.");
+			log("Pantalla Redsys error | 500 ");
+		}
+		log("No se ha podido validar la pantalla del recibo !!!");
+		Assert.assertTrue(false);
+		return false;		
 	}
 }

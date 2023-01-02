@@ -3,7 +3,12 @@ package utils;
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -14,6 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -30,6 +45,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.IRetryAnalyzer;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
@@ -41,6 +57,9 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
+import org.testng.internal.Utils;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -68,7 +87,7 @@ public class TestBase {
 	Actions actions;
 	String pathprofile;
 	ChromeOptions options;
-
+	
 	@BeforeClass
 	@Parameters({"test"})
 	public void configure(@Optional ("true") boolean test) {
@@ -99,6 +118,14 @@ public class TestBase {
 
 	@BeforeTest
 	public void beforeTest(final ITestContext testContext) {
+		
+		if(!isNullOrEmpty(Data.getInstance().getNewUserMail())){
+			Data.getInstance().setNewUserMail(null);
+		}
+		
+		if(!isNullOrEmpty(Data.getInstance().getPedidoActual())) {
+			Data.getInstance().setPedidoActual(null);
+		}
 
 		System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
 		options = new ChromeOptions();
@@ -162,6 +189,15 @@ public class TestBase {
 
 	@AfterTest
 	public void afterTest(final ITestContext testContext) {
+		espera(500);
+		if(!isNullOrEmpty(Data.getInstance().getNewUserMail())){
+			Data.getInstance().setNewUserMail(null);
+		}
+		
+		if(!isNullOrEmpty(Data.getInstance().getPedidoActual())) {
+			Data.getInstance().setPedidoActual(null);
+		}
+
 		espera(500);
 		log("Test finalizado: " + testContext.getName());
 		extent.flush();
@@ -293,6 +329,11 @@ public class TestBase {
 		espera(1000);
 	}
 	
+	public void abrirMenu() {
+		clicJS(driver.findElement(By.xpath("//mat-icon[text()='menu']")));
+		espera(500);
+	}
+	
 	public void clicAction(WebElement element) {
 		espera(500);
 		actions.moveToElement(element).click().build().perform();
@@ -322,5 +363,64 @@ public class TestBase {
 		   return true;
 	   else
 		   return false;
+	}
+	
+	public static String stripAccents(String input) {
+	    return input == null ? null :
+	            Normalizer.normalize(input, Normalizer.Form.NFD)
+	                    .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+	}
+	
+	//Formatting an XML file using Transformer
+	public void formatXMLFile(String file) throws Exception {
+	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder builder = factory.newDocumentBuilder();
+	    org.w3c.dom.Document document =  builder.parse(new InputSource(new InputStreamReader(new FileInputStream(
+	        file))));
+
+	    Transformer xformer = TransformerFactory.newInstance().newTransformer();
+	    xformer.setOutputProperty(OutputKeys.METHOD, "xml");
+	    xformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	    xformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+	    xformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+	    Source source = new DOMSource((Node) document);
+	    Result result = new StreamResult(new File(file));
+	    xformer.transform(source, result);
+	}
+	
+	//Creating File
+	private void createFile(@Optional("") String fileString, @Optional("false") boolean delete) throws IOException {
+		if(Utils.isStringNotBlank(fileString) && Utils.isStringNotEmpty(fileString)) {
+			File file = new File(fileString); //initialize File object and passing path as argument  
+			String pathFile = file.getCanonicalPath();
+			boolean result;  
+			try {
+				if(file.exists() && delete) {
+					Files.deleteIfExists(Path.of(pathFile));
+					if(Files.notExists(Path.of(pathFile))) {
+						log("File deleted: " + pathFile); 
+					} else {
+						log("Error: failed on delete file: " + pathFile);
+						Assert.assertTrue(false);
+					}
+				}
+				
+				result = file.createNewFile();  //creates a new file  
+				if(result)      // test if successfully created a new file  
+				{  
+					log("file created "+file.getCanonicalPath()); //returns the path string  
+				}  
+				else  
+				{  
+					log("File already exist at location: "+file.getCanonicalPath()); 						
+				} 
+				
+			} catch (IOException e) {  
+				e.printStackTrace();    //prints exception if any  
+			}  
+		} else {
+			log("error: Falta parmetro para crear fichero.");
+			Assert.assertTrue(false);
+		}
 	}
 }

@@ -10,16 +10,13 @@ public class Data {
     private String reportDirectory;
     private boolean entornoTest=true;
     private boolean runAllTests=true;
+    private boolean runTestsFailed = true;
     private String pedidoActual;
-    
-    
     
     public String getBD() {
 		return BD;
 	}
     
-    
-
 	public boolean isEntornoTest() {
 		return entornoTest;
 	}
@@ -28,19 +25,13 @@ public class Data {
 		return runAllTests;
 	}
 
-	
-
 	public String getPedidoActual() {
 		return pedidoActual;
 	}
 
-
-
 	public void setPedidoActual(String pedidoActual) {
 		this.pedidoActual = pedidoActual;
 	}
-
-
 
 	public void setEntornoTest(boolean entornoTest) {
 		this.entornoTest = entornoTest;
@@ -49,13 +40,14 @@ public class Data {
 	public void setRunAllTests(boolean runAllTests) {
 		this.runAllTests = runAllTests;
 	}
-
-
+	
+	public void setRunTestsFailed(boolean runTestsFailed) {
+		this.runTestsFailed = runTestsFailed;
+	}
 
 	public void setBD(String bD) {
 		BD = bD;
 	}
-	
 
 	private Data() {        
     }
@@ -66,9 +58,7 @@ public class Data {
         }
         
         return INSTANCE;
-    }
-    
-    
+    }    
     
     public boolean isModoSinVentana() {
 		return modoSinVentana;
@@ -96,10 +86,6 @@ public class Data {
 
 	public void setNewUserMail(String newUserMail) {
 		this.newUserMail = newUserMail;
-	}
-	
-	
-    
-    
+	}   
 
 }

@@ -30,6 +30,7 @@ import org.testng.annotations.Test;
 import Objects.ProductItem;
 import Verificaciones.VerificarPedidos;
 import graphql.Assert;
+import utils.RetryTestsFailed;
 import utils.TestBase;
 
 //ESTA CLASSE SE UTILIZA PARA : 
@@ -65,8 +66,8 @@ public class RepeatAddCarrito extends TestBase {
 	@Test(description="Este test permite el checkout del pedido repetido manualmente" , priority=1)
 	@Parameters({"repeatProductos","repeatProductosTotalPrice","formaPago","nuevaTarjeta","testCardNumber",
 		"cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
-		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", "totalEsperado", "goBackByAddOrderButton", "importeMinimo","validarImporteMinimo"})
-	
+		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", 
+		"totalEsperado", "goBackByAddOrderButton", "importeMinimo","validarImporteMinimo"})	
 	public void checkOutPedido(@Optional ("") String repeatProductos, @Optional ("") String repeatProductosTotalPrice, String formaPago,
 			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv, String pedidoConfirmadoString, 

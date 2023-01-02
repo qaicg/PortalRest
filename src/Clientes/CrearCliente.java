@@ -1,5 +1,6 @@
 package Clientes;
 
+import java.sql.ResultSet;
 import java.time.Duration;
 import java.util.List;
 import org.openqa.selenium.By;
@@ -26,33 +27,49 @@ public class CrearCliente extends TestBase {
 	 String dummyPassword;
 	 boolean isValidatedInformationPersonalUser = true;
 	 public boolean isCreatedUser = false;
+	 WebElement inputName, inputPhone, inputPostalCode, inputEmail, inputPassword, inputRepeatPassword,  checkboxCondiciones, buttonCrear;
 	
   @Test  (priority=1)
-  @Parameters({"resultadoEsperado", "aceptoTerminos", "ICGCloud", "validationCliente", "menu", "profile", "personal" })
+  @Parameters({"resultadoEsperado", "aceptoTerminos", "ICGCloud", "validationCliente", "menu", "profile", "personal" , "shop", "email", "telefone"})
   public void crearCliente(@Optional ("true") boolean resultadoEsperado, @Optional ("true") boolean aceptoTerminos, @Optional ("false") boolean IcgCloud, @Optional ("false") boolean validationCliente,
-		  @Optional("") String menu, @Optional("") String profile, @Optional("") String personal) {
+		  @Optional("") String menu, @Optional("") String profile, @Optional("") String personal, @Optional("") String shop, @Optional("") String email, @Optional("") String telefone) {
 	  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10));
 	  w.until(ExpectedConditions.presenceOfElementLocated (By.className("generic-title")));
-	  dummyUserName = getDummyData.getDummyUserName();
-	  dummyTelefono = getDummyData.getDummyTelefono();
-	  dummyPostalCode = getDummyData.getDummyPostalCode();
-	  dummyEmail = dummyUserName+"@yopmail.com";
-	  Data.getInstance().setNewUserMail(dummyEmail);//LO GUARDAMOS PARA PODER VALIDAR POSIBLES PEDIDOS
+	  espera(1000);
+	  if(getDummyData.getLimite()) {
+		  List<String> dummyInformation = getDummyData.getDummyInformation();
+		  
+		  dummyUserName = dummyInformation.get(0);
+		  dummyTelefono = dummyInformation.get(4);
+		  dummyPostalCode = dummyInformation.get(3);
+		  
+		  dummyEmail = stripAccents(dummyInformation.get(5));
+		  
+		  Data.getInstance().setNewUserMail(dummyEmail);//LO GUARDAMOS PARA PODER VALIDAR POSIBLES PEDIDOS
+		  dummyPassword = dummyInformation.get(6);
+
 	  
-	  dummyPassword = getDummyData.getDummyPassword();
+	  } else {
+		  dummyUserName = getDummyData.getDummyUserName();
+		  dummyTelefono = getDummyData.getDummyTelefono();
+		  dummyPostalCode = getDummyData.getDummyPostalCode();
+		  dummyEmail =stripAccents(dummyUserName) + "@yopmail.com";
+		  Data.getInstance().setNewUserMail(dummyEmail);//LO GUARDAMOS PARA PODER VALIDAR POSIBLES PEDIDOS
+		  dummyPassword = getDummyData.getDummyPassword();
+	  }
 	  
-	  WebElement inputName, inputPhone, inputPostalCode, inputEmail, inputPassword, inputRepeatPassword, checkboxCondiciones, buttonCrear;
+	  //WebElement inputName, inputPhone, inputPostalCode, inputEmail, inputPassword, inputRepeatPassword, checkboxCondiciones, buttonCrear;
 	  
-	  
-	  if(IcgCloud) { //Input for ICGCloud login
+	 /* if(IcgCloud) { //Input for ICGCloud login
 		  inputName = driver.findElement(By.id("mat-input-4"));
 		  inputPhone = driver.findElement(By.id("mat-input-5"));
 		  inputPostalCode = driver.findElement(By.id("mat-input-6"));
 		  inputEmail = driver.findElement(By.id("mat-input-7"));
 		  inputPassword = driver.findElement(By.id("mat-input-2"));
 		  inputRepeatPassword = driver.findElement(By.id("mat-input-3"));
-		  checkboxCondiciones = driver.findElement(By.xpath("//label[@for='mat-checkbox-2-input']//div[@class='mat-checkbox-inner-container']"));
-		  buttonCrear= driver.findElement(By.xpath("//button[@class='btn-centered']//div[contains(text(),'Crear')]"));
+		  
+		  //checkboxCondiciones = driver.findElement(By.xpath("//label[@for='mat-checkbox-2-input']//div[@class='mat-checkbox-inner-container']"));
+		  //buttonCrear= driver.findElement(By.xpath("//button[@class='btn-centered']//div[contains(text(),'Crear')]"));
 		  
 		 
 	  } else { //Input for PRT login
@@ -63,22 +80,43 @@ public class CrearCliente extends TestBase {
 		  inputEmail = driver.findElement(By.cssSelector("#mat-input-5"));
 		  inputPassword = driver.findElement(By.cssSelector("#mat-input-6"));
 		  inputRepeatPassword = driver.findElement(By.cssSelector("#mat-input-7"));
-		  checkboxCondiciones = driver.findElement(By.xpath("//label[@for='mat-checkbox-2-input']//div[@class='mat-checkbox-inner-container']"));
-		  buttonCrear= driver.findElement(By.xpath("//button[@class='btn-centered']//div[contains(text(),'Crear')]"));
-	  }
+		  
+		  //checkboxCondiciones = driver.findElement(By.xpath("//label[@for='mat-checkbox-2-input']//div[@class='mat-checkbox-inner-container']"));
+		  //buttonCrear= driver.findElement(By.xpath("//button[@class='btn-centered']//div[contains(text(),'Crear')]"));
+	  }*/
 	  
-	  enviarTexto(inputName,dummyUserName);
-	  enviarTexto(inputPhone,dummyTelefono);
+	  
+	  //
+	  espera(500);
+	  createInputElement();
+	  espera(1000);
+	  checkboxCondiciones = driver.findElement(By.xpath("//label[@for='mat-checkbox-2-input']//div[@class='mat-checkbox-inner-container']"));
+	  buttonCrear= driver.findElement(By.xpath("//button[@class='btn-centered']//div[contains(text(),'Crear')]"));
+	  
+	  //
+	  enviarTexto(inputName, dummyUserName);
+	  if(!isNullOrEmpty(telefone))
+		  enviarTexto(inputPhone, telefone);
+	  else
+		  enviarTexto(inputPhone, dummyTelefono);
+	  
 	  enviarTexto(inputPostalCode,dummyPostalCode);
-	  enviarTexto(inputEmail,dummyEmail);
+	  
+	  if(!isNullOrEmpty(email))
+		  enviarTexto(inputEmail, email);
+	  else
+		  enviarTexto(inputEmail, dummyEmail);
+	  
 	  enviarTexto(inputPassword,dummyPassword);
 	  enviarTexto(inputRepeatPassword,dummyPassword);  
 	   
 	  if(aceptoTerminos)checkboxCondiciones.click(); 
 	  buttonCrear.click();
+	  espera(1000);
 	  
 	  if (resultadoEsperado) {
 		  w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10)); //Le damos 10 segundos para registrar el usuario y salir de la pantalla de registro.
+		  espera(500);
 		  w.until(ExpectedConditions.invisibilityOfElementLocated(By.className("generic-title")));
 		  
 		  if(isElementPresent(By.className("generic-title"))) {
@@ -88,8 +126,70 @@ public class CrearCliente extends TestBase {
 		  log("Cliente a crear -> Nombre: "+ dummyUserName + " email: "+ dummyEmail+ " password: " + dummyPassword);
 	  }else {
 		  //TO DO 
-		  //Determinar expresiones a evaluar cuando queremos testear el registro sin �xito.
-		 
+		  //Determinar expresiones a evaluar cuando queremos testear el registro sin exito debido al email ya existente en la BD.
+		  if(!isNullOrEmpty(email) && !isNullOrEmpty(shop)) {
+			  if(isPersonalInformationValidatedDB("", email, "", "", shop, true)) {
+				  log("No se puede registrar debido a la existencia del correo electronico");
+				  log("Resulta esperado es correcto");
+				  
+				  //validar la notificacion de PortalRest al usuario que su email ya existe 
+				  // WebDriverWait error = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10));
+				  // error.until(ExpectedConditions.visibilityOfElementLocated(By.id("mat-error-53")));
+				  //
+				  String typeEmail = "email";
+				  String ariaInvalid = "true";
+				  String ariaRequired = "false";
+				  String typeId = "10";
+				  String typeIdMatError = "mat-error-10";
+				  
+				  if(IcgCloud) {
+					  typeEmail = "text";
+					  ariaInvalid = "true";
+					  ariaRequired = "true";
+					  typeId = "7";
+					  typeIdMatError = "mat-error-7";
+				  }
+				  
+				  w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//input[contains(@type, '" +typeEmail + "') and contains(@aria-invalid, '" + ariaInvalid + "') and contains(@aria-required, '" + ariaRequired + "')]")));
+				  if(!isElementPresent((By.xpath("//input[contains(@type, '" +typeEmail + "') and contains(@aria-invalid, '" + ariaInvalid + "') and contains(@aria-required, '" + ariaRequired + "')]")))) {
+					  //Debemos mostrar al usuario que su email ya esta en uso 
+					  log("Debemos mostrar al usuario que su email ya está en uso en la tienda ");
+					  Assert.assertTrue(false);
+				  } else {
+					  w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//mat-error[contains(@role, 'alert') and contains(@id, '" + typeIdMatError + "') and contains(@class, 'mat-error') and contains(text(), 'email')]")));
+					  
+					  if(!isElementPresent(By.xpath("//mat-error[contains(@role, 'alert') and contains(@id, '" + typeIdMatError + "') and contains(@class, 'mat-error') and contains(text(), 'email')]"))) {
+						  log("Debemos mostrar al usuario que su email ya está en uso en la tienda ");
+						  Assert.assertTrue(false);
+					  }
+				  }
+				  
+				  log("Registrar failed as spected");
+				  Assert.assertTrue(true);
+			  } else {
+				  log("Error: Debe devuelver el registro del usuario ya creado con el correo electronico o/y del telefone");
+				  Assert.assertTrue(false);
+			  }
+		  }
+		  
+		  //Verificar que el nuevo usuario no ha aceptado terminos y condiciones de uso de la tienda
+		  if(!aceptoTerminos) {
+			  String typeElement = "checkbox" ;
+			  String classElement = "mat-checkbox-input";
+			  String typeId = "mat-checkbox-2-input";
+			  String ariaChecked = "false";
+			  
+			  w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//mat-checkbox[contains(@id, 'mat-checkbox-2') and contains(@class, 'ng-invalid') and contains(@formcontrolname, 'conditionsAccepted')]")));
+			  
+			  if(!isElementPresent(By.xpath("//mat-checkbox[contains(@id, 'mat-checkbox-2') and contains(@class, 'ng-invalid') and contains(@formcontrolname, 'conditionsAccepted')]"))) {
+				  log("Error: Debe avisar que el nuevo cliente na acepte terminos y condiciones de uso de la tienda");
+				  Assert.assertTrue(false);
+			  }
+			  
+			  log("Avisar al nuevo cliente debe aceptar terminos y condiciones de uso de la tienda");
+			  log("Registrar failed as spected");
+			  
+		  }
 	  }
 	  
 	  if(validationCliente) {
@@ -97,6 +197,17 @@ public class CrearCliente extends TestBase {
 		  //Validation of the saved data in new user
 		  espera(1000);
 		  validatedPersonalInformationUser(IcgCloud, profile, personal, dummyUserName, dummyEmail, dummyTelefono, dummyPostalCode);
+		  espera(1000);
+		  
+		  //Validar la informacion personal del cliente en BBDD
+		  if(!IcgCloud) {
+			  if(isPersonalInformationValidatedDB(dummyUserName, dummyEmail, dummyTelefono, dummyPostalCode, shop, false)) {
+				  log("Se ha validado correctamiente la información personal del cliente en la BBDD");
+			  } else {
+				  log("Error: Hubo fallo en la validación de la información personal del cliente en la BBDD");
+				  Assert.assertTrue(false);
+			  }
+		  }
 		  espera(1000);
 	  }
   }
@@ -266,7 +377,75 @@ public class CrearCliente extends TestBase {
 		}
 		
 	}
-}
-
 	
+	private boolean isPersonalInformationValidatedDB(@Optional("") String nombre, @Optional("") String email, @Optional("") String telefono, @Optional("") String codigoPostal, String shop, @Optional("false") boolean verifyEmailTelefone) {
+		boolean valueReturn = false;
+		String SQL = null;
+		
+		if(!verifyEmailTelefone)
+	    	SQL = "SELECT cc.ContactTypeId , cc.Name, cc.Email, cc.Phone, cc.PostalCode " 
+	    			+ "FROM Con__Contact cc "
+	    			+ "WHERE cc.Name = '"+nombre+"'  AND cc.Email = '"+email+"' AND cc.Phone = '"+telefono+"' AND cc.PostalCode = '"+codigoPostal+"'";
+		else if(verifyEmailTelefone && !isNullOrEmpty(email) && !isNullOrEmpty(telefono))
+			SQL = "SELECT cc.ContactTypeId , cc.Name, cc.Email, cc.Phone, cc.PostalCode " 
+	    			+ "FROM Con__Contact cc "
+	    			+ "WHERE cc.Email = '"+email+"' AND cc.Phone = '"+telefono+"'";
+		else if(verifyEmailTelefone && !isNullOrEmpty(email))
+			SQL = "SELECT cc.ContactTypeId , cc.Name, cc.Email, cc.Phone, cc.PostalCode " 
+	    			+ "FROM Con__Contact cc "
+	    			+ "WHERE cc.Email = '"+email+"'";
+		else if(verifyEmailTelefone && !isNullOrEmpty(telefono))
+			SQL = "SELECT cc.ContactTypeId , cc.Name, cc.Email, cc.Phone, cc.PostalCode " 
+	    			+ "FROM Con__Contact cc "
+	    			+ "WHERE cc.Email = '"+telefono+"'";
+		
+    	ResultSet rs =  databaseConnection.ejecutarSQL(SQL,"DB" + shop); 
+    	
+    	if (rs!=null) {
+     		 try {		
+     			if (rs.first()) {
+     				log("La información personal del cliente se encuentra en la BBDD");
+     				valueReturn = true;
+     			}else {
+     				log("La información personal del cliente ya no se encuentra en la BBDD");	
+     				log(SQL);
+     				Assert.assertTrue(false);
+     			}
+     			
+     		} catch (Exception e) {
+     			// TODO Auto-generated catch block
+     			e.printStackTrace();
+     		}finally {
+     			databaseConnection.desconectar();
+     		}
+     		 //Assert.assertTrue(false);
+	    }
+    	
+    	return valueReturn;
+	}
+	
+	public void createInputElement() {
+		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'user-register-form')]//child::input")));
+		List<WebElement> inputElements = driver.findElements(By.xpath("//div[contains(@class, 'user-register-form')]//child::input"));
+		inputName = inputElements.get(0);
+		inputPhone = inputElements.get(1);
+		inputPostalCode = inputElements.get(2);
+		inputEmail = inputElements.get(3);
+		inputPassword = inputElements.get(4);
+		inputRepeatPassword = inputElements.get(5);
+	}
+	
+	public void validatedEmailTelefoneUserDB(@Optional("") String email, @Optional("") String telefone, @Optional("") String shop) {
+		//Verificar que el correo electronico no existe en la BBDD antes de crear el usuario
+		if(isPersonalInformationValidatedDB("", email, "", "", shop, true)) {
+			log("No se puede registrar debido a la existencia del correo electronico");
+			log("Resulta esperado es correcto");
+			Assert.assertTrue(true);
+		} else {
+			log("Error: Debe devuelver el registro del usuario ya creado con el correo electronico o/y del telefone");
+			Assert.assertTrue(false);
+		}
+	}
+
+}
 
