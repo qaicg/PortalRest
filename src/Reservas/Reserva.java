@@ -1,5 +1,6 @@
 package Reservas;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,20 +15,20 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import graphql.Assert;
+import utils.Data;
 import utils.TestBase;
+import utils.getDummyData;
 
 //@Test
 //@Parameters({"titleHeader", "resultatEsperado"})
 public class Reserva extends TestBase {
-	String diaReserva, hora, sala, localizador, observaciones, telefono, email = null;
-	 String dummyUserName;
-	 String dummyTelefono;
-	 String dummyPostalCode;
-	 String dummyEmail;
-	 String dummyPassword;
-	 boolean isValidatedInformationPersonalUser = true;
-	 public boolean isCreatedBooking = false;
-	 WebElement inputName, inputPhone, inputEmail, checkboxCondiciones, buttonCrear;
+	String diaReserva, hora, sala, localizador, observaciones, prefijo, telefono, email = null;
+	String dummyLocalizador, dummyName, dummyTelefono, dummyEmail, dummyObservaciones = null; 
+	
+	public boolean isCreatedBooking = false;
+	public WebElement inputLocalizador, inputName, inputPhone, inputEmail, inputObservaciones, 
+				checkboxCondicionesTerminos, checkboxPoliticaCancelacion, checkboxComunicacionComerciales,
+				buttonSiguiente, buttonAtras = null;
 	
 	@Test
 	@Parameters({"titleHeader", "resultatEsperado"})
@@ -61,33 +62,246 @@ public class Reserva extends TestBase {
 		
 	}
 	
+	/**
+	 * 
+	 * @param resultadoEsperado
+	 * @param localizador
+	 * @param prefijo
+	 * @param telefono
+	 * @param nombreCliente
+	 * @param emailCliente
+	 * @param observaciones
+	 * @param aceptoTerminos
+	 * @param aceptoPoliticaCancelacion
+	 * @param aceptoComunicacionesComerciales
+	 */
+	@Test
+	@Parameters({"resultatEsperado", "localizador", "prefijo", "telefono", "nombreCliente", "emailCliente", "observaciones", 
+				"aceptarTerminosCondiciones" , "aceptarPoliticaCancelacion", "aceptarComunicacionesComerciales", "titleHeader", "literalLocalizador", "literalObserciones"})
+	public void createBooking(@Optional ("true") boolean resultadoEsperado, @Optional("") String localizador, @Optional("") String prefijo, @Optional("") String telefono, 
+			@Optional("") String nombreCliente, @Optional("") String emailCliente, @Optional("") String observaciones, 	
+			@Optional ("true") boolean aceptoTerminos, @Optional ("true") boolean aceptoPoliticaCancelacion, @Optional ("true") boolean aceptoComunicacionesComerciales, 
+			@Optional("") String titleHeader, @Optional() String literalLocalizador, @Optional("") String literalObserciones) {
+		
+		//Validar el title de la pagina
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'title-header')]")));
+		
+		String tituloPaginaReserva = driver.findElement(By.xpath("//div[contains(@class, 'title-header')]")).getText();
+		
+		if(!tituloPaginaReserva.equalsIgnoreCase(titleHeader)) {
+			log("El titulo de la pagina es: " + tituloPaginaReserva + " y esparamos que sea: " + titleHeader);
+			Assert.assertTrue(false);
+		}
+		
+		//espera();
+		createInputElement(literalLocalizador, literalObserciones);
+		//espera(2000);
+		
+		//Generar datos basicos del cliente
+		setDummyDataInputsBooking(literalLocalizador, literalObserciones);
+		//espera();
+		
+		//Insertar datos en el formulario de la reserva
+		insertDataInputBooking(resultadoEsperado, localizador, prefijo, telefono, nombreCliente, emailCliente, observaciones);
+		espera();
+		
+		//Aceptar codiciones
+		checkConditionsBooking(aceptoTerminos, aceptoPoliticaCancelacion, aceptoComunicacionesComerciales, resultadoEsperado);
+		
+		// Verificar que no hay error que nos impide siguir el envio de la reserva
+		
+		
+		//Validar la reserva en Booking
+		
+		//Validar la reserva en BD.
+	}
+	
+	@Parameters({"resultatEsperado", "localizador", "prefijo", "telefono", "nombreCliente", "emailCliente", "observaciones"})
+	public void insertDataInputBooking(@Optional ("true") boolean resultadoEsperado, @Optional("") String localizador, @Optional("") String prefijo, @Optional("") String telefono, 
+			@Optional("") String nombreCliente, @Optional("") String emailCliente, @Optional("") String observaciones) {
+		//Localizador
+		if(inputLocalizador.getSize() != null)
+			if(!isNullOrEmpty(localizador)) 
+				enviarTexto(inputLocalizador, localizador);
+			else
+				enviarTexto(inputLocalizador, dummyLocalizador);
+		
+		//Prefijo
+		if(!isNullOrEmpty(prefijo))
+			selectPrefijoTelefono(prefijo, resultadoEsperado);
+		else 
+			selectPrefijoTelefono("Spain (+34)", resultadoEsperado);
+		
+		//Telefono
+		if(!isNullOrEmpty(telefono))
+			enviarTexto(inputPhone, telefono);
+		else
+			enviarTexto(inputPhone, dummyTelefono);		
+		
+		//Nombre
+		if(!isNullOrEmpty(nombreCliente))
+			enviarTexto(inputName, nombreCliente);
+		else
+			enviarTexto(inputName, dummyName);
+		
+		//Email
+		if(!isNullOrEmpty(email))
+			enviarTexto(inputEmail, email);
+		else
+			enviarTexto(inputEmail, dummyEmail);
+		
+		//Observaciones
+		if(inputObservaciones.getSize() != null)
+			if(!isNullOrEmpty(observaciones))
+				enviarTexto(inputObservaciones, observaciones);
+			else
+				enviarTexto(inputObservaciones, dummyObservaciones);
+			
+	}
+	
+	
 	
 	/*
-	 * Rellenar datos de la reserva
-	 * Prefijo
+	 * Generar datos Reserva
+	 * Localizador
 	 * Telefoneo
 	 * Nombre
 	 * Email
-	 * Localizador
 	 * Observaciones
-	 * Aceptar condiciones y terminos
-	 * Apceptar la politica de cancelacion
-	 * Aceptar recibir comunicaciones comerciales y ofertas
 	 */
-	public void inputDatosBooking() {
+	public void setDummyDataInputsBooking(@Optional("") String literalLocalizador, @Optional("") String literalObserciones) {
+		String labelElementLocalizado = "//mat-label[contains(text(), '" + literalLocalizador + "')]";
+		if(getDummyData.getLimite()) {
+			List<String> dummyInformation = getDummyData.getDummyInformation();
+		  	dummyName = dummyInformation.get(0);
+		  	dummyTelefono = dummyInformation.get(4);
+		  	dummyEmail = stripAccents(dummyInformation.get(5));
+		  	Data.getInstance().setNewUserMail(dummyEmail);//LO GUARDAMOS PARA PODER VALIDAR POSIBLES PEDIDOS
+		} else {
+			dummyName = getDummyData.getDummyUserName();
+		  	dummyTelefono = getDummyData.getDummyTelefono();
+		  	dummyEmail =stripAccents(dummyName) + "@yopmail.com";
+		  	Data.getInstance().setNewUserMail(dummyEmail);//LO GUARDAMOS PARA PODER VALIDAR POSIBLES PEDIDOS
+		}
 		
+		if(isElementPresent(By.xpath(labelElementLocalizado)) && isElementPresent(By.xpath("//span//mat-label[contains(text(), '" + literalLocalizador + "')]//preceding::input")))
+			if(inputLocalizador.getSize() != null) {
+				String generateCadenaAleatoria = generateCadenaAleatoria(11);
+				dummyLocalizador = !isNullOrEmpty(generateCadenaAleatoria) ? generateCadenaAleatoria : "testLocalizador01p-47.";
+			}
+	
+		String labelElementObservaciones = "//mat-label[contains(text(), '" + literalObserciones + "')]";
+		if(isElementPresent(By.xpath(labelElementObservaciones)) && isElementPresent(By.xpath("//span//mat-label[contains(text(), '" + literalObserciones + "')]//preceding::textarea")))
+			if(inputObservaciones.getSize() != null) {
+				try {
+					String generatePalabra = generatePalabra();
+					dummyObservaciones = !isNullOrEmpty(generatePalabra) ? generatePalabra.substring(3, generatePalabra.toString().length() -3) : " Nullam vel viverra magna. Pellentesque at porta odio.";
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					log("Error: no se ha podido generar datos para las Observaciones");
+					e.printStackTrace();
+					Assert.assertTrue(false);
+				}
+			}
 	}
 	
 	public void abrirUrlReserva() {
 		
 	}
 	
-	public void verificarReservar () {
+	public void verificarReservarBookink () {
+		
+	}
+	
+	public void verificarReservarBD () {
 		
 	}
 	
 	public void verificarCookiesReserva () {
 		
+	}
+	
+	@Test
+	@Parameters({"aceptarTerminosCondiciones", "aceptarPoliticaCancelacion", "aceptarComunicacionesComerciales"})
+	public void checkConditionsBooking(@Optional("") boolean aceptarCondicionesTerminos, @Optional("") boolean aceptarPoliticaCancelacion, @Optional("") boolean aceptarComunicacionComerciales,
+				@Optional("") boolean resultatEsperado) {
+		
+		try {
+			if(aceptarCondicionesTerminos && checkboxCondicionesTerminos.getSize() != null) clicJS(checkboxCondicionesTerminos);
+			espera(100);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log("Se ha producido un error");
+			Assert.assertTrue(false);
+		}
+		
+		try {
+			if(aceptarPoliticaCancelacion && checkboxPoliticaCancelacion.getSize() != null) clicJS(checkboxPoliticaCancelacion);
+			espera(100);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log("Se ha producido un error");
+			Assert.assertTrue(false);
+		}
+		
+		try {
+			if(aceptarComunicacionComerciales && checkboxComunicacionComerciales.getSize() != null) clicJS(checkboxComunicacionComerciales);
+			espera(100);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log("Se ha producido un error");
+			Assert.assertTrue(false);
+		}
+		
+	}
+	
+	/*
+	 * Selecionar un prefijo 
+	 *
+	 */
+	@Test
+	@Parameters({"prefijo", "resultatEsperado"})
+	public void selectPrefijoTelefono(@Optional("") String prefijo, @Optional("") boolean resultatEsperado) {
+		String stringElementPrefijo = "//div[contains(@class, 'mat-select-arrow-wrapper')]//child::div[contains(@class, 'mat-select-arrow')]";
+		String stringListPrefijo = "//mat-option[contains(@class, 'mat-option')]//child::span[contains(@class, 'mat-option-text')]";
+		if(!isNullOrEmpty(prefijo)) {
+			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(stringElementPrefijo)));
+			
+			clicJS(driver.findElement(By.xpath(stringElementPrefijo)));
+			//espera(100);
+			
+			List<WebElement> prefijos = new ArrayList<WebElement>();			
+			
+			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(stringListPrefijo)));
+
+			prefijos = driver.findElements(By.xpath(stringListPrefijo));
+			
+			if(prefijos.size() > 0) {
+				//buscar i seleccionar prefijo definido como parametro
+				boolean isSelectedPrefijo = false;
+				for(int i = 0; i < prefijos.size(); i++) {
+					if(prefijos.get(i).getText().equals(prefijo)) {
+						clicJS(prefijos.get(i));
+						log("el prefijo("+ prefijo +") del telefono está seleccionada desde el listado ");
+						isSelectedPrefijo = true;
+						break;
+					}
+				}
+				
+				if(!isSelectedPrefijo) {
+					log("No se ha podido seleccionar el prefijo ("+ prefijo +") en el listado");
+					Assert.assertTrue(false);
+				}
+			}
+			
+		} else {
+			log("El parametro Prefijo es vacio");
+			if(resultatEsperado) {
+				Assert.assertTrue(false);
+			}
+			Assert.assertTrue(true);
+		}
 	}
 	
 	@Test
@@ -343,40 +557,42 @@ public class Reserva extends TestBase {
 		}
 	}
 	
-	
-	public void createInputElement() {
-		//$x("//div[contains(@class, 'user-data-wrapper')]//child::input");
+	@Parameters({"literalLocalizador", "literalObserciones"})
+	public void createInputElement(@Optional() String localizador, @Optional("") String observaciones) {
 		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'user-data-wrapper')]//child::input")));
-		
 		
 		List<WebElement> inputElements = driver.findElements(By.xpath("//div[contains(@class, 'user-data-wrapper')]//child::input"));
 		
-		for(int i=0; i <= inputElements.size(); i++) {
-			if(isElementPresent(null)) {
-				
+		if(inputElements.size() == 7) {
+			String labelElementLocalizado = "//mat-label[contains(text(), '" + localizador + "')]";
+			if(isElementPresent(By.xpath(labelElementLocalizado)) && isElementPresent(By.xpath("//span//mat-label[contains(text(), '" + localizador + "')]//preceding::input"))) {
+				inputLocalizador = inputElements.get(0);
+			} else {
+				log("Error: no se ha localizqdo el campo Localizador");
+				Assert.assertTrue(false);
 			}
+			
+			inputPhone = inputElements.get(1);
+			inputName = inputElements.get(2);
+			inputEmail = inputElements.get(3);
+			checkboxCondicionesTerminos = inputElements.get(4);
+			checkboxPoliticaCancelacion = inputElements.get(5);
+			checkboxComunicacionComerciales = inputElements.get(6);
+						
+		} else if(inputElements.size() == 6) {
+			inputPhone = inputElements.get(0);
+			inputName = inputElements.get(1);
+			inputEmail = inputElements.get(2);
+			checkboxCondicionesTerminos = inputElements.get(3);
+			checkboxPoliticaCancelacion = inputElements.get(4);
+			checkboxComunicacionComerciales = inputElements.get(5);
+		}
+		
+		String labelElementObservaciones = "//mat-label[contains(text(), '" + observaciones + "')]";
+		if(isElementPresent(By.xpath(labelElementObservaciones)) && isElementPresent(By.xpath("//span//mat-label[contains(text(), '" + observaciones + "')]//preceding::textarea"))) {
+			inputObservaciones = driver.findElement(By.xpath("//span//mat-label[contains(text(), '"+observaciones +"')]//preceding::textarea"));
 			
 		}
 		
-		if(inputElements.size() >= 6) {
-			//Verificar si el campos Localizado esta visibles en el formulario de la Reserva
-			String labelElementLocalizado = "//mat-label[contains(text(), 'Localizador')]";
-			if(isElementPresent(By.xpath(labelElementLocalizado))) {
-				
-			}
-			
-			
-			//Verificar si el campos Observaciones esta visibles en el formulario de la Reserva
-			String labelElementObservaciones = "//mat-label[contains(text(), 'Observación')]";
-			if(isElementPresent(By.xpath(labelElementObservaciones))) {
-				
-			}
-		}
-		inputName = inputElements.get(0);
-		inputPhone = inputElements.get(1);
-		//inputPostalCode = inputElements.get(2);
-		inputEmail = inputElements.get(3);
-		//inputPassword = inputElements.get(4);
-		//inputRepeatPassword = inputElements.get(5);
 	}
 }

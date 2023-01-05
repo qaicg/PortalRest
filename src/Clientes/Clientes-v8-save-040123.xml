@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
 
-<suite name="Pruebas de Clientes en PortalRest -> Login,Registro y validación (**Servidor Master QA09 -> https://cloudquality03.hiopos.com/portalrest**)" verbose="1" preserve-order="true">
+<suite name="*Test* Pruebas de Clientes en PortalRest -> Login,Registro y validación" verbose="1" preserve-order="true">
 
 	<listeners>
 		<listener class-name="com.vimalselvam.testng.listener.ExtentTestNgFormatter" />
@@ -10,7 +10,7 @@
 
 	<parameter name="login" value="Registrarme" />
 	<parameter name="report.config" value="C:\Users\QA\portalrestproject\test-output\extent-config.xml" />
-	<parameter name="test" value ="false" /> <!-- Entorno de ejecución Produccion-->
+	<parameter name="test" value ="true" /> <!-- Entorno de ejecución -->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 
@@ -22,13 +22,19 @@
 	<parameter name="ICGCloud" value=""/>
 	<parameter name="validationCliente" value="" />
 	
+	
 	<parameter name="miPerfilString" value="Mi perfil" /> <!--Nombre de la opción de menú Mi Perfil en Español -->
 	<parameter name="misDireccionesString" value="Mis direcciones" /> <!--Nombre de la opción de menú Mis Direcciones en Español -->
+
+	<!--parameter name="pedidos" value="Mis Pedidos" /--> <!-- Nombre de la opcioón de menú en Español Información Personal-->
+	<!--parameter name="familiasEsperadas" value="6" /--> <!-- Numero de familias esperadas al cargar el restaurante -->
+	
+
 
 	<test thread-count="5" name="Creación de nuevo cliente PRT" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="aceptoTerminos" value="true" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />       
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="login" value="Registrarme" />
@@ -37,13 +43,13 @@
 		<parameter name="menu" value="menu" />
 		<parameter name="profile" value="Mi perfil" />
 		<parameter name="personal" value="Información personal" />
-		<parameter name="shop" value="52704" />
+		<parameter name="shop" value="48777" />
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
 			<class name="Verificaciones.VerificarCookies" />
 			<class name="Clientes.AbrirPaginaRegistro" />
-			<class name="Clientes.CrearCliente"> 
+			<class name="Clientes.CrearCliente">
 				<parameter name="email" value=""></parameter>
 			</class>
 			<class name="Verificaciones.VerificarFichaRestaurante" />
@@ -53,13 +59,13 @@
 
 	<test thread-count="5" name="Loguea un cliente con éxito con PRT" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="email" value="portaltest88@yopmail.com" />
 		<parameter name="password" value=".1234abcd" />
 		<parameter name="rememberMe" value="false" />
-		<parameter name="shop" value="52704" />
+		<parameter name="shop" value="48777" />
 		<parameter name="language" value="Es" />
 		<parameter name="menu" value="menu" />
 		<parameter name="profile" value="Mi perfil" />
@@ -82,14 +88,14 @@
 
 	<test thread-count="5" name="Loguea un cliente erróneo con PRT" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="login" value="Registrarme" />
 		<parameter name="email" value="portaltest88@yopmail.com" />
 		<parameter name="password" value=".1234abcdd" />
 		<parameter name="rememberMe" value="false" />
-		<parameter name="shop" value="52704" />
+		<parameter name="shop" value="48777" />
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
@@ -102,7 +108,7 @@
 
 	<test thread-count="5" name="Recordar cliente con PRT" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="login" value="Registrarme" />
@@ -110,7 +116,7 @@
 		<parameter name="email" value="portaltest88@yopmail.com" />
 		<parameter name="password" value=".1234abcd" />
 		<parameter name="rememberMe" value="true" />
-		<parameter name="shop" value="52704" />
+		<parameter name="shop" value="48777" />
 		<parameter name="language" value="Es" />
 		<parameter name="menu" value="menu" />
 		<parameter name="profile" value="Mi perfil" />
@@ -133,7 +139,7 @@
 
 	<test thread-count="5" name="Loguea un cliente con éxito con Google" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<classes>
@@ -148,14 +154,14 @@
 
 	<test thread-count="5" name="Loguea un cliente con éxito con ICGCloud" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="login" value="Registrarme" />
 		<parameter name="email" value="clienteprt@yopmail.com" />
 		<parameter name="password" value=".1234abcd" />
 		<parameter name="rememberMe" value="false" />
-		<parameter name="shop" value="54066" />
+		<parameter name="shop" value="51983" />
 		<parameter name="language" value="Es" />
 		<parameter name="menu" value="menu" />
 		<parameter name="profile" value="Mi perfil" />
@@ -178,14 +184,14 @@
 
 	<test thread-count="5" name="Loguea un cliente erróneo con ICGCloud" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="login" value="Registrarme" />
 		<parameter name="email" value="clienteprt@yopmail.com" />
 		<parameter name="password" value=".1234abcdd" />
 		<parameter name="rememberMe" value="false" />
-		<parameter name="shop" value="54066" />
+		<parameter name="shop" value="51983" />
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
@@ -198,14 +204,14 @@
 
 	<test thread-count="5" name="Recordar cliente con ICGCloud" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="login" value="Registrarme" />
 		<parameter name="email" value="clienteprt@yopmail.com" />
 		<parameter name="password" value=".1234abcd" />
 		<parameter name="rememberMe" value="true" />
-		<parameter name="shop" value="54066" />
+		<parameter name="shop" value="51983" />
 		<parameter name="language" value="Es" />
 		<parameter name="menu" value="menu" />
 		<parameter name="profile" value="Mi perfil" />
@@ -222,19 +228,18 @@
 					<include name="validateUser"></include>
 				</methods>
 			</class>
-
 		</classes>
 	</test> <!-- CreaCliente -->
 
 	<test thread-count="5" name="Login ICGCloud usuario PRT" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="email" value="clientenoicg@yopmail.com" />
 		<parameter name="password" value=".1234abcd" />
 		<parameter name="rememberMe" value="false" />
-		<parameter name="shop" value="54066" />
+		<parameter name="shop" value="51983" />
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
@@ -243,75 +248,27 @@
 			<class name="Clientes.LoginCliente" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
 		</classes>
-	</test> <!-- CreaCliente -->
-
- 	<!--Validar Informacion Personal del cliente logeado en PRT -->
-	<test name="Prueba de Validacion: Información personal del cliente logeado en PRT" enabled="true" preserve-order="true">
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
-		<parameter name="shop" value="52704" />
-		<parameter name="name" value="portaltest88" />
-		<parameter name="telefone" value="999696966" /> 
-		<parameter name="codigoPostal" value="25123" />
-		<parameter name="email" value="portaltest88@yopmail.com" />
-		<parameter name="icgCloud" value="" />
-		<classes>
-			<class name="AbrePortalRest.AbrirUrl" />
-			<class name="Verificaciones.VerificarCookies" />
-			<class name="Verificaciones.VerificarFamiliasRestaurante" />
-			<class name="Clientes.AbrirPaginaLogin" />
-			<class name="Clientes.LoginCliente" />
-			<class name="Verificaciones.VerificarClientes"> 
-				<methods>
-					<include name="validatedPersonalInformationUser"></include>
-				</methods>
-			</class>
-		</classes>
-	</test>	
- 
-	<!--Validar Informacion Personal del cliente logeado en PRT ICGCLOUD -->
-	<test name="Prueba de Validacion: Información personal del cliente logeado en PRT ICGCLOUD" enabled="true" preserve-order="true">
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
-		<parameter name="shop" value="54066" />
-		
-		<parameter name="name" value="Cliente PortalRest" />
-		<parameter name="telefone" value="645858923" /> 
-		<parameter name="codigoPostal" value="25123" />
-		<parameter name="email" value="clienteprt@yopmail.com" />
-		<parameter name="icgCloud" value="true" />
-		<classes>
-			<class name="AbrePortalRest.AbrirUrl" />
-			<class name="Verificaciones.VerificarCookies" />
-			<class name="Verificaciones.VerificarFamiliasRestaurante" />
-			<class name="Clientes.AbrirPaginaLogin" />
-			<class name="Clientes.LoginCliente" />
-			<class name="Verificaciones.VerificarClientes"> 
-				<methods>
-					<include name="validatedPersonalInformationUser"></include>
-				</methods>
-			</class>
-		</classes>
-	</test>	
-	<!-- -->
-
-  	<test  name="Prueba de registrar un nuevo usuario(ICGCLOUD) y comprobar su informacion personal" enabled="true" preserve-order="true">
-  		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
-		<parameter name="shop" value="54066" />
-  	   	<parameter name="ICGCloud" value="true"/>
+	</test> 
+	
+	<test  name="Prueba de registrar un nuevo usuario(ICGCLOUD) y comprobar su informacion personal" enabled="true" preserve-order="true">
+   		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZyMzEzNxITP0NXZSRWa"/>  
+	  	<parameter name="shop" value="51983"/>
+	   	<parameter name="ICGCloud" value="true"/>
 	   	<parameter name="email" value = ""/>
 	   	<parameter name="validationCliente" value="true" />
    
 	    <classes>
 	   		<class name="AbrePortalRest.AbrirUrl"/>
 			<class name="Verificaciones.VerificarCookies"/>
-	      	<class name="Verificaciones.VerificarFamiliasRestaurante"/>
+	      	<class name="Verificaciones.VerificarFamiliasRestaurante"/>  
 	      	<class name="Clientes.AbrirPaginaRegistro"/>
 	        <class name="Clientes.CrearCliente"/>
 	    </classes>
  	</test>
  
  	<test  name="Prueba de registrar un nuevo usuario y comprobar su informacion personal" enabled="true" preserve-order="true">
-	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
-	   	<parameter name="shop" value="52704"/>
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" /> 
    		<parameter name="ICGCloud" value=""/>
    		<parameter name="email" value = ""/>
    		<parameter name="validationCliente" value="true" />
@@ -323,12 +280,59 @@
 	      	<class name="Clientes.AbrirPaginaRegistro"/>
 	        <class name="Clientes.CrearCliente"/>
 	    </classes>
- 	</test>
+ 	</test> <!-- CreaCliente -->
+ 	
+	<!--Validar Informacion Personal del cliente logeado en PRT -->
+	<test name="Prueba de Validacion: Informacion personal del cliente logeado en PRT" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" />
+		<parameter name="name" value="portaltest88" />
+		<parameter name="telefone" value="999696966" /> 
+		<parameter name="codigoPostal" value="25123" />
+		<parameter name="email" value="portaltest88@yopmail.com" />
+		<parameter name="icgCloud" value="" />
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />			
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Verificaciones.VerificarClientes"> 
+				<methods>
+					<include name="validatedPersonalInformationUser"></include>
+				</methods>
+			</class>
+		</classes>
+	</test>	
+	<!-- -->
+
+	<!--Validar Informacion Personal del cliente logeado en PRT ICGCLOUD -->
+	<test name="Prueba de Validacion: Informacion personal del cliente logeado en PRT ICGCLOUD" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZyMzEzNxITP0NXZSRWa" />
+		<parameter name="shop" value="51983" />
+		
+		<parameter name="name" value="Cliente PortalRest" />
+		<parameter name="telefone" value="645858923" /> 
+		<parameter name="codigoPostal" value="25123" />
+		<parameter name="email" value="clienteprt@yopmail.com" />
+		<parameter name="icgCloud" value="true" />
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />			
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Verificaciones.VerificarClientes"> 
+				<methods>
+					<include name="validatedPersonalInformationUser"></include>
+				</methods>
+			</class>
+		</classes>
+	</test>	
+	<!-- -->
   
-    <test thread-count="5" name="Creación de nuevo cliente ICGCloud" enabled="true"  preserve-order="true">
+    <test thread-count="5" name="Creación de nuevo cliente ICGCloud" enabled="true" preserve-order="true">
 	  <parameter name="resultadoEsperado" value="true"/>
 	  <parameter name="aceptoTerminos" value="true"/>
-	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa"/>
+	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa"/>
 	  <parameter name="expectedTitle" value="PortalRest2"/>
 	  <parameter name="classExpected" value = "shop-data-title"/>
 	  <parameter name="login" value="Registrarme"/>
@@ -336,17 +340,17 @@
 	  <parameter name="menu" value="menu"/>
 	  <parameter name="profile" value="Mi perfil"/>
 	  <parameter name="personal" value="Información personal"/>
-	    <classes>
-	    <class name="AbrePortalRest.AbrirUrl"/>
-	    <class name="Verificaciones.VerificarFichaRestaurante"/>
-	    <class name="Verificaciones.VerificarCookies"/>
-	    <class name="Clientes.AbrirPaginaRegistro"/>
-	    <class name="Clientes.CrearCliente">
-	    	<parameter name="email" value=""></parameter>
-	    </class>
-	    <class name="Verificaciones.VerificarFichaRestaurante"/>
+	  	<classes>
+		    <class name="AbrePortalRest.AbrirUrl"/>
+		    <class name="Verificaciones.VerificarFichaRestaurante"/>
+		    <class name="Verificaciones.VerificarCookies"/>
+		    <class name="Clientes.AbrirPaginaRegistro"/>
+		    <class name="Clientes.CrearCliente">
+		    	<parameter name="email" value=""></parameter>
+		    </class>
+		    <class name="Verificaciones.VerificarFichaRestaurante"/>
 	    </classes>
-  </test> 
+ 	</test> 
 
  	<!--Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT -->
  	<test thread-count="5" name="Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT " enabled="true" preserve-order="true">
@@ -354,8 +358,8 @@
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="resultadoEsperado" value="false" />
 		<parameter name="aceptoTerminos" value="true" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
-		<parameter name="shop" value="52704" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" />
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
@@ -366,16 +370,16 @@
 			</class>
 			<class name="Verificaciones.VerificarFichaRestaurante"/>
 		</classes>
-	</test><!--Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT -->
+	</test> <!--Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT -->
 	
 	<!-- Registrar nuevo usuario  con correo que ya está en uso en la tienda PRT(ICGCloud) -->
 	<test thread-count="5" name="Creación de nuevo cliente ICGCloud con correo que ya está en uso" enabled="true" preserve-order="true">
 	  <parameter name="resultadoEsperado" value="false"/>
 	  <parameter name="aceptoTerminos" value="true"/>
-	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa"/>
-	  <parameter name="shop" value="54066"/>	  
-	  <parameter name="expectedTitle" value="PortalRest2" />
-	  <parameter name="classExpected" value="shop-data-title" />
+	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa"/>
+	  <parameter name="shop" value="51983"/>
+	  <parameter name="expectedTitle" value="PortalRest2"/>
+	  <parameter name="classExpected" value = "shop-data-title"/>
 	  <parameter name="login" value="Registrarme"/>
 	  <parameter name="ICGCloud" value="true"/>
 	  	<classes>
@@ -388,14 +392,14 @@
 			</class>
 		    <class name="Verificaciones.VerificarFichaRestaurante"/>
 	    </classes>
- 	</test> <!-- Registrar nuevo usuario  con correo que ya está en uso en la tienda PRT(ICGCloud) -->
-
+ 	</test><!-- Registrar nuevo usuario  con correo que ya está en uso en la tienda PRT(ICGCloud) -->
+ 	
  	<!--Registrar nuevo usuario sin aceptar terminos y condiciones de uso en la tienda PRT -->
  	<test thread-count="5" name="Registrar nuevo usuario sin aceptar terminos y condiciones de uso en PRT " enabled="true" preserve-order="true">
  		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
-		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
-		<parameter name="shop" value="52704" />
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" />
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
@@ -413,8 +417,8 @@
 	<!-- Registrar nuevo usuario sin aceptar terminos y condiciones de uso en PRT(ICGCloud) -->
 	<test thread-count="5" name="Creación de nuevo cliente ICGCloud sin aceptar terminos y condiciones de uso" enabled="true" preserve-order="true">
 	  <parameter name="resultadoEsperado" value="false"/>
-	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa"/>
-	  <parameter name="shop" value="54066"/>	  
+	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa"/>
+  	  <parameter name="shop" value="51983"/>
 	  <parameter name="expectedTitle" value="PortalRest2"/>
 	  <parameter name="classExpected" value = "shop-data-title"/>
 	  <parameter name="login" value="Registrarme"/>
@@ -432,11 +436,11 @@
 		    <class name="Verificaciones.VerificarFichaRestaurante"/>
 	    </classes>
  	</test><!-- Registrar nuevo usuario sin aceptar terminos y condiciones de uso en PRT(ICGCloud) -->
-
+ 	
 	<!-- Registrar direccion -->
  	<test  name="Prueba de registrar una direcciones(Creacion de direccion)" enabled="true" preserve-order="true">
-	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
-	   	<parameter name="shop" value="52704"/>
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" /> 
    		<parameter name="validationCliente" value="true" />
 		<parameter name="direccion" value="Calle Maragall, 7"/>		
 		<parameter name="cp" value="25003" />
@@ -460,8 +464,8 @@
 
 	<!-- Modificar direccion -->
  	<test  name="Prueba de Modificar direcciones(Modificacion de direccion)" enabled="true" preserve-order="true">
-	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
-	   	<parameter name="shop" value="52704"/>
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" /> 
    		<parameter name="validationCliente" value="true" />
 		<parameter name="direccion" value="Calle Maragall, 7"/>		
 		<parameter name="cp" value="25003" />
@@ -492,8 +496,8 @@
 
 	<!-- Eliminar direccion -->
  	<test  name="Prueba de Eliminar direcciones(Supprimir direccion)" enabled="true" preserve-order="true">
-	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
-	   	<parameter name="shop" value="52704"/>
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" /> 
    		<parameter name="validationCliente" value="true" />
 		<parameter name="direccion" value="Calle Maragall, 7"/>		
 		<parameter name="cp" value="25003" />
@@ -514,8 +518,8 @@
 	        <!-- -->
 	    </classes>
  	</test> <!-- Modificar  direccion -->
-
+ 	
  	<!-- Nuevas implementaciones -->
- 
-
+ 	 	
+ 	
 </suite>

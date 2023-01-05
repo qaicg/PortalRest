@@ -2,10 +2,14 @@ package utils;
 
 import java.awt.AWTException;
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.Normalizer;
@@ -18,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -74,6 +79,7 @@ import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
 import Cadenas.Es;
 import Objects.ProductItem;
 import Windows.TrayIconDemo;
+import lombok.var;
 
 public class TestBase {
 
@@ -263,9 +269,25 @@ public class TestBase {
 			elment.sendKeys(value);			
 			return true;
 		}
-		
+		log("No se ha podido insertar datos("+value +") en el campo con By.xpath: " + by);
 		return false;
 	}
+	
+	//Se hace un metodo de envio de txto para que haga pausas necesarias.
+	public void enviarTexto(WebElement elemento, String texto) {
+		if(!isNullOrEmpty(elemento.getAttribute("value"))){				
+			elemento.clear();
+		}
+		elemento.sendKeys(texto);
+		//espera(100);
+		//Testear que se ha insertado el texto
+		if(!elemento.getAttribute("value").contentEquals(texto)) {
+			log("Error: insercion del texto " + texto + " ha fallo en el elemento -> " + elemento);
+			Assert.assertTrue(false);
+		}
+		//espera(100);
+	}
+	
 
 	protected void atras() {
 		WebElement back = driver.findElements(By.className("header-icon")).get(0);
@@ -423,4 +445,40 @@ public class TestBase {
 			Assert.assertTrue(false);
 		}
 	}
+	
+	//Generar caracteres aleatotios
+	public String generateCadenaAleatoria(int longitud) {
+	    // El banco de caracteres
+	    String banco = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	    // La cadena en donde iremos agregando un carácter aleatorio
+	    String cadena = "";
+	    for (int x = 0; x < longitud; x++) {
+	        int indiceAleatorio = generateNumeroAleatorioEnRango(0, banco.length() - 1);
+	        char caracterAleatorio = banco.charAt(indiceAleatorio);
+	        cadena += caracterAleatorio;
+	    }
+	    return cadena;
+	}
+	
+	//Generar numeros aleatotios
+    public int generateNumeroAleatorioEnRango(int minimo, int maximo) {
+        // nextInt regresa en rango pero con límite superior exclusivo, por eso sumamos 1
+        return ThreadLocalRandom.current().nextInt(minimo, maximo + 1);
+    }
+    
+    //Generar palabra
+    public String generatePalabra() throws IOException {
+    	StringBuilder result = new StringBuilder();
+    	//URL url = new URL("https://palabras-aleatorias-public-api.herokuapp.com/random");
+    	URL url = new URL("https://baconipsum.com/api/?type=all-meat&sentences=1&start-with-lorem=1");
+    	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    	conn.setRequestMethod("GET");
+    	try ( BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+    	    for (String line; (line = reader.readLine()) != null; ) {
+    	        result.append(line);
+    	    }
+    	}
+    	return result.toString();
+    	
+    }
 }

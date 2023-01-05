@@ -240,12 +240,11 @@ public class CheckOut extends TestBase{
 		importeVentaDouble = Double.parseDouble(importeVenta.replace(',', '.'));
 	
 		back();
-
-		if(( round((saldoAnteriorDouble - importeVentaDouble), 1)) != (round(saldoActualDouble, 1))) {
-			log("Saldo incorrecto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble, 1)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);
+		if(( round((saldoAnteriorDouble - importeVentaDouble), 2)) != (round(saldoActualDouble, 2))) {
+			log("Saldo incorrecto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble, 2)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);
 			Assert.assertTrue(false);
 		}else {
-			log("Saldo correcto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble, 1)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);		
+			log("Saldo correcto despues de realizar venta - Saldo Actual: " + (round(saldoActualDouble, 2)) + " - Saldo anterior: " +  saldoAnteriorDouble + " - Importe venta: " +importeVentaDouble);		
 		}
 
 
