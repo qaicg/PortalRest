@@ -72,6 +72,7 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentAventReporter;
 import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.google.gson.annotations.Until;
 import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
 import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
@@ -299,6 +300,7 @@ public class TestBase {
 
 	public void abrirMiMonedero(String miMonedero) {
 		clicJS(driver.findElement(By.xpath("//mat-icon[text()='menu']")));
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//button[text()='" + miMonedero + "']")));
 		clicJS(driver.findElement(By.xpath("//button[text()='" + miMonedero + "']")));
 		clicJS(driver.findElement(By.xpath("//mat-icon[text()='info']")));
 		espera(500);

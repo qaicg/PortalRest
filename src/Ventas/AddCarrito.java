@@ -136,6 +136,11 @@ public class AddCarrito extends TestBase{
 					espera(1000);
 					log("Producto " + currentItem.getNombre() + " encontrado y añadido a carrito");	
 					productosEncontrados++;
+					
+					//Testear si tenemos todos los artículos añadidos en el carrito
+					if(productosEncontrados==arrayNombres.length) {
+						break;
+					}
 				}
 
 			}

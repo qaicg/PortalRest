@@ -56,7 +56,7 @@
 	<parameter name="goBack" value="" />
 	<!--parameter name="importeMinimo" value="" /-->
 	
-	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -74,7 +74,7 @@
 	</test>
 	
 	<!--Prueba de venta simple y verificar el pedido desde el menu -->
-	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos y verificar el pedido en el apartado mis pedidos desde el menu" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos y verificar el pedido en el apartado mis pedidos desde el menu" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -93,7 +93,7 @@
 	</test><!--Prueba de venta simple y verificar el pedido desde el menu -->
 	
 	<!--Prueba de venta simple y verificar el pedido desde de la ficha restaurante -->
-	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos y verificar el pedido en el apartado mis pedidos desde la ficha del restaurante" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos y verificar el pedido en el apartado mis pedidos desde la ficha del restaurante" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -118,7 +118,7 @@
 	</test><!--Prueba de venta simple y verificar el pedido desde de la ficha restaurante -->	
 	
 	<!--Prueba de venta simple y repetir el pedido desde del menu -->
-	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos y repetir el pedido desde el menu, al final de la venta"  enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos y repetir el pedido desde el menu, al final de la venta"  enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -143,7 +143,7 @@
 	</test>
 	
   	<!--Prueba de venta simple y repetir el pedido desde de la ficha principal del restaurante -->
- 	<test name="-Prueba de venta simple en local de 4 articulos y repetir el pedido dedes de la ficha principal del restaurante" enabled="false" preserve-order="true">
+ 	<test name="-Prueba de venta simple en local de 4 articulos y repetir el pedido dedes de la ficha principal del restaurante" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -172,7 +172,7 @@
 		</classes>
 	</test> <!--Prueba de venta simple y repetir el pedido dedes de la ficha principal del restaurante -->
 	
-	<test name=" Prueba de ventas consecutivas usando back al final del pedido" enabled="false" preserve-order="true">
+	<test name=" Prueba de ventas consecutivas usando back al final del pedido" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Coca-Cola Zero 350ml,Fanta Taronja 30 ml" />
@@ -204,7 +204,7 @@
 		</classes>
 	</test>	
 
-	<test name="Al final del proceso de una venta hacer back para añadir mas productos y luego totalizar" enabled="false" preserve-order="true">
+	<test name="Al final del proceso de una venta hacer back para añadir mas productos y luego totalizar" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Coca-Cola Zero 350ml,Fanta Taronja 30 ml" />
@@ -241,7 +241,7 @@
 		</classes>
 	</test>	
 
-	<test name="Prueba de añadir productos y en el resumen del pedido antes de pagar, pulsar en añadir más productos. Añadir y totalizar" enabled="false" preserve-order="true">
+	<test name="Prueba de añadir productos y en el resumen del pedido antes de pagar, pulsar en añadir más productos. Añadir y totalizar" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Coca-Cola Zero 350ml,Fanta Taronja 30 ml" />
@@ -284,7 +284,7 @@
 		</classes>
 	</test>	
 
-	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales con una tarifa distinta al turno cargada desde el QR" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales con una tarifa distinta al turno cargada desde el QR" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmETPsNGcmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Coca-Cola Zero 350ml,Fanta Taronja 30 ml" />
@@ -303,7 +303,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple EN EL LOCAL como invitado con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple EN EL LOCAL como invitado con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3D%3DQM9YnczZSM9Q3clV3ZmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -320,7 +320,7 @@
 
 	<!-- INICIO PRUEBAS DELIVERY -->
 
-	<test name="Prueba de venta simple DELIVERY con dirección existente con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple DELIVERY con dirección existente con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -341,7 +341,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple DELIVERY con nueva dirección con 4 artículos normales y al terminar la borra" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple DELIVERY con nueva dirección con 4 artículos normales y al terminar la borra" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -367,7 +367,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta con DELIVERY en zona donde no se reparte terminada en local con 4 artículos normales." enabled="false" preserve-order="true">
+	<test name="Prueba de venta con DELIVERY en zona donde no se reparte terminada en local con 4 artículos normales." enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -389,7 +389,7 @@
 
 	<!-- FIN PRUEBAS DELIVERY -->
 
-	<test name="Prueba de venta simple servicio AUTO con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple servicio AUTO con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DQTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -407,7 +407,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple servicio EN LA MESA (6) con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple servicio EN LA MESA (6) con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DUTP2J3cmYTPsJGdmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -426,7 +426,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta con múltiples unidades del mismo artículo EN EL LOCAL" enabled="false" preserve-order="true">
+	<test name="Prueba de venta con múltiples unidades del mismo artículo EN EL LOCAL" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="unidades" value="2" />
@@ -443,7 +443,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple PARA LLEVAR con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple PARA LLEVAR con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DITP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="tipoServicio" value="2" />
@@ -459,7 +459,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple con 4 artículos normales pagados con forma de pago pendiente" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple con 4 artículos normales pagados con forma de pago pendiente" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="formaPago" value="Pagar a la entrega" />
@@ -475,7 +475,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple con login de Google con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple con login de Google con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="email" value="dptocalidadicg@gmail.com" />
@@ -491,7 +491,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple con login de ICGCLoud y 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple con login de ICGCLoud y 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="shop" value="54066" />
 		<parameter name="email" value="clienteprt@yopmail.com" />
@@ -509,7 +509,7 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple haciendo login en ICGCLoud con forma de pago de saldo en pago único con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple haciendo login en ICGCLoud con forma de pago de saldo en pago único con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="shop" value="54066" />
 		<parameter name="email" value="clienteprt@yopmail.com" />
@@ -529,7 +529,7 @@
 	</test>
 
 
-	<test name="Registro de nuevo usuario y prueba de venta simple con 4 artículos normales" enabled="false" preserve-order="true">
+	<test name="Registro de nuevo usuario y prueba de venta simple con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="email" value="" />
@@ -547,7 +547,7 @@
 		</classes>
 	</test>
 	
-	<test name="Prueba de venta simple con 4 artículos normales y Registro de nuevo usuario en el carrito" enabled="false" preserve-order="true">
+	<test name="Prueba de venta simple con 4 artículos normales y Registro de nuevo usuario en el carrito" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		
@@ -566,7 +566,7 @@
 		</classes>
 	</test>	
 
-	<test name="Venta de artículos normales y con formatos con incrementos de precio" enabled="false" preserve-order="true">
+	<test name="Venta de artículos normales y con formatos con incrementos de precio" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml,Yuzu Chocolate Cup" />
@@ -584,7 +584,26 @@
 		</classes>
 	</test>
 
-	<test name="Venta de artículos normales y con modificadores con incrementos de precio" enabled="false" preserve-order="true">
+ 	<!-- Añadir el producto con modificador Oyako Don sin Rebozar = 15,50  -->
+ 	<test name="Prueba de venta simple EN EL LOCAL  de 3 artículos normales y un producto con modificador " enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
+		<parameter name="shop" value="52704" />
+	
+		<parameter name="productos" value="Kirin TA,Inedit Damm,Fanta Taronja 30 ml,Oyako Don sin Rebozar" />
+		<parameter name="totalEsperado" value="32,35€" />
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+		</classes>
+	</test>
+
+	<test name="Venta de artículos normales y con modificadores con incrementos de precio" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml,Dorayaki de Chocolate" />
@@ -602,7 +621,7 @@
 		</classes>
 	</test>
 
-	<test name="Venta de artículos normales y un menú con incrementos de precio" enabled="false" preserve-order="true">
+	<test name="Venta de artículos normales y un menú con incrementos de precio" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml,MENÚ MIDDAY TAKE AWAY" />
@@ -621,7 +640,7 @@
 		</classes>
 	</test>
 
- <test  name="Prueba de venta simple con registro de nuevo usuario de ICGCLoud con 4 artículos normales"  enabled="false" preserve-order="true">
+ <test  name="Prueba de venta simple con registro de nuevo usuario de ICGCLoud con 4 artículos normales"  enabled="true" preserve-order="true">
    	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
 	<parameter name="shop" value="54066" />
     <parameter name="ICGCloud" value="true"/>
@@ -639,7 +658,7 @@
 	    </classes>
  </test> 
  
- <test  name="Prueba de venta fallida DELIVERY con dirección existente con 1 artículo que no alcanza importe minimo de pedido"  enabled="false" preserve-order="true">
+ <test  name="Prueba de venta fallida DELIVERY con dirección existente con 1 artículo que no alcanza importe minimo de pedido"  enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>
    <parameter name="shop" value="52704"/>
    <parameter name="productos" value="Fanta Taronja 30 ml"/>
@@ -663,7 +682,7 @@
 	    </classes>
  </test> 
 
- <test  name="Prueba de venta simple EN EL LOCAL haciendo login en el carrito y continuar con la compra"  enabled="false" preserve-order="true" >
+ <test  name="Prueba de venta simple EN EL LOCAL haciendo login en el carrito y continuar con la compra"  enabled="true" preserve-order="true" >
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
    <parameter name="shop" value="52704"/>
    <parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml"/>
@@ -680,7 +699,7 @@
 	    </classes>
  </test> 
  
- <test  name="Prueba de venta simple EN EL LOCAL pagar como invitado en el carrito y continuar con la compra" enabled="false" preserve-order="true" >
+ <test  name="Prueba de venta simple EN EL LOCAL pagar como invitado en el carrito y continuar con la compra" enabled="true" preserve-order="true" >
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
    <parameter name="shop" value="52704"/>
    <parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml"/>
@@ -703,7 +722,7 @@
  
  	<!--#29025 -->
  	<!--#29792: No se puede hacer pedido al volver de la pantalla Carga saldo tras registrar un nuevo cliente en ICGCLOUD.  -->
- <test  name="Prueba de login de un cliente en ICGCLoud y realizar carga de su tarjeta de fidelizacion" enabled="false" preserve-order="true">
+ <test  name="Prueba de login de un cliente en ICGCLoud y realizar carga de su tarjeta de fidelizacion" enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa"/>  
    <parameter name="shop" value="54066"/>
    <parameter name="email" value = "tarjetaqa07@yopmail.com"/>
@@ -719,7 +738,7 @@
 	    </classes>
  </test>  	
 
- <test  name="Prueba de venta simple con 4 artículos normales, haciendo login en ICGCLoud con forma de pago combinado saldo y Redsys"  enabled="false" preserve-order="true">
+ <test  name="Prueba de venta simple con 4 artículos normales, haciendo login en ICGCLoud con forma de pago combinado saldo y Redsys"  enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa"/>  
    <parameter name="shop" value="54066"/>
    <parameter name="email" value = "tarjetaqa07@yopmail.com"/>
@@ -773,7 +792,7 @@
 	</test>
  
 	<!--#26743
- <test  name="Prueba de venta simple servicio LOCAL y PARA MAS TARDE con 4 artículos normales" enabled="false" preserve-order="true">
+ <test  name="Prueba de venta simple servicio LOCAL y PARA MAS TARDE con 4 artículos normales" enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DQTP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa"/>  
    <parameter name="shop" value="48777"/>
    <parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml"/>
@@ -790,5 +809,6 @@
 	    </classes>
  </test> 
  -->
+
  
 </suite>
