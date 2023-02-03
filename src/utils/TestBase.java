@@ -44,6 +44,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -217,9 +218,11 @@ public class TestBase {
 		try {
 			log("Ejecución de pruebas finalizada");
 			td.displayTray("Ejecución de pruebas finalizada");
+			
 			//File htmlFile = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report"+new Date().getTime()+".html");
-			// espera(2000);
-			// Desktop.getDesktop().browse(htmlFile.toURI());
+			//espera(2000);
+			//Desktop.getDesktop().browse(htmlFile.toURI());
+	
 		} catch (AWTException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -483,4 +486,13 @@ public class TestBase {
     	return result.toString();
     	
     }
+    
+    //Abrir nueva pestaña en el navegador chrome
+	public void openNewWindowTab(String url) {
+		driver.switchTo().newWindow(WindowType.TAB);
+		espera();
+		driver.get(url);
+		espera(500);
+		log("Current Url -> " + driver.switchTo().window(driver.getWindowHandle()).getCurrentUrl());		
+	}
 }

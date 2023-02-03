@@ -7,8 +7,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.tools.DocumentationTool.Location;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -22,7 +26,7 @@ import utils.getDummyData;
 //@Test
 //@Parameters({"titleHeader", "resultatEsperado"})
 public class Reserva extends TestBase {
-	String diaReserva, hora, sala, localizador, observaciones, prefijo, telefono, email = null;
+	String diaReserva, hora, sala, localizador, observaciones, prefijo, telefono, email, citaReserva, nombreCliente, emailCliente = null;
 	String dummyLocalizador, dummyName, dummyTelefono, dummyEmail, dummyObservaciones = null; 
 	
 	public boolean isCreatedBooking = false;
@@ -77,11 +81,15 @@ public class Reserva extends TestBase {
 	 */
 	@Test
 	@Parameters({"resultatEsperado", "localizador", "prefijo", "telefono", "nombreCliente", "emailCliente", "observaciones", 
-				"aceptarTerminosCondiciones" , "aceptarPoliticaCancelacion", "aceptarComunicacionesComerciales", "titleHeader", "literalLocalizador", "literalObserciones"})
+				"aceptarTerminosCondiciones" , "aceptarPoliticaCancelacion", "aceptarComunicacionesComerciales", "titleHeader", 
+				"literalLocalizador", "literalObserciones", "insertBooking", "iconeNotification", "confirmacionReseva", "nombreRestaurante", 
+				"direccionRestaurante", "telefonoRestaurante", "numeroCliente", "infoDetails", "hora", "citaReserva", "urlEmail"})
 	public void createBooking(@Optional ("true") boolean resultadoEsperado, @Optional("") String localizador, @Optional("") String prefijo, @Optional("") String telefono, 
 			@Optional("") String nombreCliente, @Optional("") String emailCliente, @Optional("") String observaciones, 	
 			@Optional ("true") boolean aceptoTerminos, @Optional ("true") boolean aceptoPoliticaCancelacion, @Optional ("true") boolean aceptoComunicacionesComerciales, 
-			@Optional("") String titleHeader, @Optional() String literalLocalizador, @Optional("") String literalObserciones) {
+			@Optional("") String titleHeader, @Optional() String literalLocalizador, @Optional("") String literalObserciones, @Optional("true") boolean insertBooking,
+			String iconeNotification, String confirmacionReseva, String nombreRestaurante, String direccionRestaurante, String telefonoRestaurante, 
+			String numeroCliente, String infoDetails, String horaReserva, String citaReserva, String urlEmail) {
 		
 		//Validar el title de la pagina
 		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'title-header')]")));
@@ -107,20 +115,69 @@ public class Reserva extends TestBase {
 		
 		//Aceptar codiciones
 		checkConditionsBooking(aceptoTerminos, aceptoPoliticaCancelacion, aceptoComunicacionesComerciales, resultadoEsperado);
+		espera();
 		
-		// Verificar que no hay error que nos impide siguir el envio de la reserva
-		
+		// Verificar que no hay error que nos impide siguir la finalizacion de la reserva
+		validFormBookingByButtonNext(insertBooking, resultadoEsperado);
 		
 		//Validar la reserva en Booking
+		nombreCliente = isNullOrEmpty(nombreCliente) ? this.nombreCliente : nombreCliente;
+		emailCliente = isNullOrEmpty(emailCliente) ? this.emailCliente : emailCliente;
+		horaReserva = isNullOrEmpty(horaReserva) ? this.hora : horaReserva;
+		citaReserva = isNullOrEmpty(citaReserva) ? this.citaReserva : citaReserva;
+		verificarReservarBooking (iconeNotification, confirmacionReseva, nombreRestaurante, direccionRestaurante, 
+				telefonoRestaurante, nombreCliente, emailCliente, citaReserva, horaReserva, numeroCliente, infoDetails);
 		
 		//Validar la reserva en BD.
+		
+		
+		//Validación por mail cliente
+		//validateEmailClientBooking(urlEmail);
+		
+		//Validación por mail restaurante
+		//validateEmailRestaurantBooking(urlEmail);
+		
 	}
+	
+	
+	public void validFormBookingByButtonNext(@Optional("true") boolean insertBooking, @Optional("true") boolean resultatEsperado ) {
+		log("si todos los campos requeridos del formulario estan ingresados pulsar el boton siguiente");
+		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//button[contains(@class, 'button primary-color')]")));
+		
+		WebElement buttonNext = driver.findElement(By.xpath("//button[contains(@class, 'button primary-color')]"));
+		
+		if(isNullOrEmpty(buttonNext.getAttribute("disabled"))) {
+			//El boton está activado
+			log("El boton está activado");
+			
+			if(!resultatEsperado) { //No crear la reserva en booking
+				log("El boton deberia ser desactivado por que falta dato requerido en el formulario reserva");
+				Assert.assertTrue(false);
+			}
+			
+			if(insertBooking) {
+				buttonNext.click();
+				espera(2000);
+			}
+			
+		} else {
+			//El boton está desactivado
+			log("El boton está desactivado");
+			
+			if(insertBooking && resultatEsperado) {
+				log("Falla el boton Siguiente mientras que los campos requeridos estan ingresados");
+				Assert.assertTrue(false);
+			}
+		}
+
+	}
+	
 	
 	@Parameters({"resultatEsperado", "localizador", "prefijo", "telefono", "nombreCliente", "emailCliente", "observaciones"})
 	public void insertDataInputBooking(@Optional ("true") boolean resultadoEsperado, @Optional("") String localizador, @Optional("") String prefijo, @Optional("") String telefono, 
 			@Optional("") String nombreCliente, @Optional("") String emailCliente, @Optional("") String observaciones) {
 		//Localizador
-		if(inputLocalizador.getSize() != null)
+		if(inputLocalizador != null && inputLocalizador.getSize() != null)
 			if(!isNullOrEmpty(localizador)) 
 				enviarTexto(inputLocalizador, localizador);
 			else
@@ -141,14 +198,21 @@ public class Reserva extends TestBase {
 		//Nombre
 		if(!isNullOrEmpty(nombreCliente))
 			enviarTexto(inputName, nombreCliente);
-		else
+		else {
 			enviarTexto(inputName, dummyName);
+			this.nombreCliente = dummyName;
+		}
 		
 		//Email
-		if(!isNullOrEmpty(email))
+		if(!isNullOrEmpty(email) || !isNullOrEmpty(emailCliente)) {
+			email = !isNullOrEmpty(emailCliente) ? emailCliente : email;
 			enviarTexto(inputEmail, email);
-		else
+			this.emailCliente = email;
+		}
+		else {
 			enviarTexto(inputEmail, dummyEmail);
+			this.emailCliente = dummyEmail;
+		}
 		
 		//Observaciones
 		if(inputObservaciones.getSize() != null)
@@ -210,12 +274,289 @@ public class Reserva extends TestBase {
 		
 	}
 	
-	public void verificarReservarBookink () {
+	@Test
+	@Parameters({"iconeNotification", "confirmacionReseva", "nombreRestaurante", "direccionRestaurante", 
+				"telefonoRestaurante", "nombreCliente", "emailCliente", "citaReserva", "hora", "numeroCliente", "infoDetails"})
+	public void verificarReservarBooking (String iconeNotification, String messageConfirmation, String nombreRestaurante, String direccionRestaurante, 
+			String telefonoRestaurante, String nombreCliente, String emailCliente, String citaReserva, String horaReserva, String paxReserva, String infoDetails) {
+		log("validacion de la nueva reserva desde la pagina de confirmacion de la reserva");
+		WebElement informacionReservaWbmt = null;
+		String newReservaInformation = null;
+		
+		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//app-ticket")));
+		
+		informacionReservaWbmt = driver.findElement(By.xpath("//app-ticket"));
+		
+		if(isNullOrEmpty(informacionReservaWbmt.getAttribute("outerText"))) {
+			log("Error: No hay información en la nueva reserva");
+			Assert.assertTrue(false);
+		}
+		
+		newReservaInformation = informacionReservaWbmt.getAttribute("outerText");
+		
+		log("información de la nueva reserva en Booking: " + newReservaInformation);
+		
+		//validamos la información de la pagina
+		
+		/* Icono de confirmacion */ 
+		validateBookingIcon(iconeNotification);
+		
+		/* message de notificacion de la reserva */
+		validateBookingNotification(messageConfirmation);
+		
+		/* el nombre del restaurante */ 
+		validateRestaurantName(nombreRestaurante);
+		
+		/* la dirección del restaurante */ 
+		validateRestaurantAddress(direccionRestaurante);
+		
+		/* telefono del restaurante | nombre del restaurante */
+		validateRestaurantPhone(telefonoRestaurante);
+		
+		/* nombre del cliente */
+		validateCustomerName(nombreCliente);
+		
+		/* el email del cliente */
+		validateCustomerEmail(emailCliente);
+		
+		/* pax y hora de la reserva: 1 persona a las 15:30 */
+		validateBookingPaxAndTime(paxReserva, infoDetails, horaReserva);
+		
+		/* cita de la reserva en el formato: viernes, 3 febrero de 2023  */
+		validateBookingAppointment(citaReserva);
 		
 	}
 	
-	public void verificarReservarBD () {
+	/* Icono de confirmacion */ 
+	public void validateBookingIcon(String iconeNotification) {
+		/* Icono de confirmacion */ 
+		log("Validación: Icono de confirmacion -> " + iconeNotification);
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//mat-icon")));
 		
+		if(!driver.findElement(By.xpath("//mat-icon")).getAttribute("innerText").contentEquals(iconeNotification)) {
+			log("Error en la Validación Icono de confirmacion: " + iconeNotification);
+			log("Se ha encuentrado Icono de confirmacion: " + driver.findElement(By.xpath("//mat-icon")).getAttribute("innerText"));
+			log("Se espera encuentrar el Icono: "+ iconeNotification );
+			Assert.assertTrue(false); 
+		}
+		log("Validación: Icono de confirmacion: " + iconeNotification + " -> OK");
+	}
+	
+	/* message de notificacion de la reserva */
+	public void validateBookingNotification(String messageConfirmation) {
+		/* message de notificacion de la reserva */
+		log("Validación: message de notificacion de la reserva -> "+ messageConfirmation);
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//h2[contains(@class, 'booking-ok')]")));
+		
+		if(!driver.findElement(By.xpath("//h2[contains(@class, 'booking-ok')]")).getAttribute("innerText").contentEquals(messageConfirmation)) {
+			log("Error en la Validación del mensaje de confirmacion: " + messageConfirmation);
+			log("Se ha encuentrado otro mensaje de notificación de confirmación: " + driver.findElement(By.xpath("//h2[contains(@class, 'booking-ok')]")).getAttribute("innerText"));
+			log("Se espera encuentrar el siguiente mensaje de notificación: "+ messageConfirmation );
+			Assert.assertTrue(false);
+		}
+		log("Validación: message de notificacion de la reserva " + messageConfirmation + " -> OK");
+	}
+	
+	public void validateRestaurantName(String nombreRestaurante) {
+		/* el nombre del restaurante */ 
+		log("Validación: El nombre del restaurante -> " + nombreRestaurante);
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante +"')]")));
+		
+		if(driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante + "')]")).size() > 1) {
+			
+			String sNombreRestauranteValided = driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante +"')]")).get(0).getAttribute("innerText");
+			
+			if(!sNombreRestauranteValided.contentEquals(nombreRestaurante)) {
+				log("Error en la Validación: nombre del restaurante -> " + nombreRestaurante);
+				log("Se ha encuentrado otro nombre para el restaurante: " + sNombreRestauranteValided);
+				log("Se espera encuentrar el siguiente nombre: "+ nombreRestaurante );
+				Assert.assertTrue(false);
+			}
+		} else {
+			String sNombreRestauranteValided = driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante +"')]")).get(0).getAttribute("innerText");
+			if(!sNombreRestauranteValided.contentEquals(nombreRestaurante)) {
+				log("Error en la Validación: nombre del restaurante -> " + nombreRestaurante);
+				log("Se ha encuentrado otro nombre para el restaurante: " + sNombreRestauranteValided);
+				log("Se espera encuentrar el siguiente nombre para el restaurante: "+ nombreRestaurante );
+				Assert.assertTrue(false);
+			}
+		}
+		log("Validación: El nombre del restaurante " + nombreRestaurante + " -> OK");
+	}
+	
+	public void validateRestaurantAddress(String direccionRestaurante) {
+		/* la dirección del restaurante */ 
+		log("Validación de la dirección del restaurante -> " + direccionRestaurante);
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h4[contains(text(), '" + direccionRestaurante +"')]")));
+		
+		String sDireccionRestauranteValided = driver.findElement(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h4[contains(text(), '" + direccionRestaurante +"')]")).getAttribute("innerText");
+		
+		if(!sDireccionRestauranteValided.contentEquals(direccionRestaurante)) {
+			log("Error en la Validación de la dirección del restaurante -> " + direccionRestaurante);
+			log("Se ha encuentrado otra dirección: " + sDireccionRestauranteValided);
+			log("Se espera encuentrar la dirección: "+ direccionRestaurante );
+			Assert.assertTrue(false);
+		}
+		log("Validación de la dirección del restaurante " + direccionRestaurante + " -> OK");
+
+	}
+	
+	public void validateRestaurantPhone(String telefonoRestaurante) {
+		/* telefono del restaurante | nombre del restaurante */
+		log("Validación del telefono del restaurante -> " + telefonoRestaurante);
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + telefonoRestaurante +"')]")));
+
+		String stelefonoRestauranteValided = driver.findElement(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + telefonoRestaurante +"')]")).getText();
+		
+		
+		if(!stelefonoRestauranteValided.contains(telefonoRestaurante)) {
+			log("Error en la Validación del telefono del restaurante -> " + telefonoRestaurante);
+			log("Se ha encuentrado otro telefono: " + stelefonoRestauranteValided);
+			log("Se espera encuentrar el telefono: "+ telefonoRestaurante );
+			Assert.assertTrue(false);
+		}
+		log("Validación del telefono del restaurante " + telefonoRestaurante + " -> OK");
+
+	}
+	
+	public void validateCustomerName(String nombreCliente) {
+		/* nombre del cliente */
+		log("Validación: el nombre del cliente -> " + nombreCliente);
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'info-wrapper')]/h3[contains(text(), '" + nombreCliente +"')]")));
+		
+		if(driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper')]/h3[contains(text(), '"+ nombreCliente + "')]")).size() > 1) {
+			
+			String sNombreClienteValided = driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper')]/h3[contains(text(), '" + nombreCliente +"')]")).get(0).getAttribute("innerText");
+			
+			if(!sNombreClienteValided.contentEquals(nombreCliente)) {
+				log("Error en la Validación: nombre del cliente -> " + nombreCliente);
+				log("Se ha encuentrado otro nombre para el cliente: " + sNombreClienteValided);
+				log("Se espera encuentrar el siguiente nombre para el cliente: "+ nombreCliente );
+				Assert.assertTrue(false);
+			}
+		} else {
+			String sNombreClienteValided = driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper')]/h3[contains(text(), '" + nombreCliente +"')]")).get(0).getAttribute("innerText");
+			if(!sNombreClienteValided.contentEquals(nombreCliente)) {
+				log("Error en la Validación: nombre del cliente -> " + nombreCliente);
+				log("Se ha encuentrado otro nombre para el cliente: " + sNombreClienteValided);
+				log("Se espera encuentrar el siguiente nombre para el cliente: "+ nombreCliente );
+				Assert.assertTrue(false);
+			}
+		}
+		log("Validación: El nombre del cliente " + nombreCliente + " -> OK");
+
+	}
+	
+	public void validateCustomerEmail(String emailCliente) {
+		/* el email del cliente */
+		log("Validación: email del cliente -> " + emailCliente);
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'info-wrapper')]/h4[contains(text(), '" + emailCliente +"')]")));
+
+		String sEmailClienteValided = driver.findElement(By.xpath("//div[contains(@class, 'info-wrapper')]/h4[contains(text(), '" + emailCliente +"')]")).getAttribute("innerText");
+		
+		if(!sEmailClienteValided.contains(emailCliente)) {
+			log("Error en la Validación del email del cliente -> " + emailCliente);
+			log("Se ha encuentrado otro email: " + sEmailClienteValided);
+			log("Se espera encuentrar el email: "+ emailCliente );
+			Assert.assertTrue(false);
+		}
+		log("Validación del email del cliente " + emailCliente + " -> OK");
+
+	}
+	
+	public void validateBookingPaxAndTime(String paxReserva, String infoDetails, String horaReserva) {
+		/* pax y hora de la reserva: 1 persona a las 15:30 */
+		log("Validación: pax y hora de la reserva");
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'details-info-wrapper')]//div")));
+		
+		WebElement webelmtDetailInfo = driver.findElements(By.xpath("//div[contains(@class, 'details-info-wrapper')]//div")).get(1);
+		String sInfoDetailValided = webelmtDetailInfo.getText();
+		
+		if(!isNullOrEmpty(infoDetails)) {
+			String sVerificarInfoDetail = paxReserva + " " + infoDetails + " " + horaReserva;
+			
+			if(!sInfoDetailValided.contentEquals(sVerificarInfoDetail)) {
+				log("Error en la Validación pax y hora  -> " + infoDetails);
+				log("Se ha encuentrado otra informción pax y hora: " + sInfoDetailValided);
+				log("Se espera encuentrar pax y hora : "+ infoDetails );
+				Assert.assertTrue(false);
+			}
+			
+		} else {
+			if(!sInfoDetailValided.contentEquals(paxReserva)) {
+				log("Error en la Validación pax  -> " + paxReserva);
+				log("Se ha encuentrado otra informción pax y hora: " + sInfoDetailValided);
+				log("Se espera encuentrar pax: "+ paxReserva );
+				Assert.assertTrue(false);
+			}
+			
+			if(!sInfoDetailValided.contentEquals(horaReserva)) {
+				log("Error en la Validación pax  -> " + horaReserva);
+				log("Se ha encuentrado otra informción pax y hora: " + sInfoDetailValided);
+				log("Se espera encuentrar pax: "+ horaReserva );
+				Assert.assertTrue(false);
+			}
+			
+		}
+		log("Validación pax y hora de la reserva  -> OK");
+
+	}
+	
+	public void validateBookingAppointment(String citaReserva) {
+		/* cita de la reserva en el formato: viernes, 3 febrero de 2023  */
+		log("Validación: cita de la reserva por dia, mes de año");		
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'details-info-wrapper')]//div")));
+		
+		WebElement webelmtInfoCitaBooking = driver.findElements(By.xpath("//div[contains(@class, 'details-info-wrapper')]//div")).get(0);
+		String sInfoCitaBookingValided = webelmtInfoCitaBooking.getText();
+		
+		if(!sInfoCitaBookingValided.contentEquals(citaReserva)) {
+			log("Error en la Validación de la cita  -> " + citaReserva);
+			log("Se ha encuentrado otra cita: " + sInfoCitaBookingValided);
+			log("Se espera encuentrar la cita: "+ citaReserva );
+			Assert.assertTrue(false);
+		}
+		log("Validación: cita de la reserva: "+ citaReserva + " -> OK");	
+
+	}
+	
+	@Test
+	@Parameters({"urlEmail", "emailCliente", "passwordCliente"})
+	public void validateEmailClientBooking( String urlEmail, String emailCliente, String passwordCliente) {
+		openNewWindowTab(urlEmail);
+		
+		MailReading readCustomerEmail = new MailReading();
+		
+		try {
+			readCustomerEmail.openWebMail(emailCliente, passwordCliente);
+			
+			readCustomerEmail.cerrarSesionMail(false);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+	}
+	
+	@Test
+	@Parameters({"urlEmail", "emailNotificacionReservas", "passwordRestaurante"})
+	public void validateEmailRestaurantBooking( String urlEmail, String emailRestaurante, String passwordRestaurante) {
+		openNewWindowTab(urlEmail);
+		
+		MailReading readRestaurantEmail = new MailReading();
+		
+		try {
+			readRestaurantEmail.openSesionMail(emailRestaurante, passwordRestaurante);
+			readRestaurantEmail.cerrarSesionMail(false);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	
+	public void verificarReservarBD () {
+		log("validacion de la nueva reserva desde la BBDD en las tablas:");
 	}
 	
 	public void verificarCookiesReserva () {
@@ -273,17 +614,18 @@ public class Reserva extends TestBase {
 			
 			List<WebElement> prefijos = new ArrayList<WebElement>();			
 			
-			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(stringListPrefijo)));
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(stringListPrefijo)));
 
 			prefijos = driver.findElements(By.xpath(stringListPrefijo));
 			
 			if(prefijos.size() > 0) {
 				//buscar i seleccionar prefijo definido como parametro
 				boolean isSelectedPrefijo = false;
+				String elemFijoSearch = "("+prefijo+")";
 				for(int i = 0; i < prefijos.size(); i++) {
-					if(prefijos.get(i).getText().equals(prefijo)) {
+					if(prefijos.get(i).getText().contains(elemFijoSearch)) {
 						clicJS(prefijos.get(i));
-						log("el prefijo("+ prefijo +") del telefono está seleccionada desde el listado ");
+						log("el prefijo "+ prefijo +" del telefono está seleccionada desde el listado ");
 						isSelectedPrefijo = true;
 						break;
 					}
@@ -316,17 +658,23 @@ public class Reserva extends TestBase {
 		String stringDay;
 		String stringValidateSelectedDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator mat-calendar-body-selected')]";
 		
-		if(isNullOrEmpty(day)) {
+		if(isNullOrEmpty(day) || day.equalsIgnoreCase("hoy")) {
 			//stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator mat-calendar-body-selected mat-calendar-body-today')]";
-			day = fechaHoy.split("/")[0];
-			stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ fechaHoy.split("/")[0] +"')]";
+			day = fechaHoy.split("/")[0].replaceFirst("^0+(?!$)", ""); // saccar los 0 de la izquerda replaceFirst("^0+(?!$)", "")
+			stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ fechaHoy.split("/")[0].replaceFirst("^0+(?!$)", "") +"')]";
+			
+			this.citaReserva = fechaHoy;
 			
 		} else {
 			
 			if(day.split("/").length > 0) {
 				stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ day.split("/")[0] +"')]";
+				
+				
 			} else {
 				stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ day +"')]";
+				
+				
 			}
 		}
 		
@@ -340,7 +688,7 @@ public class Reserva extends TestBase {
 		//Validar el dia seleccionado
 		//("//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator mat-calendar-body-selected')]")
 		if(isElementPresent(By.xpath(stringValidateSelectedDay))) {
-			 
+			day =  day.split("/").length > 0 ? day.split("/")[0] : day;
 			if(!driver.findElement(By.xpath(stringValidateSelectedDay)).getText().equalsIgnoreCase(day)) {
 				log("No se ha podido seleccionar el dia: "+ day);
 				
@@ -595,4 +943,5 @@ public class Reserva extends TestBase {
 		}
 		
 	}
+
 }

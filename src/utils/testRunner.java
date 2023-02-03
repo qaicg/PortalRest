@@ -36,7 +36,7 @@ public class testRunner {
 			
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
 			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
+			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
 			
 			
 			// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)
@@ -46,7 +46,7 @@ public class testRunner {
 			
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");	
 			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
+			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
 			
 		} else {
 			Data.getInstance().setEntornoTest(ENTORNOTEST);
@@ -59,7 +59,7 @@ public class testRunner {
 				
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
 				
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
+				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
 			}else {
 				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)
 				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)");
@@ -68,7 +68,7 @@ public class testRunner {
 				
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml"); 
 				
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
+				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
 			}
 		}
 		
