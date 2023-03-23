@@ -46,9 +46,10 @@ public class RepeatAddCarrito extends TestBase {
 	
 	
 	@Test(description="Este test permite repetir el pedido manualmente con otros productos" , priority=1)
-	@Parameters({"repeatProductos","repeatProductosTotalPrice","opcionesMenu","unidades", "goBack", "productos", "totalEsperado", "preciototalEsperado", "goBackByAddOrderButton"})
+	@Parameters({"repeatProductos","repeatProductosTotalPrice","opcionesMenu","unidades", "goBack", "productos", "totalEsperado", "preciototalEsperado", "goBackByAddOrderButton", "abrirFichaProducto"})
 	public void addCartPedido(String repeatProductos, String repeatProductosTotalPrice, @Optional ("") String opcionesMenu, @Optional ("") String unidades, 
-			@Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado, @Optional ("") String preciototalEsperado, @Optional ("") String goBackByAddOrderButton) {
+			@Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado, @Optional ("") String preciototalEsperado,
+			@Optional ("") String goBackByAddOrderButton, @Optional("false") boolean abrirFichaProducto) {
 		
 		String firstOrderProducts = productos;
 		
@@ -60,7 +61,7 @@ public class RepeatAddCarrito extends TestBase {
 		}
 				
 		AddCarrito	repeatPedido = new AddCarrito();
-		repeatPedido.addCart(repeatProductos, repeatProductosTotalPrice, opcionesMenu, unidades, goBack, firstOrderProducts, goBackByAddOrderButton);
+		repeatPedido.addCart(repeatProductos, repeatProductosTotalPrice, opcionesMenu, unidades, goBack, firstOrderProducts, goBackByAddOrderButton, abrirFichaProducto);
 	}
 	
 	@Test(description="Este test permite el checkout del pedido repetido manualmente" , priority=1)

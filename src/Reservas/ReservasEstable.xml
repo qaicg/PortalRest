@@ -11,7 +11,7 @@
 	<parameter name="expectedTitle" value="PortalRest Booking" /> <!--Titulo de la página -->
 	<parameter name="titleHeader" value="Ingrese los detalles de su reserva" /> <!-- Titulo formulario Reserva-->
 	
-	<parameter name="test" value="true" /> <!-- Entorno de test -->
+	<parameter name="test" value="false" /> <!-- Entorno de produción(Estable) -->
 	
 	<parameter name="dia" value="hoy" /> <!-- El dia de la reserva-->
 	<parameter name="hora" value="" /> <!-- Elegir la hora de la reserva-->

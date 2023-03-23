@@ -32,6 +32,9 @@
   https://www.guru99.com/selenium-tutorial.html
   https://www.tutorialselenium.com/2018/09/20/xpath-selenium-webdriver-tutorial/
   
+  Locator strategies -> Ways to identify one or more specific elements in the DOM:
+  	https://www.selenium.dev/documentation/webdriver/elements/locators/
+  
   
   Interesante leer para seguir con el desarrollo y tenerlo en cuenta.
   ----------------------
@@ -39,6 +42,8 @@
   https://howtodoinjava.com/testng/testng-executing-parallel-tests/ -> Ejecucion paralela de tests
   https://www.toolsqa.com/testng/testng-listeners/ -> TestNG Listeners
   https://api.generadordni.es/api-docs/ -> Obtener datos para pruebas.
+  
+  https://medium.com/test-automation-hub/how-to-rerun-retry-failed-tests-selenium-framework-67e33206f108
   
   ------------------NOTAS DEL TEST --------------
   LOS ARTICULOS CON FORMATO, MODIFICADORES O MENÚS DEBEN IR SIEMPRE AL FINAL DEL LISTADO DE PORTALREST.

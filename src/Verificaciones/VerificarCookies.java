@@ -46,7 +46,14 @@ public class VerificarCookies extends TestBase {
 		}
 		
 		if(aceptarCookies.getSize() != null) {
-			aceptarCookies.click();
+				
+			if(driver.findElements(By.xpath("//button[contains(@class, 'btn-confirm')]")).size() > 1) { 
+				//pantalla muestrando mensaje de error con botones vuelve a intertarlo y aceptar cookies.
+				driver.findElements(By.xpath("//button[contains(@class, 'btn-confirm')]")).get(1).click();
+			} else {
+				//pantalla muestra solo el botón aceptar cookies
+				aceptarCookies.click();
+			}
 			espera(1000);
 			log("Hemos aceptado las cookies");
 		} else {

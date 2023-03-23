@@ -41,6 +41,18 @@ public class CargarSaldoIcgCloud extends TestBase {
 			log("balanceBeforeLoading: " + balanceBeforeLoading);
 		}
 		
+		By elmtBy = By.xpath(("//button[contains(@class, 'btn btn-confirm')]//ancestor::span//preceding-sibling::span[2]"));
+		
+		WebElement newElement = getElementByFluentWait(elmtBy, 30, 5);
+		
+		if(newElement != null) {
+			log(" text newElement > " + newElement.getText());
+		}
+		else {
+			log("Error: text newElement ");
+			Assert.assertTrue(false);
+		}
+		
 		//espera(500);
 		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'btn btn-confirm') and text()='"+cargarSaldoString+"']")));
 		WebElement cargarSaldoButton = driver.findElement(By.xpath("//button[contains(@class,'btn btn-confirm') and text()='"+cargarSaldoString+"']"));
@@ -101,7 +113,7 @@ public class CargarSaldoIcgCloud extends TestBase {
 		clicJS(driver.findElement(By.xpath("//button[contains(@class,'main-btn basket-button')]")));
 		espera(1000);
 		
-		pagarPedidoConTarjeta(nuevaTarjeta.equalsIgnoreCase("true"), testCardNumber, cad1, cad2, cvv);
+		pagarPedidoConTarjeta(nuevaTarjeta.equalsIgnoreCase("true"), testCardNumber, cad1, cad2, cvv, miMonederoString);
 		
 		if(validateChargedBalance.equalsIgnoreCase("false")) {
 			log("No hemos podido cargar la tarjeta de fidelización.");
@@ -109,17 +121,14 @@ public class CargarSaldoIcgCloud extends TestBase {
 		}
 		
 		//driver.navigate().back();
-		//TODO: Eliminar o comentar las dos siguientes lineas una vez las tareas #29792 #29025 solucionadas. 
-		espera();
-		driver.navigate().refresh();
-		//espera();
-		//driver.navigate().back();
-		//driver.navigate().refresh();
-		//TODO: Eliminar o comentar las dos siguientes lineas una vez las tareas #29792 #29025 solucionadas.
+		espera(2000);
+		
+		//Pulsar el logo tipo del establecimiento para volver al inicio(la pantalla principal de la tienda)
+		clicLogoEstablecimiento();
 	}
 		
 	// pagar el saldo a carga en la tarjeta de fidelizacion al utilizar la tarjeta Redsys
-	private void pagarPedidoConTarjeta(boolean nuevaTarjeta, String testCardNumber, String cad1, String cad2, String cvv) {
+	private void pagarPedidoConTarjeta(boolean nuevaTarjeta, String testCardNumber, String cad1, String cad2, String cvv, String miMonederoString) {
 		espera(5000);
 		
 		//TENEMOS PANTALLA DE REDSYS ABIERTA.
@@ -140,10 +149,29 @@ public class CargarSaldoIcgCloud extends TestBase {
 			log("- Respuesta de cobro correcta");
 			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[contains(@class,'btn btn-lg btn-continue')]")));
 			driver.findElement(By.xpath("//input[contains(@class,'btn btn-lg btn-continue')]")).click();//CLIC EN CONTINUAR
-			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//app-card/child::div[contains(@class,'card-wrapper shadowed expanded')]")));//ESPERO HASTA QUE SALGA POR PANTALLA MONEDERO.
 			
-			clicJS(driver.findElement(By.xpath("//mat-icon[text()='info']")));
-			espera(500);
+			//w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//app-card/child::div[contains(@class,'card-wrapper shadowed expanded')]")));//ESPERO HASTA QUE SALGA POR PANTALLA MONEDERO.
+			
+			//Update > desde la version 8.44.0.0 y 9.10.0.0
+				waitUntilPresence("//div/button[contains(@class, 'main-btn basket-button')]", true, false); //ESPERO HASTA QUE SALGA POR PANTALLA Resultado de la carga Saldo.
+				espera(1000);
+				
+				//TODO MAD: Que tenemos que validiar en esta pantalla tras terminar la carga saldo de la tarjeta de fidelización
+				
+				abrirMiMonedero(miMonederoString); //Abrir mi monedero para comprobar que ha ido bien la carda del saldo
+				espera(2000);
+				
+				//waitUntilPresence("//app-card/child::div[contains(@class,'card-wrapper shadowed expanded')]", true, false);
+				
+				//waitUntilPresence("//mat-icon[text()='info']", true, false);
+				
+				//w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class, 'btn btn-confirm')]//ancestor::span//preceding-sibling::span[2]")));
+				
+			//Fin update 
+			
+			
+			//clicJS(driver.findElement(By.xpath("//mat-icon[text()='info']")));
+			//espera(500);
 			
 			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class, 'btn btn-confirm')]//ancestor::span//preceding-sibling::span[2]")));
 			

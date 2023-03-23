@@ -33,9 +33,9 @@ public class AddCarrito extends TestBase{
 	int productosEncontrados;
 
 	@Test (description="Este test busca un producto dado en el PortalRest actual" , priority=1)
-	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts", "goBackByAddOrderButton"})
+	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts", "goBackByAddOrderButton", "abrirFichaProducto"})
 	public void addCart(String productos, String totalEsperado, @Optional ("") String opcionesMenu, @Optional ("") String unidades,
-						@Optional ("") String goBack, @Optional ("") String firstOrderProducts,  @Optional ("") String goBackByAddOrderButton) {
+						@Optional ("") String goBack, @Optional ("") String firstOrderProducts,  @Optional ("") String goBackByAddOrderButton, @Optional("false") boolean abrirFichaArticulo) {
 		arrayNombres = productos.split(",");
 		
 		ArrayList<ProductItem> productosAddeds = new ArrayList<ProductItem> ();
@@ -63,7 +63,7 @@ public class AddCarrito extends TestBase{
 		boolean doScroll=true;
 		int vueltas=0;
 		String familia = "";
-
+		
 		while (doScroll) {
 
 			espera(1000);
@@ -74,19 +74,36 @@ public class AddCarrito extends TestBase{
 				familia = driver.findElement(By.xpath("//div[contains(@class,'family-title')]")).getAttribute("innerText");
 			}		
 			espera(1000);
+			
 			for(int i=1;i<= elements.size();i++) { 
 				
-				ProductItem currentItem = new ProductItem();	   		 
-				currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')])["+i+"]")).getAttribute("innerText"));		   
+				ProductItem currentItem = new ProductItem();	 
+				
+				if(isElementPresent(By.xpath("//div[contains(@class,'dish-name')]//div"))) {
+					currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')]//div)["+i+"]")).getAttribute("innerText"));		   
+				} else {
+					currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')])["+i+"]")).getAttribute("innerText"));		   
+				}
+				
+				
 				if (isElementPresent(By.xpath("(//div[contains(@class,'dish-image')])["+i+"]")))
 					currentItem.setImagenElement(driver.findElement(By.xpath("(//div[contains(@class,'dish-image')])["+i+"]")));
 
-				if(isElementPresent(By.xpath("(//button[contains(@class,'product-info')])["+i+"]"))) currentItem.setBoton(driver.findElement(By.xpath("(//button[contains(@class,'product-info')])["+i+"]")));
-				else currentItem.setBoton(driver.findElement(By.xpath("(//div[contains(@class,'product-item-add')])["+i+"]")));	
+				if(isElementPresent(By.xpath("(//button[contains(@class,'product-info')])["+i+"]"))) {
+					currentItem.setBoton(driver.findElement(By.xpath("(//button[contains(@class,'product-info')])["+i+"]")));
+				}
+				else {
+					currentItem.setBoton(driver.findElement(By.xpath("(//div[contains(@class,'product-item-add')])["+i+"]")));	
+				}
 
 				if(contieneNombre(arrayNombres,currentItem.getNombre()) && !productosAddeds.contains(currentItem) && (i<elements.size() || currentItem.getNombre().contains("MENÚ")))
 				{
-					clicJS(currentItem.getBoton());
+					if(abrirFichaArticulo) {
+						addFromProductSheet(currentItem.getImagenElement(), currentItem.getNombre());
+					} else {
+						clicJS(currentItem.getBoton());
+					}
+					
 					productosAddeds.add(currentItem);
 					
 					//Validamos si tiene formatos o modificadores
@@ -222,5 +239,50 @@ public class AddCarrito extends TestBase{
 		}	
 		return false;
 	}
-
+	
+	public void abrirFichaProducto(WebElement elementProducto) {
+		clicJS(elementProducto);
+		espera(500);
+	}
+	
+	//Añadir artículo desde de la ficha del producto
+	//** Abrir ficha producto
+	public void addFromProductSheet(WebElement elementProducto, String productName) {
+		
+		abrirFichaProducto(elementProducto);
+		
+		String sProductInfoWrapper = "//div[contains(@class, 'product-info-wrapper-scrollable')]";
+		
+		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(sProductInfoWrapper)));
+		
+		if(!driver.findElement(By.xpath(sProductInfoWrapper)).getAttribute("textContent").contains(productName)) {
+			String errorMensaje = "Errror: no se ha encontrado el producto " + productName + " en la ficha abierta";
+			log(errorMensaje);
+			Assert.assertTrue(false);
+		}
+		
+		String sButtonAdd = "//app-basket-button//button[contains(@class, 'main-btn basket-button')]";
+		String sButtonAddLabel = "+ Añadir al pedido";
+		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(sButtonAdd)));
+		
+		if(!isElementPresent(By.xpath(sButtonAdd))) {
+			String errorMensaje = "Errror: no se ha encontrado el button  " + sButtonAddLabel + " en la ficha abierta para añadir el artículo a la cesta";
+			log(errorMensaje);
+			Assert.assertTrue(false);
+		}
+		
+		if(driver.findElements(By.xpath(sButtonAdd)).size() > 0) {
+			List<WebElement> elmeBtn = driver.findElements(By.xpath(sButtonAdd));
+			elmeBtn.forEach(btn -> {
+				if(btn.getText().contains(sButtonAddLabel)) {
+					clicJS(btn);  //CLIC EN AÑADIR A CARRITO
+				}
+			});
+		} else {
+			clicJS(driver.findElement(By.xpath(sButtonAdd))); //CLIC EN AÑADIR A CARRITO
+		}
+		
+		log("Producto" + productName + " añadido desde la ficha");
+	}
+	
 }

@@ -11,13 +11,17 @@ import org.testng.Reporter;
 import org.testng.TestNG;
 
 public class testRunner {
-	 //POR DEFECTO EJECUTA LOS TESTS DE LA VERSIÓN MASTER DE PORTALREST (QA08)
+	 //POR DEFECTO EJECUTA LOS TESTS DE LA VERSIÓN MASTER DE PORTALREST (QA09)
 	//VARIABLES DE SELECCIÓN DE ENTORNO DE EJECUCIÓN//
 	
 																		//-------------------**********DEFINIDIR CONSTANTES***********--------------------------//
-																							static boolean RUNALLTESTS = true;
+																							static boolean RUNALLTESTS = false;
+																							
 																							static boolean SINVENTANA = false;
-																							static boolean ENTORNOTEST = true;
+																							
+																							static boolean ENTORNOTEST = false;
+																							
+																							static boolean BETATEST = false; //CloudLicenceBeta
 																	   //-------------------******************************************--------------------------//
 
 	public static void main(String[] args) {
@@ -29,24 +33,37 @@ public class testRunner {
 			log("EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA08) Y DESPUES EN LA VERSION ESTABLE (QA07)");
 			Data.getInstance().setRunAllTests(RUNALLTESTS);
 			
-			// EJECUTA LOS TESTS EN LA VERSION MASTER (QA09)
-			log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA09)");
+			if(!BETATEST) {
+				// EJECUTA LOS TESTS EN LA VERSION MASTER (QA09)
+				log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA09)");
+				
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
+				
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
+				
+				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
+				
+				
+				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)
+				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)");
+				
+				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\AbrePortalRest\\AbrirPortalRest.xml");
+				
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
+				
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");	
 			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
-			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
-			
-			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
-			
-			
-			// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)
-			log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)");
-			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
-			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");	
-			
-			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
+				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
+			}
+			else {
+				// EJECUTA LOS TESTS EN LA VERSION BETA MASTER (QA09)
+				log("EJECUTA LOS TESTS EN LA VERSION BETA MASTER (QA09)");
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\BetaVentas.xml");
+				
+				// EJECUTA LOS TESTS EN LA VERSION BETA ESTABLE (QA08)
+				log("EJECUTA LOS TESTS EN LA VERSION BETA ESTABLE (QA08)");
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\BetaVentasEstable.xml");	
+			}
 			
 		} else {
 			Data.getInstance().setEntornoTest(ENTORNOTEST);
@@ -60,9 +77,11 @@ public class testRunner {
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
 				
 				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
-			}else {
+			} else {
 				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)
 				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)");
+				
+				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\AbrePortalRest\\AbrirPortalRest.xml");
 				
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
 				

@@ -10,7 +10,7 @@
 
 	<parameter name="login" value="Registrarme" />
 	<parameter name="report.config" value="C:\Users\QA\portalrestproject\test-output\extent-config.xml" />
-	<parameter name="test" value ="false" /> <!-- Entorno de ejecución Produccion-->
+	<parameter name="test" value ="true" /> <!-- Entorno de ejecución TEST(Master)-->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 
@@ -24,6 +24,11 @@
 	
 	<parameter name="miPerfilString" value="Mi perfil" /> <!--Nombre de la opción de menú Mi Perfil en Español -->
 	<parameter name="misDireccionesString" value="Mis direcciones" /> <!--Nombre de la opción de menú Mis Direcciones en Español -->
+	
+	<parameter name="pedidoMasTarde" value="false" /> <!-- realizar pedido por mas tarde con avisar por email al cliente -->
+	<parameter name="pedidoDiaHora" value="false" /> <!-- Realizar pedido seleccionando dia y hora por la entregada -->
+	
+	<parameter name="modoSinVentana" value="false" /> <!--modo sin ventana para test case o test suite -->
 
 	<test thread-count="5" name="Creación de nuevo cliente PRT" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
@@ -491,7 +496,7 @@
  	</test> <!-- Modificar  direccion -->
 
 	<!-- Eliminar direccion -->
- 	<test  name="Prueba de Eliminar direcciones(Supprimir direccion)" enabled="true" preserve-order="true">
+ 	<test  name="Prueba de Eliminar direcciones(Suprimir direccion)" enabled="true" preserve-order="true">
 	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
 	   	<parameter name="shop" value="52704"/>
    		<parameter name="validationCliente" value="true" />

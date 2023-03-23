@@ -9,10 +9,17 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 	
 	//POR DEFECTO DEJAMOS PARAMETROS DE ENTORNO TEST
+	/*
 	private static String urlConexion="jdbc:mysql://213.99.41.61:3306/";
-	private String BBDD = "";
 	private static String userName="cloud";
 	private static String password="d4PKLWwrhFcdwnB1";
+	*/
+	private static String urlConexion = "jdbc:mysql://213.99.41.60:3306/";
+	private static String userName = "cloud";
+	private static String password = "gKeQf6xfsIHLJXVy";
+	
+	private String BBDD = "";
+	
 	private static Connection connection;
 	private static PreparedStatement statement;
 	
@@ -23,14 +30,16 @@ public class DatabaseConnection {
 	
 	public void defineEntorno(int entorno, String database) {
 		
-		if (entorno == ENTORNOPRODUCION) {
+		//if (entorno == ENTORNOPRODUCION) {
+		if (entorno == ENTORNOTEST) {
 			urlConexion = "jdbc:mysql://213.99.41.60:3306/"+database;
 			userName = "cloud";
 			password = "gKeQf6xfsIHLJXVy";
 			BBDD =  database;
 		}
 		
-		else if (entorno == ENTORNOTEST) {
+		//else if (entorno == ENTORNOTEST) {
+		else if (entorno == ENTORNOPRODUCION) {
 			urlConexion = "jdbc:mysql://213.99.41.61:3306/"+database;
 			userName = "cloud";
 			password = "d4PKLWwrhFcdwnB1";
@@ -42,14 +51,16 @@ public class DatabaseConnection {
 	
 	public void defineEntorno(String database) {
 		
-		if (ENTORNODEFINIDO == ENTORNOPRODUCION) {
+		//if (ENTORNODEFINIDO == ENTORNOPRODUCION) {
+		if (ENTORNODEFINIDO == ENTORNOTEST) {
 			urlConexion = "jdbc:mysql://213.99.41.60:3306/"+database;
 			userName = "cloud";
 			password = "gKeQf6xfsIHLJXVy";
 			BBDD =  database;
 		}
 		
-		else if (ENTORNODEFINIDO == ENTORNOTEST) {
+		//else if (ENTORNODEFINIDO == ENTORNOTEST) {
+		else if (ENTORNODEFINIDO == ENTORNOPRODUCION) {
 			urlConexion = "jdbc:mysql://213.99.41.61:3306/"+database;
 			userName = "cloud";
 			password = "d4PKLWwrhFcdwnB1";
@@ -60,7 +71,6 @@ public class DatabaseConnection {
 		
 		Data.getInstance().setBD(BBDD);
 	}
-	
 	
 	
 	//REALIZA CONEXIÓN AL ENTORNO CONFIGURADO

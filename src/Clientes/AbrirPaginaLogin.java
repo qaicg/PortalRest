@@ -38,6 +38,9 @@ public class AbrirPaginaLogin extends TestBase {
 				  espera(500);
 			  }
 			  
+			  String menuItemsXpath = "//*[contains(text(), '"+ register +"')]";
+			  waitUntilPresence(menuItemsXpath, true, false);
+			  
 			  espera(500);
 			  WebElement menuItems= driver.findElement(By.xpath("//*[contains(text(), '"+ register +"')]"));
 			  espera(500);

@@ -2,39 +2,47 @@ package Reservas;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.tools.DocumentationTool.Location;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver.Window;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
+import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import graphql.Assert;
+import main.Correo;
 import utils.Data;
 import utils.TestBase;
 import utils.getDummyData;
 
-//@Test
-//@Parameters({"titleHeader", "resultatEsperado"})
+
 public class Reserva extends TestBase {
 	String diaReserva, hora, sala, localizador, observaciones, prefijo, telefono, email, citaReserva, nombreCliente, emailCliente = null;
 	String dummyLocalizador, dummyName, dummyTelefono, dummyEmail, dummyObservaciones = null; 
+	
+	public BookingInformation bookingInfo;
 	
 	public boolean isCreatedBooking = false;
 	public WebElement inputLocalizador, inputName, inputPhone, inputEmail, inputObservaciones, 
 				checkboxCondicionesTerminos, checkboxPoliticaCancelacion, checkboxComunicacionComerciales,
 				buttonSiguiente, buttonAtras = null;
 	
-	@Test
+	@Test(description = "Comprobar si se puede realizar la reserva después de ingresar la información(Dia, Hora, Sala y Pax)", priority = 1)
 	@Parameters({"titleHeader", "resultatEsperado"})
 	public void realizarReserva(@Optional("") String titleHeader, @Optional("") boolean resultatEsperado) {
 		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'title-header')]")));
@@ -79,17 +87,17 @@ public class Reserva extends TestBase {
 	 * @param aceptoPoliticaCancelacion
 	 * @param aceptoComunicacionesComerciales
 	 */
-	@Test
+	@Test(description = "Creación nueva reserva en Booking", priority = 1)
 	@Parameters({"resultatEsperado", "localizador", "prefijo", "telefono", "nombreCliente", "emailCliente", "observaciones", 
 				"aceptarTerminosCondiciones" , "aceptarPoliticaCancelacion", "aceptarComunicacionesComerciales", "titleHeader", 
 				"literalLocalizador", "literalObserciones", "insertBooking", "iconeNotification", "confirmacionReseva", "nombreRestaurante", 
-				"direccionRestaurante", "telefonoRestaurante", "numeroCliente", "infoDetails", "hora", "citaReserva", "urlEmail"})
+				"direccionRestaurante", "telefonoRestaurante", "numeroCliente", "infoDetails", "hora", "citaReserva", "urlEmail", "dia", "emailNotificacionReservas", "tipoCliente"})
 	public void createBooking(@Optional ("true") boolean resultadoEsperado, @Optional("") String localizador, @Optional("") String prefijo, @Optional("") String telefono, 
 			@Optional("") String nombreCliente, @Optional("") String emailCliente, @Optional("") String observaciones, 	
 			@Optional ("true") boolean aceptoTerminos, @Optional ("true") boolean aceptoPoliticaCancelacion, @Optional ("true") boolean aceptoComunicacionesComerciales, 
 			@Optional("") String titleHeader, @Optional() String literalLocalizador, @Optional("") String literalObserciones, @Optional("true") boolean insertBooking,
 			String iconeNotification, String confirmacionReseva, String nombreRestaurante, String direccionRestaurante, String telefonoRestaurante, 
-			String numeroCliente, String infoDetails, String horaReserva, String citaReserva, String urlEmail) {
+			String numeroCliente, String infoDetails, String horaReserva, String citaReserva, String urlEmail, String reservationDay, String emailNotificacionReservas, String tipoCliente) {
 		
 		//Validar el title de la pagina
 		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'title-header')]")));
@@ -120,28 +128,49 @@ public class Reserva extends TestBase {
 		// Verificar que no hay error que nos impide siguir la finalizacion de la reserva
 		validFormBookingByButtonNext(insertBooking, resultadoEsperado);
 		
-		//Validar la reserva en Booking
+		//Verify and Completing booking information 
 		nombreCliente = isNullOrEmpty(nombreCliente) ? this.nombreCliente : nombreCliente;
 		emailCliente = isNullOrEmpty(emailCliente) ? this.emailCliente : emailCliente;
+		
+		//log("1 reservationDay ------> reservationDay " + reservationDay);
+		
+		reservationDay = isNullOrEmpty(reservationDay) ? this.diaReserva :reservationDay;
+		
 		horaReserva = isNullOrEmpty(horaReserva) ? this.hora : horaReserva;
+		
 		citaReserva = isNullOrEmpty(citaReserva) ? this.citaReserva : citaReserva;
-		verificarReservarBooking (iconeNotification, confirmacionReseva, nombreRestaurante, direccionRestaurante, 
-				telefonoRestaurante, nombreCliente, emailCliente, citaReserva, horaReserva, numeroCliente, infoDetails);
 		
-		//Validar la reserva en BD.
+		//log("2 reservationDay ------> this.diaReserva " + this.diaReserva);
 		
+		//log("3 reservationDay ------> reservationDay " + reservationDay);
 		
-		//Validación por mail cliente
-		//validateEmailClientBooking(urlEmail);
+		observaciones = isNullOrEmpty(observaciones) ? this.observaciones : observaciones;
 		
-		//Validación por mail restaurante
-		//validateEmailRestaurantBooking(urlEmail);
+		log("Localizador de la reserva this.localizador -> " + this.localizador + " / localizador dummyLocalizador -> " + this.dummyLocalizador);
+		
+		//Save booking information
+		this.bookingInfo = new BookingInformation(nombreCliente, emailCliente, prefijo+telefono, emailNotificacionReservas, telefonoRestaurante, nombreRestaurante, 
+				direccionRestaurante, reservationDay, horaReserva, this.localizador, this.sala, numeroCliente, tipoCliente, this.observaciones);
+		
+		Data.getInstance().setBookingInformation(bookingInfo);
+		
+		log("informacion de la nueva reserva  Addres Restaurant --> " + Data.getInstance().getBookingInformation().getRestaurantAddress());
+		
+		log("informacion de la nueva reserva  reservation day en CreateBooking  --> " + Data.getInstance().getBookingInformation().getReservationDay());
+		
+		if(insertBooking) {
+			//Validar la reserva en Booking
+			verificarReservarBooking (iconeNotification, confirmacionReseva, nombreRestaurante, direccionRestaurante, 
+					telefonoRestaurante, nombreCliente, emailCliente, citaReserva, horaReserva, numeroCliente, infoDetails);
+			
+			Data.getInstance().getBookingInformation().setVerificarReserva(true);
+		}
 		
 	}
 	
-	
+	@Parameters({"insertBooking", "resultatEsperado"})
 	public void validFormBookingByButtonNext(@Optional("true") boolean insertBooking, @Optional("true") boolean resultatEsperado ) {
-		log("si todos los campos requeridos del formulario estan ingresados pulsar el boton siguiente");
+		log("si todos los campos requeridos del formulario Reserva estan ingresados luego pulsar el boton siguiente");
 		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//button[contains(@class, 'button primary-color')]")));
 		
 		WebElement buttonNext = driver.findElement(By.xpath("//button[contains(@class, 'button primary-color')]"));
@@ -172,16 +201,20 @@ public class Reserva extends TestBase {
 
 	}
 	
-	
 	@Parameters({"resultatEsperado", "localizador", "prefijo", "telefono", "nombreCliente", "emailCliente", "observaciones"})
 	public void insertDataInputBooking(@Optional ("true") boolean resultadoEsperado, @Optional("") String localizador, @Optional("") String prefijo, @Optional("") String telefono, 
 			@Optional("") String nombreCliente, @Optional("") String emailCliente, @Optional("") String observaciones) {
 		//Localizador
-		if(inputLocalizador != null && inputLocalizador.getSize() != null)
-			if(!isNullOrEmpty(localizador)) 
+		if(inputLocalizador != null && inputLocalizador.getSize() != null) {
+			if(!isNullOrEmpty(localizador)) {
 				enviarTexto(inputLocalizador, localizador);
-			else
+				this.localizador = localizador;
+			} else {
 				enviarTexto(inputLocalizador, dummyLocalizador);
+				this.localizador = dummyLocalizador;
+			}
+			espera(500);
+		}
 		
 		//Prefijo
 		if(!isNullOrEmpty(prefijo))
@@ -215,15 +248,17 @@ public class Reserva extends TestBase {
 		}
 		
 		//Observaciones
-		if(inputObservaciones.getSize() != null)
-			if(!isNullOrEmpty(observaciones))
+		if(inputObservaciones.getSize() != null) {
+			if(!isNullOrEmpty(observaciones)) {
 				enviarTexto(inputObservaciones, observaciones);
-			else
+				this.observaciones = observaciones;
+			} else {
 				enviarTexto(inputObservaciones, dummyObservaciones);
+				this.observaciones = dummyObservaciones;
+			}
+		}
 			
 	}
-	
-	
 	
 	/*
 	 * Generar datos Reserva
@@ -270,11 +305,8 @@ public class Reserva extends TestBase {
 			}
 	}
 	
-	public void abrirUrlReserva() {
-		
-	}
 	
-	@Test
+	@Test(description = "Verificar que los datos entrados en Booking, para la nueva reserva, son correctos" , priority = 1)
 	@Parameters({"iconeNotification", "confirmacionReseva", "nombreRestaurante", "direccionRestaurante", 
 				"telefonoRestaurante", "nombreCliente", "emailCliente", "citaReserva", "hora", "numeroCliente", "infoDetails"})
 	public void verificarReservarBooking (String iconeNotification, String messageConfirmation, String nombreRestaurante, String direccionRestaurante, 
@@ -296,7 +328,7 @@ public class Reserva extends TestBase {
 		
 		log("información de la nueva reserva en Booking: " + newReservaInformation);
 		
-		//validamos la información de la pagina
+		//validamos la información de la reserva en Booking
 		
 		/* Icono de confirmacion */ 
 		validateBookingIcon(iconeNotification);
@@ -324,7 +356,6 @@ public class Reserva extends TestBase {
 		
 		/* cita de la reserva en el formato: viernes, 3 febrero de 2023  */
 		validateBookingAppointment(citaReserva);
-		
 	}
 	
 	/* Icono de confirmacion */ 
@@ -408,7 +439,6 @@ public class Reserva extends TestBase {
 
 		String stelefonoRestauranteValided = driver.findElement(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + telefonoRestaurante +"')]")).getText();
 		
-		
 		if(!stelefonoRestauranteValided.contains(telefonoRestaurante)) {
 			log("Error en la Validación del telefono del restaurante -> " + telefonoRestaurante);
 			log("Se ha encuentrado otro telefono: " + stelefonoRestauranteValided);
@@ -483,17 +513,19 @@ public class Reserva extends TestBase {
 			}
 			
 		} else {
-			if(!sInfoDetailValided.contentEquals(paxReserva)) {
+			//if(!sInfoDetailValided.contentEquals(paxReserva)) {
+			if(!sInfoDetailValided.substring(0, 1).contentEquals(paxReserva)) {
 				log("Error en la Validación pax  -> " + paxReserva);
 				log("Se ha encuentrado otra informción pax y hora: " + sInfoDetailValided);
 				log("Se espera encuentrar pax: "+ paxReserva );
+				log("sInfoDetailValided.substring(0, 0) --> " + sInfoDetailValided.substring(0, 0));
 				Assert.assertTrue(false);
 			}
 			
-			if(!sInfoDetailValided.contentEquals(horaReserva)) {
-				log("Error en la Validación pax  -> " + horaReserva);
+			if(!sInfoDetailValided.contains(horaReserva)) {
+				log("Error en la Validación hora  -> " + horaReserva);
 				log("Se ha encuentrado otra informción pax y hora: " + sInfoDetailValided);
-				log("Se espera encuentrar pax: "+ horaReserva );
+				log("Se espera encuentrar hora: "+ horaReserva );
 				Assert.assertTrue(false);
 			}
 			
@@ -509,6 +541,8 @@ public class Reserva extends TestBase {
 		
 		WebElement webelmtInfoCitaBooking = driver.findElements(By.xpath("//div[contains(@class, 'details-info-wrapper')]//div")).get(0);
 		String sInfoCitaBookingValided = webelmtInfoCitaBooking.getText();
+			    
+	    //log(" dateReserva ---> " + citaReserva);
 		
 		if(!sInfoCitaBookingValided.contentEquals(citaReserva)) {
 			log("Error en la Validación de la cita  -> " + citaReserva);
@@ -516,54 +550,115 @@ public class Reserva extends TestBase {
 			log("Se espera encuentrar la cita: "+ citaReserva );
 			Assert.assertTrue(false);
 		}
+		
 		log("Validación: cita de la reserva: "+ citaReserva + " -> OK");	
-
 	}
 	
-	@Test
+	@Test(description = "Consultación de la notificacion de la reserva enviada por email del cliente", priority = 1)
 	@Parameters({"urlEmail", "emailCliente", "passwordCliente"})
-	public void validateEmailClientBooking( String urlEmail, String emailCliente, String passwordCliente) {
+	public void emailClientBooking( String urlEmail, String emailCliente, String passwordCliente) {
+		
+		if(Data.getInstance().getBookingInformation() == null) {
+			log("emailClientBooking --> No se puede verificar el email mientras que la reserva no sea guardada");
+			Assert.assertTrue(false);
+		} 
+		
+		Correo correoCliente = openLastMessageFromMailSac(emailCliente, passwordCliente);
+		
+		if(correoCliente != null) {
+			espera(500);
+			Data.getInstance().getBookingInformation().setReservationClientEmail(correoCliente);
+			espera(500);
+		}
+		else {
+			Assert.assertTrue(false, () -> "No se ha podido consultar el correo del Cliente");
+		}
+		
+		/*	
 		openNewWindowTab(urlEmail);
 		
 		MailReading readCustomerEmail = new MailReading();
 		
 		try {
-			readCustomerEmail.openWebMail(emailCliente, passwordCliente);
+			readCustomerEmail.openWebMail(emailCliente, passwordCliente, false);
+			
+			readCustomerEmail.extractContentMail("Email del cliente");
+			espera(500);
+			
+			Data.getInstance().getBookingInformation().setReservationClientEmail(readCustomerEmail.getInfoEmailMap());
+			espera(500);
+			//Open the last email not reading yet
+			readCustomerEmail.lastEmailNotReading();
+			espera(500);			
 			
 			readCustomerEmail.cerrarSesionMail(false);
+			espera(1500);
+			
+			//close tab
+			log("Current Url -> " + driver.switchTo().window(driver.getWindowHandle()).getCurrentUrl());
+			closeWindowTab();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
+		 */
 	}
 	
-	@Test
+	
+	@Test(description = "Consultación de la notificación de la reserva, enviada por correo electronico al restaurante", priority = 1)
 	@Parameters({"urlEmail", "emailNotificacionReservas", "passwordRestaurante"})
-	public void validateEmailRestaurantBooking( String urlEmail, String emailRestaurante, String passwordRestaurante) {
-		openNewWindowTab(urlEmail);
+	public void emailRestaurantBooking( String urlEmail, String emailRestaurante, String passwordRestaurante) {
 		
+		if(Data.getInstance().getBookingInformation() == null) {
+			log("emailRestaurantBooking --> No se puede verificar el email mientras que la reserva no se ha guardada");
+			Assert.assertTrue(false);
+		} 
+		
+		Correo correoRestaurante = openLastMessageFromMailSac(emailRestaurante, passwordRestaurante);
+		
+		if(correoRestaurante != null) {
+			espera(500);
+			Data.getInstance().getBookingInformation().setReservationRestaurantEmail(correoRestaurante);
+			espera(500);
+		} 
+		else {
+			Assert.assertTrue(false, () -> "No se ha podido consultar el correo del Restauirante");
+		}
+		
+		/*
+		openNewWindowTab(urlEmail);
+		espera(500);
 		MailReading readRestaurantEmail = new MailReading();
 		
 		try {
-			readRestaurantEmail.openSesionMail(emailRestaurante, passwordRestaurante);
+			//readRestaurantEmail.openSesionMail(emailRestaurante, passwordRestaurante);
+			readRestaurantEmail.openSesionMail(emailRestaurante, passwordRestaurante, false);
+			//espera(500);
+			
+			readRestaurantEmail.extractContentMail("Email del Restaurante");
+			espera(2000);
+			
+			Data.getInstance().getBookingInformation().setReservationRestaurantEmail(readRestaurantEmail.getInfoEmailMap());
+			espera(2000);
+			
+			//Open the last email not reading yet
+			readRestaurantEmail.lastEmailNotReading();
+			espera(1500);
+			
 			readRestaurantEmail.cerrarSesionMail(false);
+			espera(1500);
+			
+			//close tab
+			log("Current Url -> " + driver.switchTo().window(driver.getWindowHandle()).getCurrentUrl());
+			closeWindowTab();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-	}
-
-	
-	public void verificarReservarBD () {
-		log("validacion de la nueva reserva desde la BBDD en las tablas:");
+		*/
 	}
 	
-	public void verificarCookiesReserva () {
-		
-	}
-	
-	@Test
+	@Test(description = "Comprobar los check box de aceptar Terminos condiciones, politica de cancelación y comunicaciones comerciales")
 	@Parameters({"aceptarTerminosCondiciones", "aceptarPoliticaCancelacion", "aceptarComunicacionesComerciales"})
 	public void checkConditionsBooking(@Optional("") boolean aceptarCondicionesTerminos, @Optional("") boolean aceptarPoliticaCancelacion, @Optional("") boolean aceptarComunicacionComerciales,
 				@Optional("") boolean resultatEsperado) {
@@ -601,12 +696,22 @@ public class Reserva extends TestBase {
 	 * Selecionar un prefijo 
 	 *
 	 */
-	@Test
+	@Test(description = "Comprobar que se puede seleccionar el prefijo del telefono")
 	@Parameters({"prefijo", "resultatEsperado"})
 	public void selectPrefijoTelefono(@Optional("") String prefijo, @Optional("") boolean resultatEsperado) {
 		String stringElementPrefijo = "//div[contains(@class, 'mat-select-arrow-wrapper')]//child::div[contains(@class, 'mat-select-arrow')]";
 		String stringListPrefijo = "//mat-option[contains(@class, 'mat-option')]//child::span[contains(@class, 'mat-option-text')]";
 		if(!isNullOrEmpty(prefijo)) {
+			String elemFijoSearch = "("+prefijo+")";
+			//validar si es el prefijo que está seleccionado por defecto en el listado
+			String valueSelectPrefijo = "//div//span//span[contains(@class, 'mat-select-min-line')]";
+			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(valueSelectPrefijo)));
+			if(driver.findElement(By.xpath(valueSelectPrefijo)).getText().contains(elemFijoSearch)) {
+				log("el prefijo "+ prefijo +" del telefono está seleccionado por defecto en el listado ");
+				return;
+			}
+			
+			//buscar y seleccionar el prefijo desde el listado
 			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(stringElementPrefijo)));
 			
 			clicJS(driver.findElement(By.xpath(stringElementPrefijo)));
@@ -621,11 +726,10 @@ public class Reserva extends TestBase {
 			if(prefijos.size() > 0) {
 				//buscar i seleccionar prefijo definido como parametro
 				boolean isSelectedPrefijo = false;
-				String elemFijoSearch = "("+prefijo+")";
 				for(int i = 0; i < prefijos.size(); i++) {
 					if(prefijos.get(i).getText().contains(elemFijoSearch)) {
 						clicJS(prefijos.get(i));
-						log("el prefijo "+ prefijo +" del telefono está seleccionada desde el listado ");
+						log("el prefijo "+ prefijo +" del telefono está seleccionado desde el listado ");
 						isSelectedPrefijo = true;
 						break;
 					}
@@ -646,9 +750,9 @@ public class Reserva extends TestBase {
 		}
 	}
 	
-	@Test
-	@Parameters({"dia"})
-	public void selectedDay(@Optional("") String day) {
+	@Test(description = "Comprobar que se puede seleccionar un día", priority=1)
+	@Parameters({"dia", "ingresarDatosPorDefecto"})
+	public void selectedDay(@Optional("") String day, @Optional("false") boolean ingresarDatosPorDefecto) {
 		// la fecha de la venta 
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
@@ -658,23 +762,64 @@ public class Reserva extends TestBase {
 		String stringDay;
 		String stringValidateSelectedDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator mat-calendar-body-selected')]";
 		
-		if(isNullOrEmpty(day) || day.equalsIgnoreCase("hoy")) {
-			//stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator mat-calendar-body-selected mat-calendar-body-today')]";
+		if(isNullOrEmpty(day) || day.equalsIgnoreCase("hoy") || ingresarDatosPorDefecto) {
 			day = fechaHoy.split("/")[0].replaceFirst("^0+(?!$)", ""); // saccar los 0 de la izquerda replaceFirst("^0+(?!$)", "")
 			stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ fechaHoy.split("/")[0].replaceFirst("^0+(?!$)", "") +"')]";
 			
-			this.citaReserva = fechaHoy;
+			this.citaReserva = getCitaReserva(fechaHoy, "/");
 			
 		} else {
 			
 			if(day.split("/").length > 0) {
-				stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ day.split("/")[0] +"')]";
+				//comparar el mes de la reserva al mes del calendario, para ver si estamos en el mes valido para hacer la reserva. 
+				//En el caso contrario cambiar el mes del calendario por el mes de la reserva
 				
+				//el mes y el año muestrado en el calendario
+				String sWbElmtCalendarMounthYear = "//span[contains(@class, 'header-label')]";
+				w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(sWbElmtCalendarMounthYear)));
+				String calendarMounthYear = driver.findElement(By.xpath(sWbElmtCalendarMounthYear)).getText();
+				//log("Se mostran en el calendario --> " + calendarMounthYear);
+				
+				Locale locale = getLocale();
+		        espera(1500);
+				String [] aDayReserva = day.split("/");
+				int iDday = Integer.parseInt(aDayReserva[0]);
+				int month = Integer.parseInt(aDayReserva[1]);
+				int year = Integer.parseInt(aDayReserva[2]);
+				
+				LocalDate localDate = LocalDate.of(year,month, iDday);
+				
+			    String dayReserva = localDate.format(DateTimeFormatter.ofPattern("MMM'.' yyyy", locale)).toUpperCase();
+			    log("dayReserva para la nueva reserva --> " + dayReserva);
+			    
+			    if(!calendarMounthYear.contains(dayReserva)) {
+			    	//
+			    	log("Camibar el MES.AÑO del calendario por ---> " + dayReserva);
+			    	String sButtonMes = "//span[contains(@class, 'header-label')]//following-sibling::button[1]";
+			    	WebElement btnNextMonth = driver.findElement(By.xpath(sButtonMes));
+			    	
+			    	while(!calendarMounthYear.contains(dayReserva)) {
+			    		clicJS(btnNextMonth);
+			    		espera(1000);
+			    		calendarMounthYear = driver.findElement(By.xpath(sWbElmtCalendarMounthYear)).getText();
+			    		if(calendarMounthYear.contains(dayReserva)) {
+			    			break;
+			    		}
+			    	}
+			    }
+			    
+			    // saccar los 0 de la izquerda replaceFirst("^0+(?!$)", "")
+			    String searchDay = day.split("/")[0].replaceFirst("^0+(?!$)", "");
+				
+			    stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ searchDay +"')]";
+			    
+				this.citaReserva = getCitaReserva(day, "/");
 				
 			} else {
 				stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ day +"')]";
 				
-				
+				String newDay = day+ "/" +  fechaHoy.split("/")[1] + "/" +  fechaHoy.split("/")[2];
+				this.citaReserva = getCitaReserva(newDay, "/");
 			}
 		}
 		
@@ -684,32 +829,39 @@ public class Reserva extends TestBase {
 		
 		
 		clicJS(selectedDay); //Seleccion de dia
-		
+		espera(1500);
 		//Validar el dia seleccionado
-		//("//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator mat-calendar-body-selected')]")
 		if(isElementPresent(By.xpath(stringValidateSelectedDay))) {
-			day =  day.split("/").length > 0 ? day.split("/")[0] : day;
-			if(!driver.findElement(By.xpath(stringValidateSelectedDay)).getText().equalsIgnoreCase(day)) {
+			String searchDay =  day.split("/").length > 0 ? day.split("/")[0] : day;
+			searchDay = searchDay.replaceFirst("^0+(?!$)", "");
+			
+			//log("searchDay --> " + searchDay);
+			
+			if(!driver.findElement(By.xpath(stringValidateSelectedDay)).getText().equalsIgnoreCase(searchDay)) {
 				log("No se ha podido seleccionar el dia: "+ day);
 				
 				Assert.assertTrue(false);
 			} else {
 				log("Se ha seleccionado el dia: " + day);
+				
+				if(isNullOrEmpty(day) || day.equalsIgnoreCase("hoy") || ingresarDatosPorDefecto) {
+					day = fechaHoy;
+				}
 				diaReserva = day;
 			}
-			
 		}
 	}
 	
-	@Test
-	@Parameters({"room", "existeRoom", "stringLabelRoom", "resultatEsperado"})
-	public void selectRoom(@Optional("") String room, @Optional("") String existeRoom, @Optional("") boolean stringLabelRoom, @Optional("") boolean resultatEsperado) {
+	@Test(description = "Comprobar que funcciona la selección de sala en Booking", priority = 1)
+	@Parameters({"room", "existeRoom", "stringLabelRoom", "resultatEsperado", "ingresarDatosPorDefecto"})
+	public void selectRoom(@Optional("") String room, @Optional("") String existeRoom, @Optional("") boolean stringLabelRoom, 
+			@Optional("") boolean resultatEsperado, @Optional("false") boolean ingresarDatosPorDefecto) {
 
 		String stringElementSelectRoom = "//mat-select//child::div[contains(@class, 'mat-select-arrow-wrapper')]//child::div[contains(@class, 'mat-select-arrow')]";
 		String stringRoom = "//mat-option[contains(@class, 'mat-option')]//child::span[contains(@class, 'mat-option-text')]";
 		
-		//Verificar que hay horas como parametro
-		if(!isNullOrEmpty(room)) { 
+		//Verificar que hay sala como parametro o seleccionar la primera sala del listado, por defecto
+		if(!isNullOrEmpty(room) || ingresarDatosPorDefecto) { 
 			
 			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(stringElementSelectRoom)));
 			int numberElementSelect = driver.findElements(By.xpath(stringElementSelectRoom)).size();
@@ -730,20 +882,31 @@ public class Reserva extends TestBase {
 			if(salas.size() > 0) {
 				//buscar i seleccionar la hora definida como parametro
 				boolean isSelectedRoom = false;
-				for(int i = 0; i < salas.size(); i++) {
-					log("Sala por " + i + " " + salas.get(i).getText());
-					if(salas.get(i).getText().equalsIgnoreCase(room)) {
-						clicJS(salas.get(i));
-						log("la sala("+ room +") está seleccionada desde el listado ");
-						isSelectedRoom = true;
-						break;
-					}
+				
+				if(ingresarDatosPorDefecto) {
+					room = salas.get(0).getText();
+					clicJS(salas.get(0));
+					log("la sala("+ room +") está seleccionada por defecto desde el listado ");
+					isSelectedRoom = true;
+				}
+				else {
+					for(int i = 0; i < salas.size(); i++) {
+						log("Sala por " + i + " " + salas.get(i).getText());
+						if(salas.get(i).getText().equalsIgnoreCase(room)) {
+							clicJS(salas.get(i));
+							log("la sala("+ room +") está seleccionada desde el listado ");
+							isSelectedRoom = true;
+							break;
+						}
+					 }
 				}
 				
-				if(!isSelectedRoom) {
+				 if(!isSelectedRoom) {
 					log("No se ha podido seleccionar la sala("+ room +") en el listado");
 					Assert.assertTrue(false);
-				}
+				 }
+				
+				 this.sala = room;
 				
 			} else {
 				log("No hay sala en listado salas");
@@ -759,14 +922,14 @@ public class Reserva extends TestBase {
 		}
 	}
 	
-	@Test
-	@Parameters({"hora", "resultatEsperado", "existeRoom"})
-	public void selectHour(@Optional("") String hour, @Optional("") boolean resultatEsperado, @Optional("") boolean existeRoom) {
+	@Test(description = "Comprobar la selección de hora en Booking", priority = 1)
+	@Parameters({"hora", "resultatEsperado", "ingresarDatosPorDefecto"})
+	public void selectHour(@Optional("") String hour, @Optional("") boolean resultatEsperado, @Optional("") boolean ingresarDatosPorDefecto) {
 		String stringElementSelectHour = "//mat-select//child::div[contains(@class, 'mat-select-arrow-wrapper')]//child::div[contains(@class, 'mat-select-arrow')]";
 		String stringHours = "//mat-option[contains(@class, 'mat-option')]//child::span[contains(@class, 'mat-option-text')]";
 		
 		//Verificar que hay horas como parametro
-		if(!isNullOrEmpty(hour)) { 
+		if(!isNullOrEmpty(hour) || ingresarDatosPorDefecto) { 
 			
 			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(stringElementSelectHour)));
 			int numberElementSelect = driver.findElements(By.xpath(stringElementSelectHour)).size();
@@ -783,16 +946,26 @@ public class Reserva extends TestBase {
 			
 			horas = driver.findElements(By.xpath(stringHours));
 			
-			if(horas.size() > 0) {
+			if(horas.size() > 0 || ingresarDatosPorDefecto) {
 				//buscar i seleccionar la hora definida como parametro
 				boolean isSelectedHour = false;
-				for(int i = 0; i < horas.size(); i++) {
-					log("hora por " + i + " " + horas.get(i).getText());
-					if(horas.get(i).getText().equalsIgnoreCase(hour)) {
-						clicJS(horas.get(i));
-						log("la hora("+ hour +") está seleccionada desde el listado ");
-						isSelectedHour = true;
-						break;
+				
+				if(ingresarDatosPorDefecto) {
+					hour = horas.get(0).getText();
+					clicJS(horas.get(0));
+					log("la Hora("+ hour +") está seleccionada por defecto desde el listado ");
+					isSelectedHour = true;
+				}
+				else {
+				
+					for(int i = 0; i < horas.size(); i++) {
+						log("hora por " + i + " " + horas.get(i).getText());
+						if(horas.get(i).getText().equalsIgnoreCase(hour)) {
+							clicJS(horas.get(i));
+							log("la hora("+ hour +") está seleccionada desde el listado ");
+							isSelectedHour = true;
+							break;
+						}
 					}
 				}
 				
@@ -800,6 +973,8 @@ public class Reserva extends TestBase {
 					log("No se ha podido seleccionar la hora("+ hour +") en el listado");
 					Assert.assertTrue(false);
 				}
+				
+				this.hora = hour;
 				
 			} else {
 				log("No hay hora en listado horas");
@@ -815,7 +990,7 @@ public class Reserva extends TestBase {
 		}
 	}
 	
-	@Test
+	@Test(description = "Comprobar que se puede introducir el pax de la reserva", priority = 1)
 	@Parameters({"numeroCliente", "testPlusMenosBtn", "resultatEsperado"})
 	public void inputNumberPerson(@Optional("") String numberCliente, @Optional("") boolean resultatEsperado, @Optional("") boolean testPlusMenosBtn) {
 		String inputElmt = "//button[contains(text(), '-')]//following::button[contains(text(), '+')]//preceding::input";
@@ -852,7 +1027,7 @@ public class Reserva extends TestBase {
 		}
 	}
 	
-	@Test
+	@Test(description = "Comprobar el pax(Numero de persona por reserva)")
 	@Parameters({"numeroCliente", "testPlusMenosBtn", "resultatEsperado"})
 	public void verificarBotonesPlusMenos(@Optional("") String numberCliente, @Optional("") boolean resultatEsperado, @Optional("") boolean testPlusMenosBtn) {
 		String inputElmt = "//button[contains(text(), '-')]//following::button[contains(text(), '+')]//preceding::input";
@@ -873,13 +1048,13 @@ public class Reserva extends TestBase {
 				
 				if(valueInput.equalsIgnoreCase(valueInputTest) ) {
 					continueClicPlus = false;
-					log("Se ha podido introducir el numero cliente vía el boton añadir ");
+					log("Se ha podido introducir el numero cliente(PAX) vía el boton añadir ");
 					Assert.assertTrue(true);
 					break;
 				}
 				
 				if( i == Integer.parseInt(numberCliente) && continueClicPlus) {
-					log("Error: no se ha podido introducir el numero cliente vía el boton añadir ");
+					log("Error: no se ha podido introducir el numero cliente(PAX) vía el boton añadir ");
 					Assert.assertTrue(false);
 				}
 			}
@@ -939,9 +1114,27 @@ public class Reserva extends TestBase {
 		String labelElementObservaciones = "//mat-label[contains(text(), '" + observaciones + "')]";
 		if(isElementPresent(By.xpath(labelElementObservaciones)) && isElementPresent(By.xpath("//span//mat-label[contains(text(), '" + observaciones + "')]//preceding::textarea"))) {
 			inputObservaciones = driver.findElement(By.xpath("//span//mat-label[contains(text(), '"+observaciones +"')]//preceding::textarea"));
-			
 		}
 		
+	}
+	
+	public String getCitaReserva(String citaReserva, String sDateSeparate) {
+		espera(500);
+		Locale locale = getLocale();
+        espera(1500);
+		String [] aCitaReserva = citaReserva.split(sDateSeparate);
+		int day = Integer.parseInt(aCitaReserva[0]);
+		int month = Integer.parseInt(aCitaReserva[1]);
+		int year = Integer.parseInt(aCitaReserva[2]);
+		
+		LocalDate localDate = LocalDate.of(year,month, day);
+		
+	   // String dateReserva = localDate.format(DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'de' yyyy", locale));
+		 String dateReserva = localDate.format(DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM 'de' yyyy", locale));
+	    log("Cita de la reserva --> " + dateReserva);
+	    
+	    
+	    return dateReserva;
 	}
 
 }

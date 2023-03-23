@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -39,9 +40,11 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
@@ -49,6 +52,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.IRetryAnalyzer;
@@ -82,6 +87,8 @@ import Cadenas.Es;
 import Objects.ProductItem;
 import Windows.TrayIconDemo;
 import lombok.var;
+import main.Correo;
+import main.Reader;
 
 public class TestBase {
 
@@ -102,10 +109,13 @@ public class TestBase {
 		
 		if(test) {
 			databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOTEST;
+			
 
-		}else {
+		} else {
 			databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOPRODUCION;
 		}
+		
+		Data.getInstance().setEntornoTest(test);
 	}
 
 	@BeforeSuite
@@ -125,7 +135,8 @@ public class TestBase {
 	}
 
 	@BeforeTest
-	public void beforeTest(final ITestContext testContext) {
+	@Parameters({"modoSinVentana"})
+	public void beforeTest(final ITestContext testContext, @Optional("false") boolean modoSinVentana) {
 		
 		if(!isNullOrEmpty(Data.getInstance().getNewUserMail())){
 			Data.getInstance().setNewUserMail(null);
@@ -137,37 +148,51 @@ public class TestBase {
 
 		System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
 		options = new ChromeOptions();
-		pathprofile = "C:\\Users\\QA\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Default";
+		pathprofile = "C:\\Users\\QA\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
 		options.addArguments("user-data-dir=" + pathprofile);
 		options.addArguments("chrome.switches", "--disable-extensions");
 		options.addArguments("--start-maximized");
 		options.addArguments("profile-directory=Default");
 		options.addArguments("--disable-geolocation");
+		
+		//Clean cookies
+		//options.addArguments("— disk-cache-size=0");
 
-		if (Data.getInstance().isModoSinVentana()) {
+		if (Data.getInstance().isModoSinVentana() || modoSinVentana) {
 			options.addArguments("--headless");// ESTOS PARAMETROS EJECUTAN EL NAVEGADOR SIN PANTALLA
 			options.addArguments("--disable-gpu");// ESTOS PARAMETROS EJECUTAN EL NAVEGADOR SIN PANTALLA
 		}
 
 		driver = new ChromeDriver(options);
+		
+		
+		
 		driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
 		w = new WebDriverWait(TestBase.driver, Duration.ofSeconds(10));
 		w2 = new WebDriverWait(TestBase.driver, Duration.ofSeconds(90));
 		actions = new Actions(driver);
-		
 
 		extent = new ExtentReports();
 		spark = new ExtentSparkReporter("target/Spark.html");
 		extent.attachReporter(spark);
 
 		try {
+			//Clean cookies
+			driver.manage().deleteAllCookies();
+			//clear cookies and cache
+			//if(clearCache)
+			
+			//clear_cache();
+			
 			td.displayTray("Iniciando test " + testContext.getName());
 			log("Iniciando " + testContext.getName());
 			extent.createTest(testContext.getName());
 
 		} catch (AWTException e) {
 			// TODO Auto-generated catch block
+			clear_cache();
 			e.printStackTrace();
+			
 		}
 	}
 
@@ -219,6 +244,8 @@ public class TestBase {
 			log("Ejecución de pruebas finalizada");
 			td.displayTray("Ejecución de pruebas finalizada");
 			
+			//driver.manage().deleteAllCookies();
+			
 			//File htmlFile = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report"+new Date().getTime()+".html");
 			//espera(2000);
 			//Desktop.getDesktop().browse(htmlFile.toURI());
@@ -240,7 +267,6 @@ public class TestBase {
 	public boolean isElementPresent(By by) {
 		try {
 			List<WebElement> elements;
-			//w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 			elements = driver.findElements(by);
 			if (elements.size() == 0)
 				return false;
@@ -263,6 +289,21 @@ public class TestBase {
 			executor.executeScript("arguments[0].click();", element);
 		}
 	}
+	
+	public void clicLogoEstablecimiento() {
+		//Pulsar el logo tipo del establecimiento para volver al inicio(la pantalla principal de la tienda)
+		By logoBy = By.xpath("//div[contains(@class, 'shop-name-wrapper')]//img[contains(@class, 'header-logo')]");
+		WebElement logoElement = getElementByFluentWait(logoBy, 30, 5);
+		if(logoElement != null) {
+			logoElement.click();
+			espera(2000);
+		}
+		else {
+			log("Error: No se ha podido localizar el log del establecimiento ");
+			Assert.assertTrue(false);
+		}
+	}
+	
 	
 	public boolean setInputValueJS(By by, String value) {
 		if(isElementPresent(by)) {
@@ -495,4 +536,156 @@ public class TestBase {
 		espera(500);
 		log("Current Url -> " + driver.switchTo().window(driver.getWindowHandle()).getCurrentUrl());		
 	}
+	
+	//Cerrar pestaña del navegador chrome
+	public void closeWindowTab() {
+		ArrayList<String> switchTabs= new ArrayList<String> (driver.getWindowHandles());
+		driver.switchTo().window(switchTabs.get(1));
+		driver.close();
+		driver.switchTo().window(switchTabs.get(0));
+	}
+	
+	public void closeWindowTab(int tabToClose, int getTab) {
+		ArrayList<String> switchTabs= new ArrayList<String> (driver.getWindowHandles());
+		driver.switchTo().window(switchTabs.get(tabToClose));
+		driver.close();
+		driver.switchTo().window(switchTabs.get(getTab));
+	}
+
+	
+	public String getNavigatorLanguage() {
+		JavascriptExecutor executor = (JavascriptExecutor) driver;
+        String language = executor.executeScript("return window.navigator.userlanguage || window.navigator.language").toString();
+        //espera(1500);
+		
+        return language;
+	}
+	
+	public Locale getLocale() {
+		String language = getNavigatorLanguage();
+		Locale locale = new Locale(language, language.toUpperCase());
+		return locale;
+	}
+	
+    public Correo openLastMessageFromMailSac(String userEmail, String userPassword) {
+    	Correo correo = null;
+    	try {
+    		if(isNullOrEmpty(userEmail)) {
+    			log("Error: No se puede connectarse en mailsac.com sin el email del usuario");
+    			Assert.assertTrue(false);
+    		}
+    		
+    		if(isNullOrEmpty(userPassword)) {
+    			log("Error: No se puede connectarse en mailsac.com sin la contraseña");
+    			Assert.assertTrue(false);
+    		}
+    		espera(5000);
+    		correo = Reader.getLastMail(userEmail, userPassword);
+    		//espera(2000);
+    		
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+    	
+    	return correo;
+    	
+    }
+    
+    public static void waitUntilPresence (String xpathCssSelector, boolean failIfNotPresent, @Optional("false") boolean useCssSelector) {
+    	WebElement element = null;
+    	try {
+    		if(useCssSelector)
+    			element = w2.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(xpathCssSelector)));
+    		else 
+    			element = w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathCssSelector)));
+    	} catch (TimeoutException e) {
+    		e.printStackTrace();
+    		System.out.println("Failed unable to find: "+ xpathCssSelector );
+    		if (failIfNotPresent) {
+    			Assert.assertTrue(false);
+    			System.exit(0);
+    		}
+    	}
+ 	
+    }
+    
+    public static void waitUntilPresence (String xpathCssSelector, boolean failIfNotPresent) {
+    	WebElement element = null;
+    	try {
+    		element = w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathCssSelector)));
+    	} catch (TimeoutException e) {
+    		e.printStackTrace();
+    		System.out.println("Failed unable to find: "+ xpathCssSelector );
+    		if (failIfNotPresent) {
+    			Assert.assertTrue(false);
+    			System.exit(0);
+    		}
+    	}
+ 	
+    }
+    
+    /*
+     * Waiting 30 seconds for an element to be present on the page, checking
+     * for its presence once every 5 seconds.
+     */
+	public WebElement getElementByFluentWait(By by, @Optional("30") int withTimeout, @Optional("5") int pollingEvery){
+		// Waiting 30 seconds for an element to be present on the page, checking
+		// for its presence once every 5 seconds.
+		WebElement element = null;
+		
+		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+		  .withTimeout(Duration.ofSeconds(withTimeout))
+		  .pollingEvery(Duration.ofSeconds(pollingEvery))
+		  .ignoring(NoSuchElementException.class);
+	
+		element = wait.until( driver -> {
+			ExpectedConditions.presenceOfAllElementsLocatedBy(by);
+			return driver.findElement(by);
+		});
+		
+		return element;
+	}
+	
+    public void clear_cache(){
+       // """Clear the cookies and cache for the ChromeDriver instance."""
+    	driver.manage().deleteAllCookies();
+    	
+        //# navigate to the settings page
+        //driver.get("chrome://settings/clearBrowserData");
+
+        //# wait for the button to appear
+       // waitUntilPresence("", true, false);
+
+        //# click the button to clear the cache
+       // get_clear_browsing_button().click();
+
+       // driver.findElement(By.xpath("//settings-ui")).sendKeys(Keys.ENTER);
+       // clicJS(driver.findElement(By.xpath("//settings-ui")));
+        
+       // # wait for the button to be gone before returning
+       // waitUntilNotPresence("* /deep/ #clearBrowsingDataConfirm");
+        
+        
+        //driver.close();
+    }
+    
+    public WebElement get_clear_browsing_button(){
+        //"""Find the "CLEAR BROWSING BUTTON" on the Chrome settings page."""
+    	WebElement clearBrowsingButton = driver.findElement(By.cssSelector("* /deep/ #clearBrowsingDataConfirm"));
+        return clearBrowsingButton;
+    }
+    
+    public void waitUntilNotPresence(String sByXpathElement) {
+    	w2.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(sByXpathElement)));
+    }
+    
+    public void activeCurrentTabWindow() {
+    	driver.findElement(By.tagName("body")).sendKeys(Keys.CONTROL, Keys.TAB);
+    }
+    
+	private double round (double value, int precision) {
+		int scale = (int) Math.pow(10, precision);
+		return (double) Math.round(value * scale) / scale;
+	}
+    
 }

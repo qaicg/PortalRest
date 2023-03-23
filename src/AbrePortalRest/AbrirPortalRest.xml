@@ -3,7 +3,10 @@
 
 <suite name="AbrePortalRestSuite">
 
-	<test enabled="false" name="Ficha Restaurante" >
+    <parameter name="labelTitleCartaContratada" value="" />
+    <parameter name="labelErrorCartaContratada" value="" />
+
+	<test enabled="true" name="Ficha Restaurante" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="classExpected" value = "shop-data-title"/>
@@ -16,7 +19,7 @@
 		
 	</test> <!-- test -->
 
-	<test enabled="false" name="Primera familia de la carta del restaurante">
+	<test enabled="true" name="Primera familia de la carta del restaurante" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmITPsNGcmATPrNXYmMTPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//div[contains(@class, 'activeFamily')]"/>
@@ -32,7 +35,7 @@
 		
 	</test> <!-- test -->
 	
-		<test enabled="false" name="Carta Restaurante (Solo consulta)">
+	<test enabled="true" name="Carta Restaurante (Solo consulta)" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
@@ -54,8 +57,7 @@
 		
 	</test> <!-- test -->
 	
-
-	<test enabled="false" name="Carta del restaurante">
+	<test enabled="true" name="Carta del restaurante" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
@@ -65,7 +67,6 @@
 		<parameter name="articuloConFormatos" value="Sake Kuramoto"/>
 	    <parameter name="articuloConModificadores" value="Oyako Don sin Rebozar"/>
 	    <parameter name="articuloMenu" value="MENÚ MIDDAY TAKE AWAY"/>
-		
 
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl"/>
@@ -76,7 +77,7 @@
 		
 	</test> <!-- test -->
 	
-	<test enabled="false" name="Test de contratación - Abre carta de PortalRest sin modulo de pedidos contratado">
+	<test enabled="true" name="Test de contratación - Abre carta de PortalRest sin modulo de pedidos contratado" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZCNwATMyITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="xpathExpected" value = "//li[contains(@class,'familyItem')]"/>
@@ -96,11 +97,14 @@
 		
 	</test> <!-- test -->
 	
-	<test enabled="true" name="Test de contratación - Abre carta de PortalRest sin modulo de carta electronica contratada">
+	<test enabled="true" name="Test de contratación - Abre carta de PortalRest sin modulo de carta electronica contratada" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmITPtZiMzETMyITP0NXZSRWa"/>
 		<parameter name="expectedTitle" value="PortalRest2"/>
 		<parameter name="idioma" value = "es"/>
 	    <parameter name="cartaContratada" value="La carta electrónica está desactivada" />
+	    
+        <parameter name="labelTitleCartaContratada" value="Oops..." />
+   		<parameter name="labelErrorCartaContratada" value="El módulo de Carta se encuentra actualmente desactivado. Contrátelo para poder acceder" />
 
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl"/>
@@ -109,8 +113,5 @@
 		</classes>
 		
 	</test> <!-- test -->
-	
-	
-	
 	
 </suite> 

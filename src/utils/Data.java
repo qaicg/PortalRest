@@ -1,5 +1,7 @@
 package utils;
 
+import Reservas.BookingInformation;
+
 public class Data {
 
 	private static Data INSTANCE;
@@ -12,8 +14,17 @@ public class Data {
     private boolean runAllTests=true;
     private boolean runTestsFailed = true;
     private String pedidoActual;
+    private BookingInformation bookingInformation;
     
-    public String getBD() {
+    public BookingInformation getBookingInformation() {
+		return bookingInformation;
+	}
+
+	public void setBookingInformation(BookingInformation bookingInformation) {
+		this.bookingInformation = bookingInformation;
+	}
+
+	public String getBD() {
 		return BD;
 	}
     

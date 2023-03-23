@@ -224,8 +224,9 @@ public class CheckOut extends TestBase{
 		}
 		
 	}
-
-	private void validarSaldoRestante(String saldoAnterior, String importeVenta, String miMonedero) { //VALIDA EL SALDO ANTERIOR CON EL NUEVO RESTADO DEL IMPORTE DE LA VENTA.
+	
+	//Saldo restante para tarjeta de fidelización 
+	private void validarSaldoRestante(String saldoAnterior, String importeVenta, String miMonedero) { //VALIDA EL SALDO ANTERIOR CON EL NUEVO RESTADO DEL IMPORTE DE LA VENTA. 
 		log("Validando saldo restante en la tarjeta...");
 		abrirMiMonedero(miMonedero);
 		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Saldo disponible']/following::span[1]")));
@@ -267,6 +268,11 @@ public class CheckOut extends TestBase{
 	private void pagarPedidoConTarjeta(String formaPago, boolean nuevaTarjeta, String testCardNumber, String cad1, String cad2, String cvv, String pedidoConfirmado, String validarImporteMinimo) {
 
 		log("Se paga el pedido con tarjeta formaPago " + formaPago);
+		
+		String formaPagoXpath = "//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]";
+		
+		waitUntilPresence(formaPagoXpath, true, false);
+		
 		w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]"))); //ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
 		clicJS(driver.findElement(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]"))); //SELECCIONO FORMA DE PAGO
 
@@ -691,6 +697,11 @@ public class CheckOut extends TestBase{
 	}
 	
 	public boolean validarPantallaRecibo() {
+		espera(2000);
+		
+		String matSpinner = "//mat-spinner[contains(@class, 'mat-spinner mat-progress-spinner mat-primary mat-progress-spinner-indeterminate-animation')]";
+		w2.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(matSpinner)));
+		
 		espera(2000);
 		if(isElementPresent(By.id("orderReceiptHeader"))) {
 			log("ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO POR ID orderReceiptHeader.");
