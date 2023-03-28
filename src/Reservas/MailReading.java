@@ -31,7 +31,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MailReading extends TestBase{
+/*
+ * Utilizamos la class para leer y descargar email desde yahoo / mailSac
+ * Para yahoo. No se ha podido utilizar la Api de yahoo
+ * TODO: Implentar la API de yahoo para poder descargar los email sin abrir el navegador
+ */
+
+public class MailReading extends TestBase {
     Properties properties = null;
     private Session session = null;
     private Store store = null;
@@ -59,26 +65,14 @@ public class MailReading extends TestBase{
     @Test(priority = 1)
     @Parameters({"webMailImapConfig", "emailCliente", "passwordCliente", "emailNotificacionReservas", "passwordRestaurante", "textConfirmacionReservaAlCliente"})
     public void readLastEmail(String webMailImapConfig, String emailCliente, String passwordCliente, String emailNotificacionReservas, String passwordRestaurante, String textConfirmacionReservaAlCliente) {
-        //MailReading sample = new MailReading();
-        //sample.readMails(webMailImapConfig, userName, userPassword);
+        MailReading sample = new MailReading();
+        
+        sample.readMails(webMailImapConfig, emailCliente, passwordCliente);
     	
     	textConfirmacionReservaAlCliente = textConfirmacionReservaAlCliente.replace("{ln}", "\n");
     	
     	log(textConfirmacionReservaAlCliente);
     	
-//    	Correo correoCliente = openLastMessageFromMailSac(emailCliente, passwordCliente);
-//    	
-//    	log("ultimo mensaje al Cliente: Asunto --> " + correoCliente.getAsunto());
-//		log("ultimo mensaje al Cliente: Remitente  --> " + correoCliente.getRemitente());
-//		log("ultimo mensaje al Cliente: Fecha  --> " +correoCliente.getFecha());
-//		log("ultimo mensaje al Cliente: Cuerpo --> " + correoCliente.getCuerpo());
-//    	
-//    	Correo correoRestaurante = openLastMessageFromMailSac(emailNotificacionReservas, passwordRestaurante);
-//    	
-//    	log("ultimo mensaje al Restaurante: Asunto --> " + correoRestaurante.getAsunto());
-//		log("ultimo mensaje al Restaurante: Remitente  --> " + correoRestaurante.getRemitente());
-//		log("ultimo mensaje al Restaurante: Fecha  --> " + correoRestaurante.getFecha());
-//		log("ultimo mensaje al Restaurante: Cuerpo --> " + correoRestaurante.getCuerpo());
     }
     
     @Test(priority = 1)
@@ -87,7 +81,8 @@ public class MailReading extends TestBase{
         MailReading sample = new MailReading();
         sample.readMails(webMailImapConfig, userName, userPassword);
     }
-
+    
+    // 
     public void readMails(String webMailImapConfig, String userName, String userPassword) {
         properties = new Properties();
         properties.setProperty("mail.store.protocol", "imaps");
@@ -168,12 +163,18 @@ public class MailReading extends TestBase{
     }  
 
     
-  //openlastEmailNotReading -> abrir el ultimo email no leido
+    //openlastEmailNotReading -> abrir el ultimo email no leido desde yahoo
     public void openWebMail(String userName, String password,  @Optional("false") boolean openlastEmailNotReading) throws InterruptedException {
     	
     	if(isElementPresent(By.id("ybarMailLink"))) {
     		//Sesión abierta
-    		driver.findElement(By.id("ybarMailLink")).click();
+    		if(getElementByFluentWait(By.id("ybarMailLink"), 60, 5) == null) {
+    			log("Error: algo pasa y no podemos pulsar el botón de id ybarMailLink");
+    			Assert.assertTrue(false);
+    		}
+    		else {
+    			clicJS(getElementByFluentWait(By.id("ybarMailLink"), 60, 5));
+    		}
     		espera(1500);
     	} else {
     		//Verificar donde estamos 
@@ -198,7 +199,7 @@ public class MailReading extends TestBase{
          
     }
     
-    //Extract content e-mail and save it
+    //Extract content e-mail and save it: Yahoo desde el navegador
     public void extractContentMail(String email) {
     	//Verificar que el usuario está connectado en su sesión email
     	if(!this.isSesionMailOpen) {
@@ -215,25 +216,54 @@ public class MailReading extends TestBase{
     	WebElement elmentLastEmail = getElementByFluentWait(By.xpath(lastEmail), 200, 5);
     	
     	if(driver.findElements(By.xpath(lastEmail)).size() > 0 || elmentLastEmail != null) {
-    		//extración información de la reserva sin abrir el correo de notificación
+    		//extración información del correo sin abrir la notificación
     		//remitente del email
-    		String xpathRemitenteEmail = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[1]/div[2]/child::span/strong";
+    		String xpathRemitenteEmail = null;
+
+    		if(isElementPresent(By.xpath("//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[1]/div[2]/child::span/strong"))) {
+    			
+    			xpathRemitenteEmail = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[1]/div[2]/child::span/strong";
+    		}
+    		else if(isElementPresent(By.xpath("//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[1]/div[3]/span/strong"))) {
+    			xpathRemitenteEmail = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[1]/div[3]/span/strong";
+    		}
+    		//log("Valor xpath del element para remitente del ultimo correo -->" + xpathRemitenteEmail);
+    		
+    		waitUntilPresence(xpathRemitenteEmail);
+    		
     		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathRemitenteEmail))).get(0);
     		String sRemitenteEmail = driver.findElements(By.xpath(xpathRemitenteEmail)).get(0).getText();
     		
     		//Asunto del email
-    		String xpathAsunto = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[2]/div[1]/div[1]/span[1]";
+    		String xpathAsunto = null;
+    		if(isElementPresent(By.xpath("//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[2]/div[1]/div[1]/span[1]"))) {
+    			xpathAsunto = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[2]/div[1]/div[1]/span[1]";
+    		}
+    		else if(isElementPresent(By.xpath("//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[3]/div[1]/div[1]/span[1]"))) {
+    			xpathAsunto = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[3]/div[1]/div[1]/span[1]";
+    		}
+    		//log("Valor xpath del element para Asunto del ultimo correo -->" + xpathAsunto);
+    		
     		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathAsunto))).get(0);
     		String sAsunto = driver.findElements(By.xpath(xpathAsunto)).get(0).getText();
     		
     		//Mensaje del correo de notificación
-    		String xpathMensajeEmail = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[2]/div[1]/div[2]/div";
+    		String xpathMensajeEmail = null;
+    		if(isElementPresent(By.xpath("//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[2]/div[1]/div[2]/div"))) {
+    			xpathMensajeEmail = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[2]/div[1]/div[2]/div";
+    			
+    		}
+    		else if(isElementPresent(By.xpath("//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[3]/div[1]/div[2]/div"))) {
+    			xpathMensajeEmail = "//a[contains(@role, 'article') and contains(@data-test-read, 'false')]/div/div[3]/div[1]/div[2]/div";
+    		}
+    		//log("Valor xpath del element para el mensaje del ultimo correo -->" + xpathMensajeEmail);
+    		
     		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathMensajeEmail))).get(0);
     		
     		String sMensajeEmail = driver.findElements(By.xpath(xpathMensajeEmail)).get(0).getText();
     		
     		if(!isNullOrEmpty(sRemitenteEmail) && !isNullOrEmpty(sAsunto) && !isNullOrEmpty(sMensajeEmail)) {
-    		//Gardar informacion de la notificación para validarla después.
+    		//Guardar la informacion de la notificación para validarla después.
     			this.setInfoEmailMap(sRemitenteEmail, sAsunto, sMensajeEmail);
     			espera(1000);
     			log("Se ha podido extraer el correo de notificación para su validación");
@@ -255,6 +285,7 @@ public class MailReading extends TestBase{
     	}
     }
     
+    //Yahoo
     public void cerrarSesionMail(@Optional("false") boolean dataEmail) throws InterruptedException {
     	String ybarAccountMenu = "//button[contains(@id, 'ybarAccountMenu')]//child::label[contains(@id, 'ybarAccountMenuOpener')]//child::span[contains(@role, 'presentation')]";
     	
@@ -295,6 +326,7 @@ public class MailReading extends TestBase{
 	    		if(driver.findElements(By.xpath("//a[contains(@id, 'profile-signout-link')]//child::span")).get(1).getText()!= null) {
 	    			driver.findElements(By.xpath("//a[contains(@id, 'profile-signout-link')]//child::span")).get(1).click();
 	    			espera(500);
+	    			log("Sesión no está abierta");
 	    			this.setSesionMailOpen(false);
 	    		} else {
 	    			log("Error: No hemos podido cerrar la sesión después de consultar el correo electonico");
@@ -308,7 +340,7 @@ public class MailReading extends TestBase{
     //password
     //openlastEmailNotReading -> abrir el ultimo email no leido
     public void openSesionMail(String userName, String password, @Optional("false") boolean openlastEmailNotReading) throws InterruptedException {
-    	
+    	espera(2000);
     	if(isElementPresent(By.xpath("//input[contains(@id, 'login-username')]"))) {
     		
 	    	w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//input[contains(@id, 'login-username')]")));
@@ -324,13 +356,9 @@ public class MailReading extends TestBase{
 	         
 	    	Thread.sleep(500);
 	    	if(isElementPresent(By.id("ybarMailLink"))) {
-	    		//waitUntilPresence(password, openlastEmailNotReading, openlastEmailNotReading)
-	    		//driver.findElement(By.id("ybarMailLink")).click(); ybarMailLink
 	    		Thread.sleep(1500);
-	    		//clicJS(driver.findElement(By.id("ybarMailLink")));
 	    		
 	    		WebElement emailClick = getElementByFluentWait(By.id("ybarMailLink"), 30, 5);
-	    		//driver.findElement(By.id("ybarMailLink")).click();
 	    		if(emailClick != null) {
 	    			emailClick.click();
 	    		}
@@ -359,7 +387,7 @@ public class MailReading extends TestBase{
 	    	driver.findElement(By.id("login-passwd")).clear();
 	    	driver.findElement(By.id("login-passwd")).sendKeys(password, Keys.ENTER);
 	         
-	    	Thread.sleep(500);
+	    	Thread.sleep(1000);
 	    	if(isElementPresent(By.id("ybarMailLink"))) {
 	    		
 	    		WebElement emailClick = getElementByFluentWait(By.id("ybarMailLink"), 30, 5);
@@ -397,5 +425,28 @@ public class MailReading extends TestBase{
     	} else {
     		log("No hay nuvea notificación");
     	}
+    }
+    
+    /**
+     * Test Utilización de MailSac
+     */
+    
+    @Test(priority = 1)
+    @Parameters({"webMailImapConfig", "emailCliente", "passwordCliente", "emailNotificacionReservas", "passwordRestaurante", "textConfirmacionReservaAlCliente"})
+    public void readLastEmailFromMailSac(String webMailImapConfig, String emailCliente, String passwordCliente, String emailNotificacionReservas, String passwordRestaurante, String textConfirmacionReservaAlCliente) {
+    	/*
+    	 * Utilización de MailSac
+    	 */
+	 	Correo correoCliente = openLastMessageFromMailSac(emailCliente, passwordCliente);
+	  	log("ultimo mensaje al Cliente: Asunto --> " + correoCliente.getAsunto());
+	  	log("ultimo mensaje al Cliente: Remitente  --> " + correoCliente.getRemitente());
+		log("ultimo mensaje al Cliente: Fecha  --> " +correoCliente.getFecha());
+		log("ultimo mensaje al Cliente: Cuerpo --> " + correoCliente.getCuerpo());
+		
+	  	Correo correoRestaurante = openLastMessageFromMailSac(emailNotificacionReservas, passwordRestaurante);
+	  	log("ultimo mensaje al Restaurante: Asunto --> " + correoRestaurante.getAsunto());
+		log("ultimo mensaje al Restaurante: Remitente  --> " + correoRestaurante.getRemitente());
+		log("ultimo mensaje al Restaurante: Fecha  --> " + correoRestaurante.getFecha());
+	 	log("ultimo mensaje al Restaurante: Cuerpo --> " + correoRestaurante.getCuerpo());
     }
 }

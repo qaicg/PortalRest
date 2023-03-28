@@ -17,7 +17,8 @@ import org.testng.annotations.Test;
 import utils.TestBase;
 
 public class VerificarCookies extends TestBase {
-
+	public boolean isVericarCookies = false;
+	
 	@Test(description = "Verifica si sale o no la ventana de aceptaci�n de cookies", priority = 1)
 	public void verificarCookies() {
 		WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(15));
@@ -27,7 +28,8 @@ public class VerificarCookies extends TestBase {
 		} else {
 			log("No Hemos encontrado la classe cookies-info-content");
 		}
-
+		
+		this.setVericarCookies(true);
 	}
 
 	// Solo se ejecuta si el test de verificar cookies es correcto.
@@ -64,5 +66,13 @@ public class VerificarCookies extends TestBase {
 		//WebElement aceptarCookies = driver.findElement(By.className("btn-confirm"));
 		//aceptarCookies.click();
 		//log("Hemos aceptado las cookies");
+	}
+	
+	public boolean isVericarCookies() {
+		return isVericarCookies;
+	}
+
+	public void setVericarCookies(boolean isVericarCookies) {
+		this.isVericarCookies = isVericarCookies;
 	}
 }

@@ -12,6 +12,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Time;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -50,6 +51,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.v108.media.model.Timestamp;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -277,6 +279,11 @@ public class TestBase {
 	}
 
 	public void log(String s) {
+		System.out.println(s);
+		Reporter.log(s + "<br>");
+	}
+	
+	public static void logStatic(String s) {
 		System.out.println(s);
 		Reporter.log(s + "<br>");
 	}
@@ -610,19 +617,36 @@ public class TestBase {
     }
     
     public static void waitUntilPresence (String xpathCssSelector, boolean failIfNotPresent) {
-    	WebElement element = null;
+    	//WebElement element = null;
+    	List<WebElement> element = null;
     	try {
-    		element = w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathCssSelector)));
+    		//element = w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathCssSelector)));
+    		element = w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathCssSelector)));
     	} catch (TimeoutException e) {
     		e.printStackTrace();
     		System.out.println("Failed unable to find: "+ xpathCssSelector );
     		if (failIfNotPresent) {
     			Assert.assertTrue(false);
     			System.exit(0);
-    		}
+    		} 
     	}
  	
     }
+    
+    //Intenta a buscar elementos
+    public static void waitUntilPresence (String xpathCssSelector) {
+    	List<WebElement> element = null;
+    	try {
+    		element = w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpathCssSelector)));
+    	} catch (TimeoutException e) {
+    		e.printStackTrace();
+    		System.out.println("First Failed unable to find: "+ xpathCssSelector );
+    		System.out.println("Try again to find: "+ xpathCssSelector );
+    		
+    		waitUntilPresence(xpathCssSelector, true);
+    	}
+ 	
+    }    
     
     /*
      * Waiting 30 seconds for an element to be present on the page, checking
@@ -687,5 +711,15 @@ public class TestBase {
 		int scale = (int) Math.pow(10, precision);
 		return (double) Math.round(value * scale) / scale;
 	}
-    
+	
+	/// <summary>
+	/// Determines if the specified element has the aria-disabled attribute
+	/// </summary>
+	/// <param name="locator">The locator of the desired element</param>
+	/// <returns>A tuple of the element and a bool as true if the element has the aria-disabled attribute, false otherwise.</returns>
+//	public (IWebElement, bool) IsAriaDisabled(By locator)
+//	{
+//	    IWebElement e = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementExists(locator));
+//	    return (e, "true" == e.GetAttribute("aria-disabled"));
+//	}
 }

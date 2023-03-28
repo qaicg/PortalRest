@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -27,6 +28,15 @@ public class ConfirmarPedidPorEmail extends TestBase {
 			
 			readCustomerEmail.openWebMail(emailCliente, passwordCliente, false);
 			espera(2000);
+			
+			//verificamos si el correo electrónico está abierto
+			String lastEmail = "//ul[contains(@aria-label, 'Message list')]//child::a[contains(@role, 'article') and contains(@data-test-read, 'false')]";
+	    	waitUntilPresence(lastEmail, true);
+	    	if(isElementPresent(By.xpath(lastEmail)) && !readCustomerEmail.isSesionMailOpen()) {
+	    		readCustomerEmail.setSesionMailOpen(true);
+	    	}
+	    	
+			//
 			
 			if(!readCustomerEmail.isSesionMailOpen()) {
 				log("No se ha podido abrir la sesión email del cliente para leer la notificación del pedido a recoger");
@@ -75,6 +85,8 @@ public class ConfirmarPedidPorEmail extends TestBase {
 	//@Parameters({"pedidoConfirmadoString"})
 	public void validarReciboRecogerPedido(String pedidoConfirmadoString) {
 		ArrayList<String> switchTabs= new ArrayList<String> (driver.getWindowHandles());
+		
+		driver.switchTo().window(switchTabs.get(2));
 		//switchTabs.get(0)
 		log("numero de pestañas abiertas --> " +switchTabs.size());
 		//ticket-background
@@ -86,8 +98,10 @@ public class ConfirmarPedidPorEmail extends TestBase {
 		log("Validar que se muestre encabezado el titulo " +sTextPedido);
 		
 		if(isElementPresent(By.xpath("//div[contains(@class, 'generic-title')]")) 
-				&& driver.findElement(By.xpath("//div[contains(@class, 'generic-title')]")).getText().toUpperCase() != sTextPedido) {
+				&& (!driver.findElement(By.xpath("//div[contains(@class, 'generic-title')]")).getText().toUpperCase().contentEquals(sTextPedido))) {
+			String textEncontrado = driver.findElement(By.xpath("//div[contains(@class, 'generic-title')]")).getText().toUpperCase() ;
 			log("No hemos encontrado encabezado el titulo --> " +sTextPedido);
+			log("Hemos encontado encabezado el titulo --> " + textEncontrado);
 			Assert.assertTrue(false);
 		}
 		
@@ -96,8 +110,13 @@ public class ConfirmarPedidPorEmail extends TestBase {
 		
 		log("el numero de pedido a recoger para comprobar:" + numPedido);
 		//comprobar el numero del pedido
-		String elmeNumePedido = "//app-pickup-order/div/div[2]/div/div/div[3]/div[2]";
-		waitUntilPresence(elmeNumePedido, true, false);
+		String elmeNumePedido = "app-pickup-order/div/div[2]/div/div/div[3]/div[2]";
+		
+		if(isElementPresent(By.xpath("//app-pickup-order/div/div[2]/div/div/div[3]/div[2]"))) {
+			elmeNumePedido = "//app-pickup-order/div/div[2]/div/div/div[3]/div[2]";
+		}
+		
+		waitUntilPresence(elmeNumePedido, true);
 		String sNumePedido = driver.findElement(By.xpath(elmeNumePedido)).getText();
 		if(!numPedido.contentEquals(sNumePedido)) {
 			log("No hemos encontrado el numero del pedido a recoger");
@@ -132,7 +151,8 @@ public class ConfirmarPedidPorEmail extends TestBase {
 			log("No debemos encontrar el botón Volver al inicio");
 			Assert.assertTrue(false);
 		}
-			
+		
+		closeWindowTab(2, 1);
 		//Assert.assertTrue(true);
 		
 	}

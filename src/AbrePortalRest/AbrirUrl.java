@@ -90,7 +90,15 @@ public class AbrirUrl extends TestBase {
 		//Verificar cookies
 		VerificarCookies validarCookies = new VerificarCookies();
 		validarCookies.verificarCookies();
-		validarCookies.aceptaCookies();
+		espera(500);
+		 if(validarCookies.isVericarCookies()) {
+		 	validarCookies.aceptaCookies();
+		 }
+//		 else {
+//			 log("Error al verifica cookies: no sale la ventana de aceptaci�n de cookies");
+//			 Process process = null;
+//			 process.
+//		 }
 	}
 
 }
