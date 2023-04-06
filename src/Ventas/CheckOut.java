@@ -129,7 +129,8 @@ public class CheckOut extends TestBase{
 			if (formaPago.equalsIgnoreCase("saldo") || formaPago.equalsIgnoreCase("combinado"))
 				pagarPedidoSaldo(formaPago, formaPago2, pedidoConfirmadoString, totalEsperado, miMonederoString, validarImporteMinimo, nuevaTarjeta, testCardNumber, cad1, cad2, cvv);
 			
-			Assert.assertTrue(true);	
+			Assert.assertTrue(true);
+			
 		}
 	}
 
@@ -417,7 +418,10 @@ public class CheckOut extends TestBase{
 		}else {
 			back(); //Desde la versión del 16/09/2022 el el botón de back tiene otro comportamiento y regresa a la ultima pantalla abierta. 
 		}
-			
+		
+		//Save el numero de pedido en Object pedido/Sirve para futuro validación por ejemplo en Pedio más tarde y Día y hora
+		Data.getInstance().getPedido().setNumeroPedido(numPedido);
+		
 		Assert.assertTrue(true);
 	}
 
@@ -534,7 +538,11 @@ public class CheckOut extends TestBase{
 				return false;
 			}
 		}
-
+		
+		//Save precio total a pagar del pedido
+		//Save el precio total a pagar
+		Data.getInstance().getPedido().setPrecioTotal(totalEsperado);
+		
 		return true;
 	}
 
@@ -545,7 +553,7 @@ public class CheckOut extends TestBase{
 		//VALIDAMOS UNIDADES TOTALES AÑADIDAS AL CARRITO Y VISIBLES EN EL BOTÓN FLOTANTE..
 		if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-units')]")).getAttribute("innerText").equalsIgnoreCase(String.valueOf(productosEncontrados))) {
 			log("- "+productosEncontrados + " productos añadidos");
-		}else {
+		} else {
 			log("- Error en validación de productos añadidos al carrito" );
 			return false;
 		}

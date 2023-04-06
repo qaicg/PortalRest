@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -24,6 +25,8 @@ import org.testng.annotations.Test;
 
 import Objects.ProductItem;
 import graphql.Assert;
+import pedido.Product;
+import utils.Data;
 import utils.TestBase;
 
 //ESTA FUNCION BUSCA UN PRODUCTO EN LA CARTA DE PORTALREST UTILIZANDO SU NOMBRE.
@@ -31,6 +34,9 @@ public class AddCarrito extends TestBase{
 	String[] arrayNombres;
 	String[] fOrderProducts;
 	int productosEncontrados;
+	
+	ArrayList<Product> orderProductList = new ArrayList<Product>();
+	Product order;
 
 	@Test (description="Este test busca un producto dado en el PortalRest actual" , priority=1)
 	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts", "goBackByAddOrderButton", "abrirFichaProducto"})
@@ -77,12 +83,13 @@ public class AddCarrito extends TestBase{
 			
 			for(int i=1;i<= elements.size();i++) { 
 				
-				ProductItem currentItem = new ProductItem();	 
+				ProductItem currentItem = new ProductItem();
+				String cantidadProducto = null;
 				
 				if(isElementPresent(By.xpath("//div[contains(@class,'dish-name')]//div"))) {
-					currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')]//div)["+i+"]")).getAttribute("innerText"));		   
+					currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')]//div)["+i+"]")).getAttribute("innerText"));	
 				} else {
-					currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')])["+i+"]")).getAttribute("innerText"));		   
+					currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')])["+i+"]")).getAttribute("innerText"));
 				}
 				
 				
@@ -95,7 +102,8 @@ public class AddCarrito extends TestBase{
 				else {
 					currentItem.setBoton(driver.findElement(By.xpath("(//div[contains(@class,'product-item-add')])["+i+"]")));	
 				}
-
+				
+				
 				if(contieneNombre(arrayNombres,currentItem.getNombre()) && !productosAddeds.contains(currentItem) && (i<elements.size() || currentItem.getNombre().contains("MENÚ")))
 				{
 					if(abrirFichaArticulo) {
@@ -150,9 +158,56 @@ public class AddCarrito extends TestBase{
 						}
 					}
 					
-					espera(1000);
-					log("Producto " + currentItem.getNombre() + " encontrado y añadido a carrito");	
-					productosEncontrados++;
+					espera(2000);
+					String priceXpath ="//div[contains(@class,'dishItem')]//child::div[contains(@class, 'first-row')]//span[contains(@class, 'dish-price')]";
+					//Set precio del producto
+					if(isElementPresent(By.xpath(priceXpath))) {
+						//get(i-1) para posicionarse en el buen precio del producto si devuelve un precio falso de otro producto, por que for está iniciado a i = 1.
+						String precio = driver.findElements(By.xpath(priceXpath)).get(i-1).getAttribute("innerText");
+						currentItem.setPrecio(precio);
+						log("precio del producto "+ currentItem.getNombre() + " --> " + precio);
+					}
+					
+					//Set Cantidad
+					String unidadXpath = "//div[contains(@class,'dishItem')]//div[contains(@class, 'product-item-add')]//child::app-input-number-spinner//div[contains(@class, 'number-spinner-value')]";
+					if(isElementPresent(By.xpath(unidadXpath))) {
+						log("Añadir la cantidad");
+						List<WebElement> productUnit = driver.findElements(By.xpath(unidadXpath));
+						if(productUnit.size() == 1) {
+							cantidadProducto = productUnit.get(0).getAttribute("innerText");
+						} 
+						else if(productUnit.size() > 1) {
+							cantidadProducto = productUnit.get(productUnit.size() -1).getAttribute("innerText");
+						} else {
+							log("Error cantidad 1 : No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
+							//Assert.assertTrue(false);
+						}
+					}
+					else {
+						
+						log("Error cantidad 2: No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
+					}
+					
+					//Save order product in list
+					order = new Product();
+					order.setNombre(currentItem.getNombre()) ;
+					order.setPrecio(currentItem.getPrecio());
+					if(StringUtils.isNumeric(cantidadProducto)) {
+						order.setUnidad(cantidadProducto);
+						log("unidad product del " + currentItem.getNombre() + "--> " + cantidadProducto);
+					}
+					//Calculo del precio total y guardarlo en order
+					order.setPrecioPorUnidad();
+					orderProductList.add(order);
+					
+					//*****
+					log("Producto " + currentItem.getNombre() + " encontrado y añadido a carrito con precio: " + currentItem.getPrecio());	
+					
+					log("*** Product order " + order.getNombre() + " encontrado y añadido a carrito con precio: " + order.getPrecio() + " unidad: " + order.getUnidad());
+					
+					productosEncontrados++;					
+					//**
+					order = null;
 					
 					//Testear si tenemos todos los artículos añadidos en el carrito
 					if(productosEncontrados==arrayNombres.length) {
@@ -169,7 +224,14 @@ public class AddCarrito extends TestBase{
 					Assert.assertTrue(false);
 				}
 				
-				if(productosEncontrados==arrayNombres.length)log("Todos los productos encontrados y añadidos al carrito " + Arrays.toString(arrayNombres));
+				if(productosEncontrados==arrayNombres.length) {
+					log("Todos los productos encontrados y añadidos al carrito " + Arrays.toString(arrayNombres));
+					
+					//Save order products in Data for using it  later to  validation order
+					Data.getInstance().getPedido().setProduct(orderProductList);
+					log("El precio total del pedido --> " + Data.getInstance().getPedido().getPrecioTotal());
+
+				}
 			}
 			
 			espera(500);
@@ -198,8 +260,9 @@ public class AddCarrito extends TestBase{
 				productosEncontrados += fOrderProducts.length;
 			} 
 			
-			Assert.assertTrue(validaCarritoFlotante((Integer.toString(productosEncontrados)),totalEsperado));  	  
+			Assert.assertTrue(validaCarritoFlotante((Integer.toString(productosEncontrados)),totalEsperado)); 
 		}
+		
 	}
 
 	private boolean validaCarritoFlotante(String productosEncontrados, String totalEsperado) {

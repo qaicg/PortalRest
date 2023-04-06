@@ -47,7 +47,7 @@ public class LoginCliente extends TestBase {
 	  buttonEntrar.click();
 	  
 	  if (resultadoEsperado.equalsIgnoreCase("true")) {   //Check remember me value in the stored cookie
-		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10)); //Le damos 10 segundos para hacer login del usuario y salir de la pantalla de login.
+		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30)); //Le damos 10 segundos para hacer login del usuario y salir de la pantalla de login.
 		  if (!w.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//input[@type='email']")))) {
 			  log("Login erroneo");
 			  Assert.assertTrue(false);

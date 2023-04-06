@@ -34,6 +34,7 @@
   
   Locator strategies -> Ways to identify one or more specific elements in the DOM:
   	https://www.selenium.dev/documentation/webdriver/elements/locators/
+  	https://www.tutorialkart.com/selenium/java/get-inner-html-of-web-element/
   
   
   Interesante leer para seguir con el desarrollo y tenerlo en cuenta.

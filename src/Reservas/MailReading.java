@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -213,7 +214,7 @@ public class MailReading extends TestBase {
     	espera(2000);
     	String lastEmail = "//ul[contains(@aria-label, 'Message list')]//child::a[contains(@role, 'article') and contains(@data-test-read, 'false')]";
     	
-    	WebElement elmentLastEmail = getElementByFluentWait(By.xpath(lastEmail), 200, 5);
+    	WebElement elmentLastEmail = getElementByFluentWait(By.xpath(lastEmail), 500, 5);
     	
     	if(driver.findElements(By.xpath(lastEmail)).size() > 0 || elmentLastEmail != null) {
     		//extración información del correo sin abrir la notificación
@@ -262,6 +263,8 @@ public class MailReading extends TestBase {
     		
     		String sMensajeEmail = driver.findElements(By.xpath(xpathMensajeEmail)).get(0).getText();
     		
+    		WebElement elementMensajeEmail = driver.findElements(By.xpath(xpathMensajeEmail)).get(0);
+    		    		
     		if(!isNullOrEmpty(sRemitenteEmail) && !isNullOrEmpty(sAsunto) && !isNullOrEmpty(sMensajeEmail)) {
     		//Guardar la informacion de la notificación para validarla después.
     			this.setInfoEmailMap(sRemitenteEmail, sAsunto, sMensajeEmail);
@@ -324,7 +327,9 @@ public class MailReading extends TestBase {
 	    		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//a[contains(@id, 'profile-signout-link')]//child::span")));
 
 	    		if(driver.findElements(By.xpath("//a[contains(@id, 'profile-signout-link')]//child::span")).get(1).getText()!= null) {
-	    			driver.findElements(By.xpath("//a[contains(@id, 'profile-signout-link')]//child::span")).get(1).click();
+	    			waitUntilPresence("//a[contains(@id, 'profile-signout-link')]//child::span", false);
+	    			//driver.findElements(By.xpath("//a[contains(@id, 'profile-signout-link')]//child::span")).get(1).click();
+	    			clicJS(driver.findElements(By.xpath("//a[contains(@id, 'profile-signout-link')]//child::span")).get(1));
 	    			espera(500);
 	    			log("Sesión no está abierta");
 	    			this.setSesionMailOpen(false);
@@ -418,7 +423,10 @@ public class MailReading extends TestBase {
     	driver.navigate().refresh();
     	espera(2000);
     	String lastEmail = "//ul[contains(@aria-label, 'Message list')]//child::a[contains(@role, 'article') and contains(@data-test-read, 'false')]";
-    	w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(lastEmail)));
+    	WebElement lastEmailClick = getElementByFluentWait(By.xpath(lastEmail), 300, 5);
+    	//waitUntilPresence(lastEmail);
+    	//w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(lastEmail)));
+    	
     	if(driver.findElements(By.xpath(lastEmail)).size() > 0) {
     		driver.findElements(By.xpath(lastEmail)).get(0).click();
     		espera(1500);

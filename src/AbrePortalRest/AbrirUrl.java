@@ -1,5 +1,7 @@
 package AbrePortalRest;
 
+import java.io.IOException;
+
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -11,16 +13,30 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.MediaEntityBuilder;
+
 import Verificaciones.VerificarCookies;
 import graphql.Assert;
+import interfaces.ITipoPedido;
+import interfaces.ITipoPedidoAhora;
+import interfaces.ITipoPedidoDiaHora;
+import interfaces.ITipoPedidoMasTarde;
+import pedido.TipoPedido;
+import pedido.TipoPedido.*;
+import pedido.Pedido;
+import utils.Data;
 import utils.TestBase;
 
 public class AbrirUrl extends TestBase {
+	private static ITipoPedido tipoPedidoAhora = null;
 	boolean  isFindedBtnMasTarde = false;
+	public static ITipoPedido newTipoOrder;
+	public Pedido pedido = new Pedido();
+	public TipoPedido orderType;
 	
 	@Test()
-	 @Parameters({ "Url", "pedidoMasTarde", "pedidoDiaHora"})
-	  public void abrirURL(String Url, @Optional("false") boolean pedidoMasTarde, @Optional("false") boolean pedidoDiaHora) {
+	 @Parameters({ "Url", "pedidoMasTarde", "pedidoDiaHora", "tipoPedido"})
+	  public void abrirURL(String Url, @Optional("false") boolean pedidoMasTarde, @Optional("false") boolean pedidoDiaHora, @Optional("1") String tipoPedido) {
 		boolean paginaCargada = false;  
 		espera(500);
 		  driver.get(Url);
@@ -47,58 +63,62 @@ public class AbrirUrl extends TestBase {
 	         }
 	      }
 	      
-	      if(paginaCargada && pedidoMasTarde && !pedidoDiaHora) {
-	    	  String elemtBtnMasTarde = "//app-when-deliver/div/div[2]/div/div/button[1]/div[1]";
-	    	  abrirPedidoMasTarde (elemtBtnMasTarde);
+	      
+	  	/*
+	  	 * Seleccionar el cuando para el pedido: Ahora,  Más tarde(Avisar por email) o día y hora si estamos en PortalRest Pedido
+	  	 * 
+	  	 */
+	      
+	  	/**
+	  	 * tipoPedido
+	  	 *  0 -> Hiopay
+	  	 *  1 -> Pedido por Ahora : Por defecto
+	  	 *  2 -> Pedido por Más tarde con aviso por email
+	  	 *  3 -> Pedido por día y hora
+	  	 */
+	  	 int iTipoPedido = Integer.parseInt(tipoPedido);
+	     switch(iTipoPedido) {
+	      	case 0:
+	      		log("Estamos en HioPay");
+	      		orderType =  new TipoPedido(iTipoPedido); 
+	      		break;
+	      	case 1:
+	      		log("PortalRest pedido para Ahora");
+	      		orderType =  new TipoPedido(iTipoPedido); 
+	      		break;
+	      	case 2:
+	      		log("PortalRest pedido para más tarde");
+	      		orderType =  new TipoPedido(iTipoPedido);    
+	      		orderType.abrirPedido();
+	    	  break;
+	      	case 3:
+	      		log("PortalRest pedido por día y hora");
+		    	orderType =  new TipoPedido(iTipoPedido); 
+		    	orderType.abrirPedido();
 	      }
-	      else if(paginaCargada && !pedidoMasTarde && pedidoDiaHora) {
-	    	  String elemtBtnDiaHora = "//app-when-deliver/div/div[2]/div/div/button[2]/div[1]";
-	    	  abrirPedidoMasTarde(elemtBtnDiaHora);
+	      
+//	      if(paginaCargada && pedidoMasTarde && !pedidoDiaHora) {
+//	    	 //
+//	    	  log("Estamos con pedido para más tarde");
+//	    	  orderType =  new TipoPedido(2);    
+//	    	  orderType.abrirPedido();
+//
+//	      }
+//	      else if(paginaCargada && !pedidoMasTarde && pedidoDiaHora) {
+//	    	  log("Estamos con pedido por día y hora");
+//	    	  orderType =  new TipoPedido(3); 
+//	    	  orderType.abrirPedido();
+//
+//	      }
+	      
+	      if((iTipoPedido == 2 || iTipoPedido == 3) && !orderType.isFindedBtn()) {
+	    	  //Cerrar la sesión del usuario si ya está abierta
+	    	  cerrarSesion();
 	      }
+	      
+	      this.pedido.setTipoPedido(orderType);
+    	  //empezamos a guardar el pedido para completarlo. Vamos utilizar el objecto pedido para guardar pedido y hacer validacion del pedido
+    	  Data.getInstance().setPedido(pedido);
 	  }
 	
-	public void abrirPedidoMasTarde (String xpathBtn) {
-		String paraCuandoXpath = "//div[contains(@class, 'how-when-button-list')]";
-		
-		waitUntilPresence(paraCuandoXpath, true);
-		
-		String btnHowWhenList =  "//div[contains(@class, 'how-when-button-list')]//button[contains(@class, 'how-when-button')]";
-		
-		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(btnHowWhenList)));
-		List<WebElement> btnHowWhenListWbmt = driver.findElements(By.xpath(btnHowWhenList));
-		
-		//Verificar cookies
-		verificarCookies();
-		
-		espera(1500);
-		btnHowWhenListWbmt.forEach( how -> {
-			
-			if(isElementPresent(By.xpath(xpathBtn))) {
-				clicJS(how.findElement(By.xpath(xpathBtn)));
-				espera(2000);
-				isFindedBtnMasTarde = true;
-			}
-		});
-		
-		if(!isFindedBtnMasTarde) {
-			log("No hemos encontrado el botón para pedido Más tarde");
-			Assert.assertTrue(false);
-		}
-	}
-
-	public void verificarCookies() {
-		//Verificar cookies
-		VerificarCookies validarCookies = new VerificarCookies();
-		validarCookies.verificarCookies();
-		espera(500);
-		 if(validarCookies.isVericarCookies()) {
-		 	validarCookies.aceptaCookies();
-		 }
-//		 else {
-//			 log("Error al verifica cookies: no sale la ventana de aceptaci�n de cookies");
-//			 Process process = null;
-//			 process.
-//		 }
-	}
-
 }

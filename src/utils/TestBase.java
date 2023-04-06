@@ -13,7 +13,10 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Time;
+import java.text.DecimalFormat;
 import java.text.Normalizer;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -83,6 +86,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.google.gson.annotations.Until;
 import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
+import org.apache.commons.lang3.StringUtils.*;
 import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
 
 import Cadenas.Es;
@@ -92,18 +96,21 @@ import lombok.var;
 import main.Correo;
 import main.Reader;
 
-public class TestBase {
+public class TestBase extends StringUtils {
 
 	protected static WebDriver driver;
 	protected DatabaseConnection databaseConnection = new DatabaseConnection();;
 	TrayIconDemo td = new TrayIconDemo();
 	protected static HashMap<String, String> biblioteca;
 	ExtentReports extent;
+
 	ExtentSparkReporter spark;
 	protected static WebDriverWait w, w2;
 	Actions actions;
 	String pathprofile;
 	ChromeOptions options;
+	
+	public ExtentTest extentTest;
 	
 	@BeforeClass
 	@Parameters({"test"})
@@ -189,6 +196,8 @@ public class TestBase {
 			td.displayTray("Iniciando test " + testContext.getName());
 			log("Iniciando " + testContext.getName());
 			extent.createTest(testContext.getName());
+			
+			setExtentTest(extent.createTest(testContext.getName()));
 
 		} catch (AWTException e) {
 			// TODO Auto-generated catch block
@@ -232,6 +241,9 @@ public class TestBase {
 		if(!isNullOrEmpty(Data.getInstance().getPedidoActual())) {
 			Data.getInstance().setPedidoActual(null);
 		}
+		
+		//31
+		getExtentTest().pass("Test finished --> " + testContext.getName());
 
 		espera(500);
 		log("Test finalizado: " + testContext.getName());
@@ -433,12 +445,12 @@ public class TestBase {
 		}
 	}
 	
-	public boolean isNullOrEmpty(String variable) {
-	   if(StringUtils.isNullOrEmpty(variable))
-		   return true;
-	   else
-		   return false;
-	}
+//	public boolean isNullOrEmpty(String variable) {
+//	   if(StringUtils.isNullOrEmpty(variable))
+//		   return true;
+//	   else
+//		   return false;
+//	}
 	
 	public static String stripAccents(String input) {
 	    return input == null ? null :
@@ -560,7 +572,7 @@ public class TestBase {
 	}
 
 	
-	public String getNavigatorLanguage() {
+	public static String getNavigatorLanguage() {
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
         String language = executor.executeScript("return window.navigator.userlanguage || window.navigator.language").toString();
         //espera(1500);
@@ -568,7 +580,7 @@ public class TestBase {
         return language;
 	}
 	
-	public Locale getLocale() {
+	public static Locale getLocale() {
 		String language = getNavigatorLanguage();
 		Locale locale = new Locale(language, language.toUpperCase());
 		return locale;
@@ -646,13 +658,15 @@ public class TestBase {
     		waitUntilPresence(xpathCssSelector, true);
     	}
  	
-    }    
+    }  
+    
+    
     
     /*
      * Waiting 30 seconds for an element to be present on the page, checking
      * for its presence once every 5 seconds.
      */
-	public WebElement getElementByFluentWait(By by, @Optional("30") int withTimeout, @Optional("5") int pollingEvery){
+	public static WebElement getElementByFluentWait(By by, @Optional("30") int withTimeout, @Optional("5") int pollingEvery){
 		// Waiting 30 seconds for an element to be present on the page, checking
 		// for its presence once every 5 seconds.
 		WebElement element = null;
@@ -712,6 +726,59 @@ public class TestBase {
 		return (double) Math.round(value * scale) / scale;
 	}
 	
+	 public static void openSpark() {
+			
+			File filePath = new File("target/Spark/Spark.html");
+			try {
+				Desktop.getDesktop().browse(filePath.toURI());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	 }
+	
+	 //******** Getters y setters*************************
+	 //***************************************************
+	public ExtentReports getExtent() {
+		return extent;
+	}
+
+	public void setExtent(ExtentReports extent) {
+		this.extent = extent;
+	}
+	
+	public ExtentTest getExtentTest() {
+		return extentTest;
+	}
+
+	public void setExtentTest(ExtentTest extentTest) {
+		this.extentTest = extentTest;
+	}
+	
+	
+	public void cerrarSesion(String login) {
+		
+		  List<WebElement> menuIcons = driver.findElements(By.xpath("//*[@class='header-icon']"));
+		  
+		  if (menuIcons.size()>=1) {
+			  menuIcons.get(menuIcons.size()-1).click();	
+			  
+			  if(!isElementPresent(By.xpath("//*[contains(text(), '"+ login +"')]"))) {
+				  List<WebElement> buttonSignOut = driver.findElements(By.xpath("//div[contains(@class, 'mat-menu-content')]//child::button"));
+				  clicJS(buttonSignOut.get(buttonSignOut.size() -1)); //Cerrar la Sesión
+				  espera(500);
+			  }
+		  }
+	}
+	
+	public void cerrarSesion() {
+		String login = "Registrarme";
+		cerrarSesion(login);
+	}
+	//
+			  
+	//***
+	
+	 
 	/// <summary>
 	/// Determines if the specified element has the aria-disabled attribute
 	/// </summary>
@@ -722,4 +789,5 @@ public class TestBase {
 //	    IWebElement e = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementExists(locator));
 //	    return (e, "true" == e.GetAttribute("aria-disabled"));
 //	}
+    
 }

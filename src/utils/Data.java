@@ -1,6 +1,7 @@
 package utils;
 
 import Reservas.BookingInformation;
+import pedido.Pedido;
 
 public class Data {
 
@@ -16,7 +17,17 @@ public class Data {
     private String pedidoActual;
     private BookingInformation bookingInformation;
     
-    public BookingInformation getBookingInformation() {
+    private Pedido pedido;
+    
+    public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+
+	public BookingInformation getBookingInformation() {
 		return bookingInformation;
 	}
 
