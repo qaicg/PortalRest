@@ -19,7 +19,7 @@ public class DireccionCliente extends TestBase {
 	String number = null;
 	String oldDirection = null;
 	
-	@Test(description="Crea una dirección en una venta delivery")
+	@Test(description="Crea una dirección en una venta delivery", groups = {"createDireccion"})
     @Parameters({"direccion", "numero", "bloque", "escalera", "planta", "puerta","ciudad","cp", "pais", "observaciones", "shop", "miPerfilString", "misDireccionesString"})
 	public void createAddress(@Optional("Avinguda Europa")String direccion, @Optional("45")String numero, @Optional("2")String bloque, @Optional("3")String escalera, @Optional("5")String planta, 
 			@Optional("7")String puerta, @Optional("Lleida")String ciudad, @Optional("25004")String cp, @Optional("")String pais, 
@@ -72,7 +72,7 @@ public class DireccionCliente extends TestBase {
     	}
     }
 
-	@Test(description="Modificar una dirección")
+	@Test(description="Modificar una dirección", groups = {"modifyDireccion"})
 	@Parameters({"direccion", "numero", "bloque", "escalera", "planta", "puerta","ciudad","cp", "pais", "observaciones", "shop", "miPerfilString", "misDireccionesString", "NewDireccion"})
 	public void modifyAddress(@Optional("Avinguda Balmes")String direccion, @Optional("10")String numero, @Optional("3")String bloque, @Optional("12")String escalera, @Optional("9")String planta, 
 			@Optional("1")String puerta, @Optional("Lleida")String ciudad, @Optional("25001")String cp, @Optional("")String pais, 
@@ -125,7 +125,7 @@ public class DireccionCliente extends TestBase {
 		
 	}	
 
-    @Test(description="Borra una dirección")
+    @Test(description="Borra una dirección", groups = {"deleteDireccion"})
     @Parameters({"direccion", "numero","miPerfilString","misDireccionesString","email","shop"})
   	public void deleteAdress(@Optional("")String direccion, @Optional("")String numero, @Optional("")String miPefil, @Optional("")String misDireccoines, @Optional("")String email, @Optional("")String shop) {
     	espera(1500);
@@ -171,7 +171,7 @@ public class DireccionCliente extends TestBase {
     /*
      * Abrir el apartado Mis direcciones
      */
-	@Test(description="Consultar las direcciones del usuario")
+	@Test(description="Consultar las direcciones del usuario", groups = {"showAddress"})
 	@Parameters({"miPerfilString", "misDireccionesString"})
 	public void openMyAddresses(@Optional("") String perfile, @Optional("") String misDirecciones) {//Consultar Direcciones	
 		abrirMisDirecciones(perfile, misDirecciones);

@@ -13,7 +13,7 @@ import graphql.Assert;
 import utils.TestBase;
 
 public class BorraDireccion  extends TestBase{
-	  @Test(description="Borra una dirección delivery")
+	  @Test(description="Borra una dirección delivery", groups = {"borraDireccion"})
 	    @Parameters({"direccion","miPerfilString","misDireccionesString","email","shop"})
 	  public void borrarDireccion(String direccion, String miPefil, String misDireccoines, String email, String shop) {
 	    	espera(1500);

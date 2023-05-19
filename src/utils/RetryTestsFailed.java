@@ -15,7 +15,7 @@ import org.testng.TestNG;
 public class RetryTestsFailed implements IRetryAnalyzer{
 
 	 private int retryCount = 0;
-	  private static final int maxRetryCount = 2;
+	 private static final int maxRetryCount = 2;
 	 
 	  @Override
 	  public boolean retry(ITestResult result) {

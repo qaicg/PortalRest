@@ -25,7 +25,7 @@ import utils.TestBase;
 
 public class VerificarFamiliasRestaurante extends TestBase {
 
-	@Test(description="Este test abre la URL proporcionada para abrir PortalRest", priority=1)
+	@Test(description="Este test abre la URL proporcionada para abrir PortalRest", priority=1, groups = { "familiasRestaurante" })
 	  @Parameters({"expectedTitle", "xpathExpected" , "soloConsulta", "familiasEsperadas","cartaContratada", "labelTitleCartaContratada", "labelErrorCartaContratada"})
 	
 	public void verificarFamiliasRestaurante(String expectedTitle, @Optional ("") String xpathExpected, @Optional ("false") String soloConsulta,

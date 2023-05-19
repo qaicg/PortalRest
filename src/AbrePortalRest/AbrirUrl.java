@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Reporter;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -34,7 +37,7 @@ public class AbrirUrl extends TestBase {
 	public Pedido pedido = new Pedido();
 	public TipoPedido orderType;
 	
-	@Test()
+	@Test(groups = { "openbrowser" })
 	 @Parameters({ "Url", "pedidoMasTarde", "pedidoDiaHora", "tipoPedido"})
 	  public void abrirURL(String Url, @Optional("false") boolean pedidoMasTarde, @Optional("false") boolean pedidoDiaHora, @Optional("1") String tipoPedido) {
 		boolean paginaCargada = false;  
@@ -65,7 +68,7 @@ public class AbrirUrl extends TestBase {
 	      
 	      
 	  	/*
-	  	 * Seleccionar el cuando para el pedido: Ahora,  Más tarde(Avisar por email) o día y hora si estamos en PortalRest Pedido
+	  	 * Tipo de pedido
 	  	 * 
 	  	 */
 	      
@@ -76,6 +79,8 @@ public class AbrirUrl extends TestBase {
 	  	 *  2 -> Pedido por Más tarde con aviso por email
 	  	 *  3 -> Pedido por día y hora
 	  	 */
+	     espera(1500);
+	     
 	  	 int iTipoPedido = Integer.parseInt(tipoPedido);
 	     switch(iTipoPedido) {
 	      	case 0:

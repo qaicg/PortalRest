@@ -14,7 +14,7 @@ import utils.TestBase;
 
 public class VerificarFichaRestaurante extends TestBase {
   
-	@Test(description="Este test abre la URL proporcionada para abrir PortalRest", priority=1)
+	@Test(description="Este test abre la URL proporcionada para abrir PortalRest", priority=1, groups = {"checkFichaRestaurante"})
 	  @Parameters({"expectedTitle", "classExpected" })
 	  public void verificaFichaRestaurante(String expectedTitle, String classExpected) {
 		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30));

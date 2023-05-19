@@ -50,7 +50,7 @@ public class MailReading extends TestBase {
     
     private boolean isSesionMailOpen = false; //determina si el usuario está connectado en su sesión mail
     
-    private Map<String, String> infoEmailMap = new HashMap<>();
+    private Map<String, String> infoEmailMap = new HashMap<String, String>();
     
     
     public void setInfoEmailMap(String remitenteEmail, String asuntoDelEmail, String mensajeDelMail) {

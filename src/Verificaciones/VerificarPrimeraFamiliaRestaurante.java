@@ -17,7 +17,7 @@ import utils.TestBase;
 
 public class VerificarPrimeraFamiliaRestaurante extends TestBase{
 	
-	@Test(description="Verifica que hemos abierto la priemra familia del restaurante y que tenemos el resto disponibles tambien a continuación", priority=1)
+	@Test(description="Verifica que hemos abierto la priemra familia del restaurante y que tenemos el resto disponibles tambien a continuación", priority=1, groups = {"checkRestFirstFamily"})
 	  @Parameters({"expectedTitle", "xpathExpected","idioma","nombrePrimeraFamilia" })
 	 
 	public void verificarPrimeraFamiliaRestaurante(String expectedTitle, String xpathExpected, @Optional ("es") String idioma, String nombrePrimeraFamilia) {		  

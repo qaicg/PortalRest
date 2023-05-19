@@ -58,5 +58,9 @@
   --- SI DESPUES DE ACTUALIZAR SE ROMPE EL USUARIO DE GOOGLE ---
   https://stackoverflow.com/questions/14480717/load-chrome-profile-using-selenium-webdriver-using-java
   
+  --Update version using maven
+  	https://medium.com/@iamfaisalkhatri/how-to-check-and-update-newer-versions-for-dependencies-in-the-maven-project-3fd20e0dc783
+  	
+  
   
   

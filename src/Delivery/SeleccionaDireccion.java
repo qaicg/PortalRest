@@ -13,7 +13,7 @@ import graphql.Assert;
 import utils.TestBase;
 
 public class SeleccionaDireccion extends TestBase {
-	@Test(description="Selecciona una dirección existente en una venta delivery")
+	@Test(description="Selecciona una dirección existente en una venta delivery", groups = {"selecteAddress"})
     @Parameters({"direccion","importeMinimo","cargoReparto", "repartoPermitido"})
   public void seleccionaDireccionExistente(String direccion, String importeMinimo, String cargoReparto, @Optional ("true") Boolean repartoPermitido ) {
     	espera(2000);

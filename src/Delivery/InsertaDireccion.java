@@ -9,7 +9,7 @@ import utils.Data;
 import utils.TestBase;
 
 public class InsertaDireccion extends TestBase{
-	@Test(description="Crea una dirección en una venta delivery")
+	@Test(description="Crea una dirección en una venta delivery", groups = {"createNewAddress"})
     @Parameters({"direccion","importeMinimo","cargoReparto","cp","ciudad","shop"})
   public void creaNuevaDireccion(String direccion, String importeMinimo, String cargoReparto, String cp, String ciudad, String shop) {
 		borraDireccionPruebas(shop);

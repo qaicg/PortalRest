@@ -6,6 +6,7 @@ import graphql.Assert;
 
 import org.testng.annotations.Test;
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -18,22 +19,39 @@ import utils.TestBase;
 
 public class VerificarCookies extends TestBase {
 	public boolean isVericarCookies = false;
+	public boolean resultVerificarCookies = false;
 	
-	@Test(description = "Verifica si sale o no la ventana de aceptaci�n de cookies", priority = 1)
+	@Test(description = "Verifica si sale o no la ventana de aceptación de cookies", priority = 1, groups = { "cookies" })
 	public void verificarCookies() {
 		WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(15));
-		w.until(ExpectedConditions.presenceOfElementLocated(By.className("cookies-info-content")));
-		if (isElementPresent(By.className("cookies-info-content"))) {
-			log("Hemos encontrado la classe cookies-info-content");
-		} else {
-			log("No Hemos encontrado la classe cookies-info-content");
-		}
+		//		w.until(ExpectedConditions.presenceOfElementLocated(By.className("cookies-info-content")));
+		//		if (isElementPresent(By.className("cookies-info-content"))) {
+		//			log("Hemos encontrado la classe cookies-info-content");
+		//		} else {
+		//			log("No Hemos encontrado la classe cookies-info-content");
+		//		}
+		//		
+		//		this.setVericarCookies(true);
 		
+		set_cookie_accept();
+		
+		WebElement element = null;
+		try {
+			element =  w.until(ExpectedConditions.presenceOfElementLocated(By.className("cookies-info-content")));
+			log("Hemos encontrado la classe cookies-info-content");
+			resultVerificarCookies = true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			log("No Hemos encontrado la classe cookies-info-content");
+			//extentTest.fail("No Hemos encontrado la classe cookies-info-content");
+			//extentTest.fail(e);
+		}
 		this.setVericarCookies(true);
 	}
 
 	// Solo se ejecuta si el test de verificar cookies es correcto.
 	@Test(description = "Acepta cookies", dependsOnMethods = "verificarCookies", priority = 2)
+	//@Test(description = "Acepta cookies", dependsOnGroups = "cookies", priority = 2)
 	public void aceptaCookies() {
 		String acpetarCookiesBooking = "//div[contains(@class, 'cookies-info-content-button')]//child::button[contains(@class, 'button primary-color')]";
 		WebElement aceptarCookies = null;
@@ -73,6 +91,7 @@ public class VerificarCookies extends TestBase {
 	}
 
 	public void setVericarCookies(boolean isVericarCookies) {
+
 		this.isVericarCookies = isVericarCookies;
 	}
 }

@@ -19,7 +19,7 @@ public class Pedido {
 	String precioTotal;
 	String propina;	
 	
-    private Map<String, String> avisoPorEmail = new HashMap<>(); //Notificación por mail para recoger el pedido realizado para más tarde
+    private Map<String, String> avisoPorEmail = new HashMap<String, String>(); //Notificación por mail para recoger el pedido realizado para más tarde
     
     
     public void setAvisoPorEmail(String remitenteEmail, String asuntoDelEmail, String mensajeDelMail) {
@@ -46,9 +46,6 @@ public class Pedido {
 	
 	public void setProduct(List<Product> product) {
 		if(product.size() > 0) {
-//			for(int i = 0; i <= product.size(); i++) {
-//				this.setProduct(product.get(i));
-//			}
 			product.forEach(p ->  {
 				this.setProduct(p);
 			});
@@ -113,6 +110,14 @@ public class Pedido {
 	}
 	
 	public void setPrecioTotal(String precioTotal) {
+		
+		if(precioTotal.split("€")[0] == "€") {
+			String newPrice = precioTotal.split("€")[1] + precioTotal.split("€")[0];
+			
+			if(newPrice.indexOf(".") != -1)
+				precioTotal = newPrice.replace(".", ",");
+		}
+		
 		this.precioTotal = precioTotal;
 	}
 	

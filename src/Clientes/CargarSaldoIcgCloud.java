@@ -1,5 +1,7 @@
 package Clientes;
 
+import static org.testng.Assert.assertTrue;
+
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -23,7 +25,7 @@ public class CargarSaldoIcgCloud extends TestBase {
 	String balanceToLoad = "";
 	String validateChargedBalance = "";
 	
-	@Test(description="Prueba de login de un cliente en ICGCLoud y realizar carga de su tarjeta de fidelizacion", priority=1)
+	@Test(description="Prueba de login de un cliente en ICGCLoud y realizar carga de su tarjeta de fidelizacion", priority=1, groups = {"cargaSaldoIcgCloud"})
 	@Parameters({"saldoACargar","miMonederoString","cargarSaldoString", "nuevaTarjeta","testCardNumber","cad1","cad2","cvv"})
 	public void cargarSaldo(String importe, String miMonederoString, String cargarSaldoString,
 	    @Optional ("true") String nuevaTarjeta, @Optional ("") String testCardNumber,
@@ -95,12 +97,42 @@ public class CargarSaldoIcgCloud extends TestBase {
 		} else {
 			log("Se paga el pedido con tarjeta");
 			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'Redsys Test')]")));
-			cargarSaldoCardBtn = driver.findElement(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'Redsys Test')]"));
+			cargarSaldoCardBtn = driver.findElement(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'Redsys Test')]"));			
 		}
 		
+		//Verificar si tenemos que seleccionar nueva tarjeta
 		espera(500);
 		cargarSaldoCardBtn.click();
+		
 		espera(500);
+		
+		String matSelectPaymentCard = "//mat-select[contains(@class, 'mat-select payment-card-select')]";
+		String selectPaymentCard = "//mat-select[contains(@class, 'mat-select payment-card-select')]//div[contains(@class, 'mat-select-value')]";
+		
+		String selectCard = "//div[contains(@class, 'mat-select-arrow-wrapper')]/div";
+		String elementNuevaTarjeta ="//span[contains(@class, 'mat-option-text')]//label[contains(text(), 'Nueva tarjeta')]";
+		
+		
+		if(nuevaTarjeta.equalsIgnoreCase("true") && 
+				( isElementPresent(By.xpath(matSelectPaymentCard)) && isElementPresent(By.xpath(selectPaymentCard)) )
+			) {
+			
+			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath(selectCard)));
+			clicJS(driver.findElement(By.xpath(selectCard)));
+			
+			if(isElementPresent(By.xpath(elementNuevaTarjeta))) {
+				log("Selecciona la opción Nueva tarjeta");
+				clicJS(driver.findElement(By.xpath(elementNuevaTarjeta)));
+				
+			} else {
+				assertTrue(false, "No se ha podido seleccionar la opción Nueva tarjeta");
+			}
+			
+		}
+
+		espera(500);
+		///cargarSaldoCardBtn.click();
+		//espera(500);
 		
 		w.until(ExpectedConditions.presenceOfElementLocated (By.xpath("//div[contains(@class,'dialog-content')]")));
 		
@@ -130,6 +162,14 @@ public class CargarSaldoIcgCloud extends TestBase {
 	// pagar el saldo a carga en la tarjeta de fidelizacion al utilizar la tarjeta Redsys
 	private void pagarPedidoConTarjeta(boolean nuevaTarjeta, String testCardNumber, String cad1, String cad2, String cvv, String miMonederoString) {
 		espera(5000);
+		
+		// Test si no hobo fallo con: result-code error
+		String codeError = "//div[contains(@class, 'result-header')]//div[contains(@class, 'result-code error')]";
+		if(isElementPresent(By.xpath(codeError))) {
+			Assert.assertTrue(false, "Error: No se puede realizar la operación\r\n"
+					+ "Error en datos enviados. Contacte con su comercio. (SIS0321)");
+		}
+		//
 		
 		//TENEMOS PANTALLA DE REDSYS ABIERTA.
 		if (nuevaTarjeta) {

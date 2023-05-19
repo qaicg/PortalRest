@@ -45,11 +45,11 @@ public class RepeatAddCarrito extends TestBase {
 	String isFindWhereRepeatOrder = "false";
 	
 	
-	@Test(description="Este test permite repetir el pedido manualmente con otros productos" , priority=1)
-	@Parameters({"repeatProductos","repeatProductosTotalPrice","opcionesMenu","unidades", "goBack", "productos", "totalEsperado", "preciototalEsperado", "goBackByAddOrderButton", "abrirFichaProducto"})
+	@Test(description="Este test permite repetir el pedido manualmente con otros productos" , priority=1, groups = {"addRepeatOrder"})
+	@Parameters({"repeatProductos","repeatProductosTotalPrice","opcionesMenu","unidades", "goBack", "productos", "totalEsperado", "preciototalEsperado", "goBackByAddOrderButton", "abrirFichaProducto", "formatos"})
 	public void addCartPedido(String repeatProductos, String repeatProductosTotalPrice, @Optional ("") String opcionesMenu, @Optional ("") String unidades, 
 			@Optional ("") String goBack, @Optional ("") String productos, @Optional ("") String totalEsperado, @Optional ("") String preciototalEsperado,
-			@Optional ("") String goBackByAddOrderButton, @Optional("false") boolean abrirFichaProducto) {
+			@Optional ("") String goBackByAddOrderButton, @Optional("false") boolean abrirFichaProducto, @Optional("") String formatos) {
 		
 		String firstOrderProducts = productos;
 		
@@ -61,10 +61,10 @@ public class RepeatAddCarrito extends TestBase {
 		}
 				
 		AddCarrito	repeatPedido = new AddCarrito();
-		repeatPedido.addCart(repeatProductos, repeatProductosTotalPrice, opcionesMenu, unidades, goBack, firstOrderProducts, goBackByAddOrderButton, abrirFichaProducto);
+		repeatPedido.addCart(repeatProductos, repeatProductosTotalPrice, opcionesMenu, unidades, goBack, firstOrderProducts, goBackByAddOrderButton, abrirFichaProducto, formatos);
 	}
 	
-	@Test(description="Este test permite el checkout del pedido repetido manualmente" , priority=1)
+	@Test(description="Este test permite el checkout del pedido repetido manualmente" , priority=1, groups = {"repeatOrderCheckOut"})
 	@Parameters({"repeatProductos","repeatProductosTotalPrice","formaPago","nuevaTarjeta","testCardNumber",
 		"cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
 		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", 
@@ -99,7 +99,7 @@ public class RepeatAddCarrito extends TestBase {
 	}
 	
 	
-	@Test(description="Este test permite validar en la BDD el pedido repetido manualmente" , priority=1)
+	@Test(description="Este test permite validar en la BDD el pedido repetido manualmente" , priority=1, groups = {"repeatVerifyOrder"})
 	@Parameters({"shop","email","totalEsperado", "tipoServicio", "mesa", "totalEsperadoMasCargos", "repartoPermitido"})
 	public void validarPedido(String shop, String customerMail, String netAmount, int tipoServicio, @Optional ("") String mesa,
 			@Optional ("") String totalEsperadoMasCargos, @Optional ("") String repartoPermitido)  {
@@ -108,7 +108,7 @@ public class RepeatAddCarrito extends TestBase {
 		validatesOrder.validarPedidoSimpleBD(shop, customerMail, netAmount, tipoServicio, mesa, totalEsperadoMasCargos, repartoPermitido);
 	}
 	
-	@Test(description="Este test permite repetir el pedido via el boton repetir pedido al finalizar una venta", priority=1)
+	@Test(description="Este test permite repetir el pedido via el boton repetir pedido al finalizar una venta", priority=1, groups = {"runRepeatOrder"})
 	@Parameters({"ultimoPedido", "menu", "profile", "pedidos", "productos", "totalEsperado", "whereRepeateOrder" })
 	public void repeatOrder(@Optional ("true") String ultimoPedido, String menu, String profile, String pedidos, String productos, String totalEsperado, @Optional ("") String whereRepeateOrder) {
 		VerificarPedidos order = new VerificarPedidos();

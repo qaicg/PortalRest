@@ -1,6 +1,7 @@
 package Ventas;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -15,22 +16,134 @@ import org.testng.annotations.Test;
 
 import Reservas.MailReading;
 import main.Correo;
+import pedido.Pedido;
+import pedido.Product;
 import utils.Data;
+import utils.PortalRestOrderElements;
 import utils.TestBase;
 
 public class ConfirmarPedidPorEmail extends TestBase {
 	boolean isValidatedTicket = false;
 	Map<String, String> informationEmail;
+	List<String> infoPedido = new ArrayList<String>();
+	List<Product> emailProducts = new ArrayList<Product>();
+	Pedido emailPedido = new Pedido();
 	
-	@Test(priority = 1)
+	@Test(priority = 1, groups = {"checkConfirmeOrderEmail"})
 	@Parameters({"urlEmail", "emailCliente", "passwordCliente", "pedidoConfirmadoString", "isMailSac"})
 	public void consultarPedido(@Optional("") String urlEmail, String emailCliente, String passwordCliente, String pedidoConfirmadoString, @Optional("false") boolean isMailSac) {
 		
 		if(isMailSac) {
+			
+			emailCliente = PortalRestOrderElements.MailSac.email;
+			passwordCliente = PortalRestOrderElements.MailSac.passwordMailSac;
+				  
 			Correo correo = openLastMessageFromMailSac(emailCliente, passwordCliente);
 			Data.getInstance().getPedido().setAvisoPorEmail(correo.getRemitente(), correo.getAsunto(), correo.getCuerpo());
+			
+			log("Aviso por mail en text del pedido para más tarde: " + correo.getCuerpo() );
+			
+			String[] infoPedidos = correo.getCuerpo().split("\n");
+			String link = null;
+			
+			
+			for(int i=0; i < infoPedidos.length; i++) {
+				
+				if(infoPedidos[i].contains("Recoger ahora [")) {
+					link = infoPedidos[i];
+				}
+				
+				if(infoPedidos[i].contains("Precio :")) {
+					int pos1 = infoPedidos[i].indexOf("Precio :");
+					emailPedido.setPrecioTotal((infoPedidos[i].substring(pos1)+1));
+				}
+				
+				
+			}
+			
+			
+			if(!isNullOrEmpty(link)) {
+				log("print position [ " +link.indexOf("["));
+				log("print position ] " +link.indexOf("]"));
+				
+				link =  link.substring(link.indexOf("[")+1, link.indexOf("]"));
+				
+				log("infoPedidos link " + link);
+			} else {
+				log("Error: No se ha podido recuperar el link del pedido para la recogida");
+				Assert.assertTrue(false);
+			}
+			
+			//
+			
+			/* Buscar el product en el correo de notificacion
+			 * Forma en la tabla infoPedidos:
+			 * 1.0
+			 * Fanta Taronja 30 ml
+			 * €1.0
+			 * Modificar el codigo cuando la incidencia sea arreglada
+			 * #33470 > Cambios en el correo recogido más tarde (avisar por email), enviado al cliente.
+			 */
+			int productFinded = 0;
+			for(int j = 0 ; j < Data.getInstance().getPedido().getProduct().size(); j++) {
+				for(int i=0; i < infoPedidos.length; i++) {
+					if(infoPedidos[i].contains(Data.getInstance().getPedido().getProduct().get(j).getNombre())) {
+						Product emailProductEncontrado = new Product();
+						emailProductEncontrado.setNombre(infoPedidos[i]); //Nombre
+						emailProductEncontrado.setUnidad(infoPedidos[i - 2].split(".")[0]); //1.0 Unidad
+						emailProductEncontrado.setPrecioPorUnidad(infoPedidos[i + 2]); //Precio
+						
+						//Añadir el producto
+						emailProducts.add(emailProductEncontrado);
+						//productFinded = true;
+						productFinded ++;
+						
+						log(productFinded + " Producto en email encontrado y añadido: " + infoPedidos[i]);
+					}
+				}
+			}
+			
+			//Test si encontramos todos los artículos en el correo de notificación
+			if(Data.getInstance().getPedido().getProduct().size() != productFinded) {
+				int falta = Data.getInstance().getPedido().getProduct().size() - productFinded;
+				log("Falta producto que no se ha visto en el email de notificacíon");
+				log("Hemos encontrado " + productFinded + " productos");
+				log("Nos faltan " + falta + " productos");
+				Assert.assertTrue(false);
+			}
+			else {
+				log("Hemos encontrado todos los productos, son: " + productFinded + " productos, no falta producto");
+			}
+			
+			
+			
+			emailPedido.setProduct(emailProducts);
+			//
+			
+			openNewWindowTab(link);
+			espera(3000);
+			
+			//String linkCogerPedido = infoPedidos[20].split("[")[1].split("]")[0];
+			//log("infoPedidos linkCogerPedido" + linkCogerPedido);
+			//driver.manage().window().
+			//driver.get(linkCogerPedido);
+			
+			
+			//Recogida del pedido pulsando el botón Recoger ahora
+			/*
+			String btnRegoger = "//div//a[contains(text(), 'Recoger ahora')]";
+			waitUntilPresence(btnRegoger, true, false);
+			clicJS(driver.findElement(By.xpath(btnRegoger)));
+			ArrayList<String> switchTabs = new ArrayList<String> (driver.getWindowHandles());
+			log("numero de pestañas abiertas después del clic para abrir el recibo del pedido a recoger --> " +switchTabs.size());
+			
+			driver.findElement(By.tagName("body")).sendKeys(Keys.CONTROL, Keys.TAB);
+			
+			espera(2000);
+			validarReciboRecogerPedido(pedidoConfirmadoString);
+			*/
 		}
-		else {
+		else { //Estamos en yahoo
 		
 			openNewWindowTab(urlEmail);
 			

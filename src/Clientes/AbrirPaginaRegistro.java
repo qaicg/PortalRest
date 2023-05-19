@@ -14,15 +14,28 @@ import utils.TestBase;
 
 public class AbrirPaginaRegistro extends TestBase{
 	//TO-DO -> Hay que mejorar los locators que se usan para localizar los elementos por otros m�s neutros y fijos.
-	@Test (priority=1)
+	@Test (priority=1, groups = { "paginaSignup" })
 	@Parameters( "login" )
 	  public void abrePaginaRegistro(@Optional("") String register) {
 		  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10));
+		  espera(2000);
 		  
 		  if(!isNullOrEmpty(register)) {
 			  List<WebElement> menuIcons = driver.findElements(By.xpath("//*[@class='header-icon']"));
 			  if (menuIcons.size()>=1) {
 				  menuIcons.get(menuIcons.size()-1).click();
+				  
+				  //Cerrar la sesión				  	  
+				  if(!isElementPresent(By.xpath("//*[contains(text(), '"+ register +"')]"))) {
+					  List<WebElement> buttonSignOut = driver.findElements(By.xpath("//div[contains(@class, 'mat-menu-content')]//child::button"));
+					  clicJS(buttonSignOut.get(buttonSignOut.size() -1)); //Cerrar la Sesión
+					  
+					  espera(500);
+					  abrirMenu();
+					  espera(500);
+				  }
+				  //
+				  
 				  WebElement menuItems= driver.findElement(By.xpath("//*[contains(text(), '"+ register +"')]"));
 				  espera(500);
 				  log("Hacemos clic en: "+ register);

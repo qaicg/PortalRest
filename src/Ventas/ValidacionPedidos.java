@@ -12,7 +12,7 @@ import utils.TestBase;
 
 public class ValidacionPedidos extends TestBase {
 
-  @Test(description="Se encarga de validar el pedido realizado en BBDD, pruebas de venta de la 1 a la 6", priority=1)
+  @Test(description="Se encarga de validar el pedido realizado en BBDD, pruebas de venta de la 1 a la 6", priority=1, groups = { "checkPedidoDB" })
   @Parameters({"shop","email","totalEsperado", "tipoServicio", "mesa", "totalEsperadoMasCargos", "repartoPermitido"})
   public void validarPedidoSimpleBD(String shop, String customerMail, String netAmount, int tipoServicio, @Optional ("") String mesa,
 		  @Optional ("") String totalEsperadoMasCargos, @Optional ("") String repartoPermitido) {

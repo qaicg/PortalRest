@@ -13,7 +13,7 @@ import graphql.Assert;
 import utils.TestBase;
 
 public class AbrirPaginaLogin extends TestBase {
-	@Test (priority=1)
+	@Test (priority=1, groups = { "paginaLogin" })
 	@Parameters ("login")
 	public void abrePaginaLogin(String register) {
 		

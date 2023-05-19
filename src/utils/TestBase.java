@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -201,7 +202,7 @@ public class TestBase extends StringUtils {
 
 		} catch (AWTException e) {
 			// TODO Auto-generated catch block
-			clear_cache();
+			//clear_cache();
 			e.printStackTrace();
 			
 		}
@@ -244,12 +245,19 @@ public class TestBase extends StringUtils {
 		
 		//31
 		getExtentTest().pass("Test finished --> " + testContext.getName());
+		
+		
+		//suprimir las cookies
+		clear_cache();
+		
 
 		espera(500);
 		log("Test finalizado: " + testContext.getName());
 		extent.flush();
 		driver.manage().deleteAllCookies();
 		driver.quit();
+		
+		//driver = null; //15/05
 	}
 
 	@AfterSuite
@@ -684,28 +692,75 @@ public class TestBase extends StringUtils {
 		return element;
 	}
 	
-    public void clear_cache(){
-       // """Clear the cookies and cache for the ChromeDriver instance."""
-    	driver.manage().deleteAllCookies();
+	//Methodo para eliminar las cookies de portalRest
+    public void clear_cache() {
+    	// """Clear the cookies and cache for the ChromeDriver instance."""
+    	//Cookies de PortalRest: https://cloudquality04.hiopos.com
+	    	//portal-rest-web-cookie-geolocation
+	    	//cookie portal-rest-web-cookie-accept
+	    	//portal-rest-web-login
+	    	//porta-rest-web-language
+	    	//portal-rest-web-remember-map
+		
+		try {
+			
+			Set <Cookie> cookies = driver.manage().getCookies();
+			
+			log("Suprimir las cookies de portRest");
+			cookies.forEach(cookie -> {
+				log("Eliminamos la  cookie " + cookie.getName());
+				log("getValue de la  cookie " + cookie.getValue());
+				driver.manage().deleteCookie(cookie);			
+			});
+			
+			//Verificar se ha eliminado las cookies
+			if(driver.manage().getCookies().size() == 0 ) {
+				log("Se ha eliminado todas las cookies de PortalRest desde https://cloudquality04.hiopos.com ");
+			}
+			else {
+				log("No se ha podiddo eliminar las cookies de portalRest ");
+				driver.manage().getCookies().iterator().forEachRemaining(k -> {
+					log("Nos queda la cookie " + k.getName());
+				});
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			log("No hemos encontrado las cookies de portalRest desde https://cloudquality04.hiopos.com ");
+			
+			driver.manage().getCookies().iterator().forEachRemaining(k -> {
+				log("Nos queda la cookie " + k.getName());
+			});
+		}
     	
-        //# navigate to the settings page
-        //driver.get("chrome://settings/clearBrowserData");
 
-        //# wait for the button to appear
-       // waitUntilPresence("", true, false);
-
-        //# click the button to clear the cache
-       // get_clear_browsing_button().click();
-
-       // driver.findElement(By.xpath("//settings-ui")).sendKeys(Keys.ENTER);
-       // clicJS(driver.findElement(By.xpath("//settings-ui")));
-        
-       // # wait for the button to be gone before returning
-       // waitUntilNotPresence("* /deep/ #clearBrowsingDataConfirm");
-        
-        
-        //driver.close();
     }
+    
+    //Suprimir la cookie portal-rest-web-cookie-accept al inicio de la app 
+	public void set_cookie_accept() {
+		String cookieAcceptName = "portal-rest-web-cookie-accept";
+		Set<Cookie> cookies = driver.manage().getCookies();
+		Cookie cookieAccep = null;
+		
+		if(cookies.size() > 0 ) {
+			espera(1500);
+			cookies.forEach(cook -> {
+				if(cook.getName().contentEquals(cookieAcceptName)) {
+					log("Eliminamos la  cookie y refrescamos la pagina " + cook.getName());
+					driver.manage().deleteCookie(cook);
+					driver.navigate().refresh();
+					return;
+				}
+				
+			});
+			return;
+		}
+		
+		log("No se ha encontrado la  cookie " + cookieAcceptName);
+		return;
+	}
+	
     
     public WebElement get_clear_browsing_button(){
         //"""Find the "CLEAR BROWSING BUTTON" on the Chrome settings page."""

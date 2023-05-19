@@ -2,6 +2,8 @@ package Objects;
 
 import org.openqa.selenium.WebElement;
 
+import utils.Utils;
+
 public class ProductItem {
 	
 	private String nombre, moneda, foto, descripcion;

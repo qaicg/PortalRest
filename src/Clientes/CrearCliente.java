@@ -29,7 +29,7 @@ public class CrearCliente extends TestBase {
 	 public boolean isCreatedUser = false;
 	 WebElement inputName, inputPhone, inputPostalCode, inputEmail, inputPassword, inputRepeatPassword,  checkboxCondiciones, buttonCrear;
 	
-  @Test  (priority=1)
+  @Test  (priority=1, groups = {"createUser"})
   @Parameters({"resultadoEsperado", "aceptoTerminos", "ICGCloud", "validationCliente", "menu", "profile", "personal" , "shop", "email", "telefone"})
   public void crearCliente(@Optional ("true") boolean resultadoEsperado, @Optional ("true") boolean aceptoTerminos, @Optional ("false") boolean IcgCloud, @Optional ("false") boolean validationCliente,
 		  @Optional("") String menu, @Optional("") String profile, @Optional("") String personal, @Optional("") String shop, @Optional("") String email, @Optional("") String telefone) {

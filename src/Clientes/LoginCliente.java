@@ -10,16 +10,18 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import graphql.Assert;
+import utils.Data;
 import utils.Decrypt;
 import utils.JSONValue;
+import utils.PortalRestOrderElements;
 import utils.TestBase;
 import utils.cookie;
 
 public class LoginCliente extends TestBase {
-  @Test
-  @Parameters({"resultadoEsperado", "email","password","rememberMe","shop","loginCheckout","login", "realizarPedido", "realizarPedidoString"})
+  @Test(groups = { "loginCliente" })
+  @Parameters({"resultadoEsperado", "email","password","rememberMe","shop","loginCheckout","login", "realizarPedido", "realizarPedidoString", "isMailSac"})
   public void loginCliente(@Optional ("true") String resultadoEsperado, String email, String password, @Optional ("false") String rememberMe, 
-		  String shop, @Optional ("false") boolean loginCheckout, String loginString, @Optional("false") boolean realizarPedido, @Optional("") String realizarPedidoString) {
+		  String shop, @Optional ("false") boolean loginCheckout, String loginString, @Optional("false") boolean realizarPedido, @Optional("") String realizarPedidoString, @Optional("false") boolean isMailSac) {
 	
 	  //SI VENIMOS DE UN CHECKOUT HAREMOS UN LOGIN DESDE AQUI
 	  if(loginCheckout) {
@@ -36,6 +38,13 @@ public class LoginCliente extends TestBase {
 	  WebElement inputPassword = driver.findElement(By.xpath("//input[@type='password']"));
 	  WebElement buttonEntrar = driver.findElement(By.xpath("//button[@class='btn-centered']"));
 	  if(loginCheckout) buttonEntrar = driver.findElement(By.xpath("//app-square-progress-button//button[@class='btn-centered']"));
+	  
+	  if(isMailSac) {
+		  email = PortalRestOrderElements.MailSac.email;
+		  password = PortalRestOrderElements.MailSac.passwordPortalRest;
+		  Data.getInstance().setNewUserMail(email);//LO GUARDAMOS PARA PODER VALIDAR POSIBLES PEDIDOS
+	  }
+	  
 	  inputEmail.sendKeys(email);
 	  inputPassword.sendKeys(password);
 	  

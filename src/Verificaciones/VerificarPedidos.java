@@ -21,7 +21,7 @@ import utils.TestBase;
 public class VerificarPedidos  extends TestBase {
 	public String testResult = "false";
 	
-	@Test(description="Verificar el pedido en el apartado Mis pedidos", priority=1)
+	@Test(description="Verificar el pedido en el apartado Mis pedidos", priority=1, groups = {"verificaPedidos"})
 	@Parameters({"ultimoPedido", "menu", "profile", "pedidos", "productos", "totalEsperado"})
 	public void VerificarPedidos (@Optional ("true") String ultimoPedido, String menu, String profile, String pedidos, String productos, String totalEsperado) {
 		espera(500); // Wait for main page

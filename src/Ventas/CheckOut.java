@@ -39,7 +39,7 @@ public class CheckOut extends TestBase{
 	String totalEsperado = null;
 	
 
-	@Test(description="Se encarga de gestionar la parte de checkout una vez los productos ya están añadidos al carrito", priority=1)
+	@Test(description="Se encarga de gestionar la parte de checkout una vez los productos ya están añadidos al carrito", priority=1, groups = { "checkOut" })
 	@Parameters({"productos","totalEsperado","formaPago","nuevaTarjeta","testCardNumber","cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
 		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "goBackByAddOrderButton", "importeMinimo", "validarImporteMinimo"})
 	public void finalizarPedido(String productos, String totalEsperado, String formaPago,
@@ -120,14 +120,17 @@ public class CheckOut extends TestBase{
 		} else {
 			espera(1000);
 			
-			if(formaPago.equalsIgnoreCase("Redsys Test"))
+			if(formaPago.equalsIgnoreCase("Redsys Test")) {
 				pagarPedidoConTarjeta(formaPago, nuevaTarjeta.equalsIgnoreCase("true"),testCardNumber,cad1,cad2,cvv,pedidoConfirmadoString, validarImporteMinimo);
+			}
 			
-			if (formaPago.equalsIgnoreCase("Pagar a la entrega"))
+			if (formaPago.equalsIgnoreCase("Pagar a la entrega")) {
 				pagarPedidoPagarEnCaja(formaPago,pedidoConfirmadoString);
+			}
 			
-			if (formaPago.equalsIgnoreCase("saldo") || formaPago.equalsIgnoreCase("combinado"))
+			if (formaPago.equalsIgnoreCase("saldo") || formaPago.equalsIgnoreCase("combinado")) {
 				pagarPedidoSaldo(formaPago, formaPago2, pedidoConfirmadoString, totalEsperado, miMonederoString, validarImporteMinimo, nuevaTarjeta, testCardNumber, cad1, cad2, cvv);
+			}
 			
 			Assert.assertTrue(true);
 			

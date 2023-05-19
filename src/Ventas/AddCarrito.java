@@ -1,5 +1,6 @@
 package Ventas;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -8,10 +9,16 @@ import com.aventstack.extentreports.model.Log;
 
 import org.testng.AssertJUnit;
 
+import static org.testng.Assert.ARRAY_MISMATCH_TEMPLATE;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,33 +31,48 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
 import Objects.ProductItem;
+import dataProvider.StaticProvider;
 import graphql.Assert;
+import pedido.Formato;
 import pedido.Product;
 import utils.Data;
+import utils.PortalRestOrderElements;
+import utils.PortalRestOrderElements.Formatos;
 import utils.TestBase;
+import utils.Utils;
 
 //ESTA FUNCION BUSCA UN PRODUCTO EN LA CARTA DE PORTALREST UTILIZANDO SU NOMBRE.
-public class AddCarrito extends TestBase{
+public class AddCarrito extends TestBase {
 	String[] arrayNombres;
 	String[] fOrderProducts;
 	int productosEncontrados;
 	
 	ArrayList<Product> orderProductList = new ArrayList<Product>();
 	Product order;
+	
+	List<Formato> articleformats = new ArrayList<Formato>();
 
-	@Test (description="Este test busca un producto dado en el PortalRest actual" , priority=1)
-	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts", "goBackByAddOrderButton", "abrirFichaProducto"})
+	@Test (description="Este test busca un producto dado en el PortalRest actual" , priority=1, groups = { "carrito" })
+	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts", "goBackByAddOrderButton", "abrirFichaProducto", "formatos"})
 	public void addCart(String productos, String totalEsperado, @Optional ("") String opcionesMenu, @Optional ("") String unidades,
-						@Optional ("") String goBack, @Optional ("") String firstOrderProducts,  @Optional ("") String goBackByAddOrderButton, @Optional("false") boolean abrirFichaArticulo) {
+						@Optional ("") String goBack, @Optional ("") String firstOrderProducts,  @Optional ("") String goBackByAddOrderButton, @Optional("false") boolean abrirFichaArticulo, @Optional("") String formatos) {
 		arrayNombres = productos.split(",");
 		
 		ArrayList<ProductItem> productosAddeds = new ArrayList<ProductItem> ();
 		
+		//test 08/05/23
+		 //this.getProductProvider(StaticProvider.ProductDataProvider.createProduct());
+		 ArrayList<Product> productDataProvider = StaticProvider.ProductDataProvider.getProductProvider();
+		
+		//fin test 08/05/23
+		
+		//List<Formato> articleformats = new ArrayList<Formato>();
+		
 		if(goBack.equalsIgnoreCase("true")) {
 			fOrderProducts = firstOrderProducts.split(",");			
 		} else {			
-			w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30));
-			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(@class,'familyItem')]")));	
+			//w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30));
+			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(@class,'familyItem')]")));	
 			List<WebElement> familias;
 			productosEncontrados=0;
 			//ArrayList<ProductItem> productosAddeds = new ArrayList<ProductItem> ();
@@ -74,14 +96,14 @@ public class AddCarrito extends TestBase{
 
 			espera(1000);
 			w.until(ExpectedConditions.presenceOfElementLocated (By.xpath("//div[@class='dishItem']")));
-			List<WebElement> elements = driver.findElements(By.xpath("//span[contains(@class,'test-product-item')]"));
 
+			List<WebElement> elements = driver.findElements(By.xpath("//span[contains(@class,'test-product-item')]"));
 			if (isElementPresent(By.xpath("//div[contains(@class,'family-title')]"))) {
 				familia = driver.findElement(By.xpath("//div[contains(@class,'family-title')]")).getAttribute("innerText");
 			}		
 			espera(1000);
 			
-			for(int i=1;i<= elements.size();i++) { 
+			for(int i = 1; i <= elements.size(); i++) { 
 				
 				ProductItem currentItem = new ProductItem();
 				String cantidadProducto = null;
@@ -91,6 +113,16 @@ public class AddCarrito extends TestBase{
 				} else {
 					currentItem.setNombre(driver.findElement(By.xpath("(//div[contains(@class,'dish-name')])["+i+"]")).getAttribute("innerText"));
 				}
+				
+				//*Set precio del producto
+				if(isElementPresent(By.xpath("//span[contains(concat(' ', normalize-space(@class), ' '), ' dish-price ')]"))) {
+					String priceReal = driver.findElement(By.xpath("(//span[contains(concat(' ', normalize-space(@class), ' '), ' dish-price ')])["+i+"]")).getAttribute("innerText");
+					currentItem.setPrecio(priceReal);	
+					
+					//log("El precio real del producto " + currentItem.getNombre() + " " + priceReal);
+				}
+				
+				//***
 				
 				
 				if (isElementPresent(By.xpath("(//div[contains(@class,'dish-image')])["+i+"]")))
@@ -131,12 +163,31 @@ public class AddCarrito extends TestBase{
 							}
 
 							clicJS(driver.findElements(By.xpath("//button[contains(@class,'basket-button')]")).get(1)); //CLIC EN AÑADIR A CARRITO
+							
+							//El menú tiene como cantidadProducto = "1"
+							cantidadProducto = "1";
 
 						}
 
 						else if(isElementPresent(By.xpath("//div[contains(@class,'format-element-wrapper')]"))) { // SON FORMATOS
 							List<WebElement> arrayFormatos = driver.findElements(By.xpath("//div[contains(@class,'format-element-wrapper')]"));
 							if(arrayFormatos.size()>0) {
+								//Añadir los formatos(Nombre y precio) en el producto
+								log("Añadir los formatos(Nombre y precio) en el producto");
+								
+								espera(1500);
+								Formatos formts = new PortalRestOrderElements.Formatos();
+								
+								articleformats = formts.getFormatList();
+								
+								articleformats.get(0).setSelected(true); // el formato seleccionado
+								
+								//Set precio por currentItem
+									String precioDesde = driver.findElement(By.xpath("(//span[contains(concat(' ', normalize-space(@class), ' '), ' dish-price ')])["+i+"]")).getAttribute("innerText");
+									log("el precio desde del producto con formatos: " + precioDesde);
+									currentItem.setPrecio(precioDesde);
+								//
+								
 								clicJS(arrayFormatos.get(0));//CLIC EN PRIMER FORMATO / MODIFICADOR
 								clicJS(driver.findElements(By.xpath("//button[contains(@class,'basket-button')]")).get(1)); //CLIC EN AÑADIR A CARRITO
 
@@ -159,18 +210,23 @@ public class AddCarrito extends TestBase{
 					}
 					
 					espera(2000);
-					String priceXpath ="//div[contains(@class,'dishItem')]//child::div[contains(@class, 'first-row')]//span[contains(@class, 'dish-price')]";
+					//String priceXpath ="//div[contains(@class,'dishItem')]//child::div[contains(@class, 'first-row')]//span[contains(@class, 'dish-price')]";
+					// se puede usar //span[contains-token(@class, 'dish-price')] ???
+					String priceXpath = "//span[contains(concat(' ', normalize-space(@class), ' '), ' dish-price ')]"; // seleccionamos la classe que corresponde con el nombre dado.
+					
 					//Set precio del producto
-					if(isElementPresent(By.xpath(priceXpath))) {
+					if(isElementPresent(By.xpath(priceXpath)) && Utils.isNullOrEmpty(currentItem.getPrecio())) {
 						//get(i-1) para posicionarse en el buen precio del producto si devuelve un precio falso de otro producto, por que for está iniciado a i = 1.
+												
 						String precio = driver.findElements(By.xpath(priceXpath)).get(i-1).getAttribute("innerText");
+						
 						currentItem.setPrecio(precio);
 						log("precio del producto "+ currentItem.getNombre() + " --> " + precio);
 					}
 					
 					//Set Cantidad
 					String unidadXpath = "//div[contains(@class,'dishItem')]//div[contains(@class, 'product-item-add')]//child::app-input-number-spinner//div[contains(@class, 'number-spinner-value')]";
-					if(isElementPresent(By.xpath(unidadXpath))) {
+					if(isElementPresent(By.xpath(unidadXpath)) && Utils.isNullOrEmpty(cantidadProducto)) {
 						log("Añadir la cantidad");
 						List<WebElement> productUnit = driver.findElements(By.xpath(unidadXpath));
 						if(productUnit.size() == 1) {
@@ -184,8 +240,10 @@ public class AddCarrito extends TestBase{
 						}
 					}
 					else {
-						
-						log("Error cantidad 2: No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
+						if (Utils.isNullOrEmpty(cantidadProducto)) {
+							log("Error cantidad 2: No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
+							extentTest.fail("Error cantidad 2: No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
+						}
 					}
 					
 					//Save order product in list
@@ -198,14 +256,49 @@ public class AddCarrito extends TestBase{
 					}
 					//Calculo del precio total y guardarlo en order
 					order.setPrecioPorUnidad();
+					
+					//Añadir y validar los formatos del producto
+					if(!articleformats.isEmpty() && articleformats.size() > 0 ) {
+						order.setFormatos(articleformats);
+						//Actualizar  el precio del artículo por el precio del formato
+						order.updatePriceProductByPriceFormat(articleformats);
+						log("el formato seleccionado:" + order.getProductFormatSelected().getNombre() + " precio " + order.getProductFormatSelected().getPrecio());
+						
+						//Validar los formatos: Nombre y precio
+						if(!Utils.isNullOrEmpty(formatos)) {
+							String[] listFormatosAValidar = formatos.split(",")[1].split(";"); //Ejemplo de articulo con formatos: "Sake Kuramoto,JARRA 1/2 LITRO:2€;JARRA 1 LITRO:3€"
+							for(int x = 0; x < listFormatosAValidar.length; x++) {
+								if(!order.validateProductFormatName(listFormatosAValidar[x].split(":")[0])) {
+									log("Bug: El nombre del formato " + listFormatosAValidar[x].split(":")[0] + " no es valido");
+									extentTest.fail("Bug: El nombre del formato " + listFormatosAValidar[x].split(":")[0] + " no es valido");
+									//getExtent().flush();									
+								}
+							}
+						}
+						
+						articleformats.clear();
+						
+					} else {
+						log("***El producto " + order.getNombre() +" no tiene formatos ");
+					}
+					
 					orderProductList.add(order);
 					
 					//*****
-					log("Producto " + currentItem.getNombre() + " encontrado y añadido a carrito con precio: " + currentItem.getPrecio());	
+					log("Producto " + currentItem.getNombre() + " encontrado y añadido al carrito con precio: " + currentItem.getPrecio());	
 					
-					log("*** Product order " + order.getNombre() + " encontrado y añadido a carrito con precio: " + order.getPrecio() + " unidad: " + order.getUnidad());
+					log("*** Product order " + order.getNombre() + " encontrado y añadido al carrito con precio: " + order.getPrecio() + " unidad: " + order.getUnidad());
 					
-					productosEncontrados++;					
+					if(order.getFormatos().size() > 0) {
+						log("***El producto tiene formatos ");
+						List<Formato> listFormatos = order.getFormatos();
+						for(int l = 0; l < listFormatos.size(); l++) {
+							log("*** Formato " + listFormatos.get(l).getNombre() + " Precio " + listFormatos.get(l).getPrecio());
+						}
+					}
+					
+					productosEncontrados++;	
+					
 					//**
 					order = null;
 					
@@ -229,7 +322,7 @@ public class AddCarrito extends TestBase{
 					
 					//Save order products in Data for using it  later to  validation order
 					Data.getInstance().getPedido().setProduct(orderProductList);
-					log("El precio total del pedido --> " + Data.getInstance().getPedido().getPrecioTotal());
+					log("El precio total del pedido con todos los prodcutos en la cesta  --> " + Data.getInstance().getPedido().getPrecioTotal());
 
 				}
 			}
@@ -237,10 +330,13 @@ public class AddCarrito extends TestBase{
 			espera(500);
 			
 			try {
+				
 				JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 				javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);",elements.get(elements.size()-1));
-			}catch(Exception e) {
-				log("Warning. La lista de elementos ha sido invalidada y no podemos seguir haciendo scroll, se vuelve a capturar.");
+				
+			} catch(Exception e) {
+				
+				log("Warning. La lista de los elementos ha sido invalidada y no podemos seguir haciendo scroll, se vuelve a capturar.");
 				elements = driver.findElements(By.xpath("//span[contains(@class,'test-product-item')]"));
 			}
 
@@ -296,12 +392,25 @@ public class AddCarrito extends TestBase{
 
 	public boolean contieneNombre(String[] arrayNombres, String nombre ) {
 
-		for(int i = 0;i<arrayNombres.length;i++) {
-			if (arrayNombres[i].equalsIgnoreCase(nombre))
+		for(int i = 0; i < arrayNombres.length; i++) {
+			//if (arrayNombres[i].equalsIgnoreCase(nombre))
+			if (arrayNombres[i].equals(nombre)) {
+				log("arrayNombres[i].equals(nombre) ---> " + nombre);
 				return true;
+			}
 		}	
 		return false;
 	}
+	
+	//Update: 09/05/2023, para la factorizacion del codigo
+	public boolean contieneNombre(ArrayList<Product> arrayNombres, String nombre ) {
+		for(int i = 0; i < arrayNombres.size(); i++) {
+			if(arrayNombres.get(i).getNombre().equals(nombre)) {
+				return true;
+			}
+		}
+		return false;
+	} //Fin Update: 09/05/2023, para la factorizacion del codigo
 	
 	public void abrirFichaProducto(WebElement elementProducto) {
 		clicJS(elementProducto);

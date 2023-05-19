@@ -27,7 +27,7 @@ public class VerificarProductos extends TestBase {
 	WebDriverWait w2;
 	boolean soloConsultaBool;
 	
-  @Test(description="Este test valida productos de PortalRest teniendo en cuenta sus escenarios", priority=1)
+  @Test(description="Este test valida productos de PortalRest teniendo en cuenta sus escenarios", priority=1, groups = {"checkProducts"})
   @Parameters({"soloConsulta", "familiasEsperadas","idioma","ultimoProducto","articuloConFormatos","articuloConModificadores","articuloMenu", "pedidosContratados"})
   public void verificaProductos(@Optional ("false") String soloConsulta,
 			@Optional ("99") String familiasEsperadas, @Optional ("es") String idioma, String ultimoProducto, @Optional ("") String articuloConFormatos, @Optional ("") 

@@ -14,23 +14,23 @@ public class testRunner {
 	 //POR DEFECTO EJECUTA LOS TESTS DE LA VERSIÓN MASTER DE PORTALREST (QA09)
 	//VARIABLES DE SELECCIÓN DE ENTORNO DE EJECUCIÓN//
 	
-																		//-------------------**********DEFINIDIR CONSTANTES***********--------------------------//
-																							static boolean RUNALLTESTS = false;
-																							
-																							static boolean SINVENTANA = false;
-																							
-																							static boolean ENTORNOTEST = false;
-																							
-																							static boolean BETATEST = false; //CloudLicenceBeta
-																	   //-------------------******************************************--------------------------//
+													//-------------------**********DEFINIDIR CONSTANTES***********--------------------------//
+														static boolean RUNALLTESTS = true; //RUNALLTESTS: true --> VERSION ESTABLE (QA08) y VERSION MASTER (QA09)
+														
+														static boolean SINVENTANA = false;
+														
+														static boolean ENTORNOTEST = false; //ENTORNOTEST: false --> VERSION ESTABLE (QA08); true --> VERSION MASTER (QA09)
+														
+														static boolean BETATEST = false; //BETATEST: true -->Tests en CloudLicenceBeta, false --> Tests en CloudLicence
+												   //-------------------******************************************--------------------------//
 
 	public static void main(String[] args) {
 		
 		TestNG runner = new TestNG();
 		List<String> suitefiles = new ArrayList<String>();
 				
-		if(RUNALLTESTS) { // EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA08) Y DESPUES EN LA VERSION ESTABLE (QA07)
-			log("EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA08) Y DESPUES EN LA VERSION ESTABLE (QA07)");
+		if(RUNALLTESTS) { // EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA09) Y DESPUES EN LA VERSION ESTABLE (QA08)
+			log("EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA09) Y DESPUES EN LA VERSION ESTABLE (QA08)");
 			Data.getInstance().setRunAllTests(RUNALLTESTS);
 			
 			if(!BETATEST) {

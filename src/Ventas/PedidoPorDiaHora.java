@@ -27,7 +27,7 @@ import utils.TestBase;
 public class PedidoPorDiaHora extends TestBase {
 	String diaReserva, hora, sala, localizador, observaciones, prefijo, telefono, email, citaReserva, nombreCliente, emailCliente = null;
 	
-	@Test(description = "Comprobar que se puede seleccionar un día", priority=1)
+	@Test(description = "Comprobar que se puede seleccionar un día", priority=1, groups = {"seleccionaDia"})
 	@Parameters({"dia", "onlyHoyDisplonibled","ingresarDatosPorDefecto", "resultatEsperado"})
 	public void selectedDay(@Optional("") String day, @Optional("false")boolean onlyHoyDisplonibled, @Optional("false") boolean ingresarDatosPorDefecto, @Optional("true") boolean resultatEsperado) {
 		// la fecha de la venta 
@@ -79,7 +79,7 @@ public class PedidoPorDiaHora extends TestBase {
 		espera(2000);
 	}
 	
-	@Test(description = "Comprobar la selección de hora en Booking", priority = 1)
+	@Test(description = "Comprobar la selección de hora en Booking", priority = 1, groups = {"seleccionaHora"})
 	@Parameters({"hora", "resultatEsperado", "ingresarDatosPorDefecto"})
 	public void selectHour(@Optional("") String hour, @Optional("") boolean resultatEsperado, @Optional("") boolean ingresarDatosPorDefecto) {
 		
@@ -134,12 +134,12 @@ public class PedidoPorDiaHora extends TestBase {
 		}
 	}
 	
-	@Test(priority = 1)
+	@Test(priority = 1, groups = {"checkEnabledDay"})
 	public void verificarDiaDispoible () {
 		
 	}
 	
-	@Test(priority = 1)
+	@Test(priority = 1, groups = {"checkEnabledHour"})
 	public void verificarHoraDisponible () {
 		
 	}

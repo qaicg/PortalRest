@@ -1,6 +1,9 @@
 package utils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.openqa.selenium.By;
@@ -8,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Optional;
 
 import graphql.Assert;
+import pedido.Formato;
 
 public class PortalRestOrderElements extends TestBase{
 	
@@ -76,10 +80,7 @@ public class PortalRestOrderElements extends TestBase{
 				Assert.assertTrue(false);
 			}
 			
-			
 			return day;
-			
-			
 		}
 		
 		//Devolver los dias habilitados o deshabilitados del mes
@@ -100,7 +101,6 @@ public class PortalRestOrderElements extends TestBase{
 				
 				logStatic("Numero de dias habilitados al hacer pedido --> " + listDaysEnabled.size());
 			}
-			
 			
 			//Disabled
 			if(!enabled && listDays.size() > 0) {
@@ -173,5 +173,72 @@ public class PortalRestOrderElements extends TestBase{
 		
 	}
 	
+	public class MailSac {
+		public static final String email = "portalrestcliente@mailsac.com";
+		public static final String passwordMailSac = "k_kJafj5UAsHjv3pY68wNCdpvhXbw7RMvUtZolnMQ1dfa";
+		public static final String passwordPortalRest = ".1234abcd";
+	}
+	
+	public static class Formatos {
+		
+		public static final String arrayFormatos = "//div[contains(@class,'format-element-wrapper')]";
+		
+		public static final List<WebElement> webElmtArrayFormatos = driver.findElements(By.xpath(arrayFormatos)); //m
+		
+		public static final String arrayNombre = "//div[contains(@class,'format-element-wrapper')]//div[contains(@class, 'format-element-name')]";
+		
+		public static final List<WebElement> webElmtArrayNombre = driver.findElements(By.xpath(arrayNombre)); //m
+		
+		public static final String arrayPrecio = "//div[contains(@class,'format-element-wrapper')]//div[contains(@class, 'format-element-price')]";
+		
+		public static final List<WebElement> webElmtArrayPrice = driver.findElements(By.xpath(arrayPrecio));
+		
+		public static final String AddToOrderButton = "//button[contains(@class,'basket-button')]";
+		
+		public List<Formato> formatList = new ArrayList<Formato>();		
+		
+		public Formatos() {
+			super();
+			// TODO Auto-generated constructor stub
+			setFormatList();
+		}
+
+		public void setFormatList() {
+			Formato formato;
+			String nameFormat;
+			String priceFormat;
+			
+			waitUntilPresence(arrayFormatos);
+
+			waitUntilPresence(arrayNombre);
+			
+			waitUntilPresence(arrayPrecio);
+			
+			if(webElmtArrayFormatos.size() > 0) {
+				
+				for(int i = 0; i < webElmtArrayFormatos.size(); i++) {
+					
+					nameFormat = driver.findElements(By.xpath(arrayNombre)).get(i).getText();
+					//Utils.logStatic("nombre del formato: " + nameFormat);
+					
+					priceFormat = driver.findElements(By.xpath(arrayPrecio)).get(i).getText();
+					//Utils.logStatic("precio del formato: " + priceFormat);
+					
+					formato = new Formato(nameFormat, priceFormat);
+					//formato = new Formato(webElmtArrayNombre.get(i).getText(),  webElmtArrayPrice.get(i).getText());
+					//formato = new Formato(webElmtArrayNombre.get(i).getText(),  webElmtArrayPrice.get(i).getText());
+					this.formatList.add(formato);
+				}
+			}
+			
+		}
+		
+		public List<Formato> getFormatList() {
+			return this.formatList;
+		}
+		
+	}
+
+
 
 }

@@ -11,7 +11,7 @@ import utils.TestBase;
 
 public class VerificarClientes extends TestBase {
 	boolean isValidatedInformationPersonalUser = true;
-	@Test
+	@Test(priority = 1, groups = {"validateUser"})
 	@Parameters({ "email", "menu", "profile", "personal" })
 	public void validateUser(String email, String menu, String profile, String personal) {
 		espera(500); // Wait for main page
@@ -40,7 +40,7 @@ public class VerificarClientes extends TestBase {
 
 	}
 	
-	@Test(description="Este test permite validar la información personal del usuario logeado." , priority=1)
+	@Test(description="Este test permite validar la información personal del usuario logeado." , priority=1, groups = {"validateUserInformation"})
 	@Parameters({"icgCloud", "profile", "personal" , "name", "email", "telefone", "codigoPostal"})
 	public void validatedPersonalInformationUser (@Optional("false") boolean icgCloud, String profile, String personal, @Optional("") String name, 
 			@Optional("") String email, @Optional("") String telefone, @Optional("") String codigoPostal) {
