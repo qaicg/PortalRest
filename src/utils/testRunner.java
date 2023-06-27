@@ -85,7 +85,7 @@ public class testRunner {
 				
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
 				
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml"); 
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");
 				
 				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
 			}

@@ -357,7 +357,7 @@
  	</test> 
 
  	<!--Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT -->
- 	<test thread-count="5" name="Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT " enabled="true" preserve-order="true">
+ 	<test thread-count="5" name="Registrar nuevo usuario con correo y telefono que existen en la tienda PRT " enabled="true" preserve-order="true">
  		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="resultadoEsperado" value="false" />

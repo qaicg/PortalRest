@@ -12,6 +12,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.ResultSet;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.Normalizer;
@@ -708,8 +709,8 @@ public class TestBase extends StringUtils {
 			
 			log("Suprimir las cookies de portRest");
 			cookies.forEach(cookie -> {
-				log("Eliminamos la  cookie " + cookie.getName());
-				log("getValue de la  cookie " + cookie.getValue());
+				//log("Eliminamos la  cookie " + cookie.getName());
+				//log("getValue de la  cookie " + cookie.getValue());
 				driver.manage().deleteCookie(cookie);			
 			});
 			
@@ -833,6 +834,11 @@ public class TestBase extends StringUtils {
 			  
 	//***
 	
+	
+	public void scrollPage (WebElement element) {
+		JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+		javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
+	}
 	 
 	/// <summary>
 	/// Determines if the specified element has the aria-disabled attribute
@@ -844,5 +850,24 @@ public class TestBase extends StringUtils {
 //	    IWebElement e = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementExists(locator));
 //	    return (e, "true" == e.GetAttribute("aria-disabled"));
 //	}
-    
+	public int getLastDoc__Doc(String db) {
+
+		String queryMaxPedido = "select MAX(DocId) as DocId from Doc__Doc dd";
+		ResultSet rs =  databaseConnection.ejecutarSQL(queryMaxPedido,"DB"+db); 
+
+		if (rs!=null) {		
+			try {
+				rs.first();
+				return rs.getInt("DocId");
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				databaseConnection.desconectar();
+			}
+		}
+
+		return 0;
+	}
 }

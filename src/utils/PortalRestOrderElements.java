@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Optional;
 
 import graphql.Assert;
@@ -239,6 +240,79 @@ public class PortalRestOrderElements extends TestBase{
 		
 	}
 
-
+	/**
+	 * Pagina de la carta del restaurante : restaurant Menu page
+	 * 	Product List
+	 *  find product
+	 *  scrollpage
+	 *  addProduct
+	 */
+	
+	
+	public static class RestaurantMenuPage extends TestBase {
+		public static String sProductListElement = "//span[contains(@class,'test-product-item')]";
+		public static String sCartPageFooter = "//div[contains(@class,'footer-item')]";
+		
+		public static String sProductInfoWrapper = "//div[contains(@class, 'product-info-wrapper-scrollable')]";
+		
+		public static String sButtonAdd = "//app-basket-button//button[contains(@class, 'main-btn basket-button')]";
+		
+		public List<WebElement> productList = new ArrayList<WebElement>();
+		
+		public List<WebElement> getProductList() {
+			return productList;
+		}
+		public void setProductList(List<WebElement> productList) {
+			this.productList = productList;
+		}
+		
+		public void setProductList() {
+			this.productList = driver.findElements(By.xpath(sProductListElement));
+		}
+		
+		//Añadir artículo desde de la ficha del producto
+		//** Abrir ficha producto
+		public void addFromProductSheet(WebElement elementProducto, String productName) {
+			
+			abrirFichaProducto(elementProducto);
+			
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(sProductInfoWrapper)));
+			
+			if(!driver.findElement(By.xpath(sProductInfoWrapper)).getAttribute("textContent").contains(productName)) {
+				String errorMensaje = "Errror: no se ha encontrado el producto " + productName + " en la ficha abierta";
+				log(errorMensaje);
+				Assert.assertTrue(false);
+			}
+			
+			
+			String sButtonAddLabel = "+ Añadir al pedido";
+			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(sButtonAdd)));
+			
+			if(!isElementPresent(By.xpath(sButtonAdd))) {
+				String errorMensaje = "Errror: no se ha encontrado el button  " + sButtonAddLabel + " en la ficha abierta para añadir el artículo a la cesta";
+				log(errorMensaje);
+				Assert.assertTrue(false);
+			}
+			
+			if(driver.findElements(By.xpath(sButtonAdd)).size() > 0) {
+				List<WebElement> elmeBtn = driver.findElements(By.xpath(sButtonAdd));
+				elmeBtn.forEach(btn -> {
+					if(btn.getText().contains(sButtonAddLabel)) {
+						clicJS(btn);  //CLIC EN AÑADIR A CARRITO
+					}
+				});
+			} else {
+				clicJS(driver.findElement(By.xpath(sButtonAdd))); //CLIC EN AÑADIR A CARRITO
+			}
+			
+			log("Producto" + productName + " añadido desde la ficha");
+		}
+		
+		public void abrirFichaProducto(WebElement elementProducto) {
+			clicJS(elementProducto);
+			espera(500);
+		}
+		
+	}
 
 }

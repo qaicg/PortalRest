@@ -588,27 +588,6 @@ public class CheckOut extends TestBase{
 		return false;
 	}
 
-	private int getLastDoc__Doc(String db) {
-
-		String queryMaxPedido = "select MAX(DocId) as DocId from Doc__Doc dd";
-		ResultSet rs =  databaseConnection.ejecutarSQL(queryMaxPedido,"DB"+db); 
-
-		if (rs!=null) {		
-			try {
-				rs.first();
-				return rs.getInt("DocId");
-
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}finally {
-				databaseConnection.desconectar();
-			}
-		}
-
-		return 0;
-	}
-
 	public static double sGetDecimalStringAnyLocaleAsDouble (String value) {
 
 		if (value == null) {

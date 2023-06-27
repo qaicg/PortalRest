@@ -110,7 +110,7 @@ public class CrearCliente extends TestBase {
 	  enviarTexto(inputPassword,dummyPassword);
 	  enviarTexto(inputRepeatPassword,dummyPassword);  
 	   
-	  if(aceptoTerminos)checkboxCondiciones.click(); 
+	  if(aceptoTerminos) clicJS(checkboxCondiciones);	//checkboxCondiciones.click(); 
 	  buttonCrear.click();
 	  espera(1000);
 	  

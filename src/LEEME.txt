@@ -61,6 +61,21 @@
   --Update version using maven
   	https://medium.com/@iamfaisalkhatri/how-to-check-and-update-newer-versions-for-dependencies-in-the-maven-project-3fd20e0dc783
   	
+  --How to create and use chrome profiles for chromedriver: Creating and Using Profiles
+ 	 https://www.chromium.org/developers/creating-and-using-profiles/
+  
+  -- User Data Directory: 
+  	https://chromium.googlesource.com/chromium/src/+/HEAD/docs/user_data_dir.md
+  	
+  -- Site of ChromeDriver
+  	https://chromedriver.chromium.org/home
+  	
+  -- Download chromeDriver
+  	https://chromedriver.chromium.org/downloads
+  	
+  -- Download version Testng desde el repositories de snapshots
+  	https://oss.sonatype.org/content/repositories/snapshots/org/testng/testng/
+  	
   
   
   
