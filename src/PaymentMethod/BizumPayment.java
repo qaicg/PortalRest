@@ -33,16 +33,7 @@ public class BizumPayment extends TestBase{
 		this.fakePhone = fakePhone;
 		
 		Data.getInstance().setUltimoDocId(getLastDoc__Doc(shop));//RECUPERAMOS ULTIMO DOCDOCID DEL CLIENTE ANTES DE REALIZAR EL PEDIDO	
-		
-		//Estamos en la pantalla del carrito añadiendo productos
-		WebElement botonVerPedidoPantallaCarito =  getElementByFluentWait(By.xpath(PaymentResource.botonVerPedidoPantallaCarritoXpath), 20, 5);
-		Assert.assertTrue(botonVerPedidoPantallaCarito.isDisplayed(), "Error: No se ha encontrado el botón Ver Pedido de la pantalla Add carrito");
-		botonVerPedidoPantallaCarito.click();
-		espera(1000);
-
-		//TODO: Validaciones de botón flotante de carrito
-	
-		
+				
 		//Validar que estamos en la pantalla Resumen pedido donde elegimos el medio de pago y continuar con el pago
 		WebElement pantallaPago =  getElementByFluentWait(By.xpath(PaymentResource.pantallaResumenPedido), 40, 10);
 		

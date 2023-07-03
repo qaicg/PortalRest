@@ -2,6 +2,7 @@ package Clientes;
 
 import java.time.Duration;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -45,7 +46,14 @@ public class LoginCliente extends TestBase {
 		  Data.getInstance().setNewUserMail(email);//LO GUARDAMOS PARA PODER VALIDAR POSIBLES PEDIDOS
 	  }
 	  
+	  if(!inputEmail.getText().isBlank()) {
+		  inputEmail.clear();
+	  }	 
 	  inputEmail.sendKeys(email);
+	  
+	  if(!inputPassword.getText().isBlank()) {
+		  inputPassword.clear();
+	  }	  
 	  inputPassword.sendKeys(password);
 	  
 	  if(rememberMe.equalsIgnoreCase("true")) {  //Check if remember me box is true or false

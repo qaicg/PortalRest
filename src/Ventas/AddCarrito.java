@@ -323,6 +323,7 @@ public class AddCarrito extends TestBase {
 					//Save order products in Data for using it  later to  validation order
 					Data.getInstance().getPedido().setProduct(orderProductList);
 					log("El precio total del pedido con todos los prodcutos en la cesta  --> " + Data.getInstance().getPedido().getPrecioTotal());
+					log("Total unidades muestrado en el boton ver pedido / pedir ahora y añadido en la cesta  --> " + Data.getInstance().getPedido().getTotalUnidades());
 
 				}
 			}

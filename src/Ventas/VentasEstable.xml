@@ -99,6 +99,23 @@
 	 <parameter name="formatos" value="" /><!-- Artículo con formatos -->
 	 
 	 <parameter name="isMailSac" value="false" /><!-- Utilisamos el correo electrónico de mailsac par enviar las notificación-->
+	 
+	<!-- Eliminar las cookies y volver a cargar la página: Comporbar que se muestre la página de error del motero-->
+	<!-- #37519 Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest -->
+	<test name="Prueba Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
+		<parameter name="shop" value="48777" />
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="utils.cookie" />
+		</classes>
+	</test>	
+	
+	<!-- Fin eliminar cookies-->
 	
 	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales" enabled="true" preserve-order="true" group-by-instances="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
@@ -146,6 +163,14 @@
 				<class name="Clientes.AbrirPaginaLogin" />
 				<class name="Clientes.LoginCliente" />
 				<class name="Ventas.AddCarrito" />
+				
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
 				<class name="PaymentMethod.BizumPayment">
 					<methods>
 						<parameter name="cancelarPago" value="false" />
@@ -169,6 +194,14 @@
 				<class name="Clientes.AbrirPaginaLogin" />
 				<class name="Clientes.LoginCliente" />
 				<class name="Ventas.AddCarrito" />
+				
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
 				<class name="PaymentMethod.BizumPayment">
 					<methods>
 						<parameter name="cancelarPago" value="true" />
@@ -194,6 +227,14 @@
 				<class name="Clientes.AbrirPaginaLogin" />
 				<class name="Clientes.LoginCliente" />
 				<class name="Ventas.AddCarrito" />
+				
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
 				<class name="PaymentMethod.BizumPayment">
 					<methods>
 						<parameter name="cancelarPago" value="true" />
@@ -230,6 +271,14 @@
 				<class name="Clientes.AbrirPaginaLogin" />
 				<class name="Clientes.LoginCliente" />
 				<class name="Ventas.AddCarrito" />
+				
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
 				<class name="PaymentMethod.BizumPayment">
 					<methods>
 						<parameter name="cancelarPago" value="false" />

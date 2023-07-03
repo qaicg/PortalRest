@@ -19,7 +19,29 @@ public class Pedido {
 	String precioTotal;
 	String propina;	
 	
-    private Map<String, String> avisoPorEmail = new HashMap<String, String>(); //Notificación por mail para recoger el pedido realizado para más tarde
+	String totalUnidades;
+	
+    public String getTotalUnidades() {
+		return totalUnidades;
+	}
+
+	public void setTotalUnidades(String totalUnidades) {
+		this.totalUnidades = totalUnidades;
+	}
+	
+	
+	public void setTotalUnidades() {
+		int quantity = 0;
+		for(Product p: product) {
+			quantity += Integer.parseInt(p.getUnidad());
+		}
+		
+		this.totalUnidades = String.valueOf(quantity);
+		
+		System.out.println("Total unidades --> " + this.totalUnidades);
+	}
+
+	private Map<String, String> avisoPorEmail = new HashMap<String, String>(); //Notificación por mail para recoger el pedido realizado para más tarde
     
     
     public void setAvisoPorEmail(String remitenteEmail, String asuntoDelEmail, String mensajeDelMail) {
@@ -49,6 +71,8 @@ public class Pedido {
 			product.forEach(p ->  {
 				this.setProduct(p);
 			});
+			
+			this.setTotalUnidades();
 		}
 		else {
 			Utils.logStatic("Error: No hemos encontrado producto en el pedido");

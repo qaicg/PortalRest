@@ -94,9 +94,12 @@ import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
 import Cadenas.Es;
 import Objects.ProductItem;
 import Windows.TrayIconDemo;
+import enums.CookiesPortalRest;
 import lombok.var;
 import main.Correo;
 import main.Reader;
+
+import java.util.*;
 
 public class TestBase extends StringUtils {
 
@@ -454,6 +457,15 @@ public class TestBase extends StringUtils {
 		}
 	}
 	
+	
+	public static void waitTime(long time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 //	public boolean isNullOrEmpty(String variable) {
 //	   if(StringUtils.isNullOrEmpty(variable))
 //		   return true;
@@ -702,64 +714,18 @@ public class TestBase extends StringUtils {
 	    	//portal-rest-web-login
 	    	//porta-rest-web-language
 	    	//portal-rest-web-remember-map
-		
-		try {
-			
-			Set <Cookie> cookies = driver.manage().getCookies();
-			
-			log("Suprimir las cookies de portRest");
-			cookies.forEach(cookie -> {
-				//log("Eliminamos la  cookie " + cookie.getName());
-				//log("getValue de la  cookie " + cookie.getValue());
-				driver.manage().deleteCookie(cookie);			
-			});
-			
-			//Verificar se ha eliminado las cookies
-			if(driver.manage().getCookies().size() == 0 ) {
-				log("Se ha eliminado todas las cookies de PortalRest desde https://cloudquality04.hiopos.com ");
-			}
-			else {
-				log("No se ha podiddo eliminar las cookies de portalRest ");
-				driver.manage().getCookies().iterator().forEachRemaining(k -> {
-					log("Nos queda la cookie " + k.getName());
-				});
-			}
-			
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			log("No hemos encontrado las cookies de portalRest desde https://cloudquality04.hiopos.com ");
-			
-			driver.manage().getCookies().iterator().forEachRemaining(k -> {
-				log("Nos queda la cookie " + k.getName());
-			});
-		}
     	
+    	boolean refreshApp = false;
+    	cookie.deleteAllCookiesPortalRest(refreshApp);
 
     }
     
     //Suprimir la cookie portal-rest-web-cookie-accept al inicio de la app 
+    //Refrescar la página de portalrest
 	public void set_cookie_accept() {
 		String cookieAcceptName = "portal-rest-web-cookie-accept";
-		Set<Cookie> cookies = driver.manage().getCookies();
-		Cookie cookieAccep = null;
-		
-		if(cookies.size() > 0 ) {
-			espera(1500);
-			cookies.forEach(cook -> {
-				if(cook.getName().contentEquals(cookieAcceptName)) {
-					log("Eliminamos la  cookie y refrescamos la pagina " + cook.getName());
-					driver.manage().deleteCookie(cook);
-					driver.navigate().refresh();
-					return;
-				}
-				
-			});
-			return;
-		}
-		
-		log("No se ha encontrado la  cookie " + cookieAcceptName);
-		return;
+		boolean refreshApp = true;
+		cookie.deleteCookiePortalRest(cookieAcceptName, refreshApp);
 	}
 	
     

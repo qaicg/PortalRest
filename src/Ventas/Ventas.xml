@@ -95,6 +95,24 @@
 	 <parameter name="isMailSac" value="false" /><!-- Utilisamos el correo electrónico de mailsac par enviar las notificación-->
 	
 	 <parameter name="fakePhone" value="false" /> <!-- fakePhone usuario no activo para compra Bizum-->
+
+	<!-- Eliminar las cookies y volver a cargar la página: Comporbar que se muestre la página de error del motero-->
+	<!-- #37519 Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest -->
+	<test name="Prueba Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
+		<parameter name="shop" value="52704" />
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="utils.cookie" />
+		</classes>
+	</test>	
+	
+	<!-- Fin eliminar cookies-->
+
 	
 	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
@@ -127,6 +145,14 @@
 				<class name="Clientes.AbrirPaginaLogin" />
 				<class name="Clientes.LoginCliente" />
 				<class name="Ventas.AddCarrito" />
+				
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
 				<class name="PaymentMethod.BizumPayment">
 					<methods>
 						<parameter name="cancelarPago" value="false" />
@@ -150,6 +176,14 @@
 				<class name="Clientes.AbrirPaginaLogin" />
 				<class name="Clientes.LoginCliente" />
 				<class name="Ventas.AddCarrito" />
+				
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
 				<class name="PaymentMethod.BizumPayment">
 					<methods>
 						<parameter name="cancelarPago" value="true" />
@@ -175,6 +209,14 @@
 				<class name="Clientes.AbrirPaginaLogin" />
 				<class name="Clientes.LoginCliente" />
 				<class name="Ventas.AddCarrito" />
+				
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
 				<class name="PaymentMethod.BizumPayment">
 					<methods>
 						<parameter name="cancelarPago" value="true" />
@@ -211,6 +253,14 @@
 				<class name="Clientes.AbrirPaginaLogin" />
 				<class name="Clientes.LoginCliente" />
 				<class name="Ventas.AddCarrito" />
+				
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
 				<class name="PaymentMethod.BizumPayment">
 					<methods>
 						<parameter name="cancelarPago" value="false" />
@@ -1101,7 +1151,7 @@
 	    </classes>
  </test>  	
 
- <test  name="Prueba de venta simple con 4 artículos normales, haciendo login en ICGCLoud con forma de pago combinado saldo y Redsys"  enabled="true" preserve-order="true">
+ <test  name="Prueba de venta simple con 4 artículos normales, haciendo login en ICGCLoud con forma de pago combinado saldo y Redsys" enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa"/>  
    <parameter name="shop" value="54066"/>
    <parameter name="email" value = "tarjetaqa07@yopmail.com"/>

@@ -314,5 +314,16 @@ public class PortalRestOrderElements extends TestBase{
 		}
 		
 	}
+	
+	public static class ErrorPage {
+		public static String labelTitleText = "Oops...";
+		public static String labelTitleXpath = "//div[contains(@class, 'labelTitle')]";
+		
+		public static String labelErrorText = "Parámetros incorrectos";
+		public static String labelErrorXpath = "//div[contains(@class, 'labelError')]";
+		
+		public static String errorImageXpath= "//img[contains(@class, 'error-img')]";
+		
+	}
 
 }

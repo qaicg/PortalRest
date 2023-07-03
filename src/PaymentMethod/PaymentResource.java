@@ -3,6 +3,7 @@ package PaymentMethod;
 public class PaymentResource {
 	
 	public static String botonVerPedidoPantallaCarritoXpath = "//button[contains(@class,'basket-button')]";
+	public static String[] labelBotonVerPedidoPantallaCarrito = {"Ver pedido", "Pedir ahora"}; //0 > pedido, 1 > hioPay  
 	
 	public static String pantallaResumenPedido = "//div[contains(@class,'basket-lines-container')]"; //Pantalla Resumen de pedido: elegir el medio de pago
 	
@@ -16,13 +17,38 @@ public class PaymentResource {
 	}
 	
 	/*
+	 * Pantalla RESUMEN PEDIDO
 	 * eliminar un producto del pedido
 	 */
-	public static String getBotonEliminarArticuloDelPedido(String articulo) {//Recuperar el botón del producto para eliminarlo del pedido
+	public static String getBotonEliminarArticuloDelPedido(String articulo) {//Recuperar el botón del producto para eliminarlo del pedido desde la pantalla RESUMEN PEDIDO
 		String botonSuprimirArticulo = "//label[contains(text(), '1 x "+articulo +"')]//parent::div//following-sibling::div//app-input-number-spinner//*[contains(@class, 'number-spinner-spinner left-spinner')]";
 		return botonSuprimirArticulo;
 	}
 	
+	/*
+	 * Pantalla RESUMENT PEDIDO
+	 * Aumentar la cantidad del product
+	 */
+	public static String getBotonMasCantidadArticuloDelPedido(String articulo) {//Recuperar el botón + del producto para aumentar la cantidad del artículo desde la pantalla RESUMEN PEDIDO
+		String botonSuprimirArticulo = "//label[contains(text(), '1 x "+articulo +"')]//parent::div//following-sibling::div//app-input-number-spinner//*[contains(@class, 'number-spinner-spinner right-spinner')]";
+		return botonSuprimirArticulo;
+	}
+	
+	
+	/*
+	 * Pantalla RESUMEN PEDIDO
+	 * Obtener la cantidad asignada al producto
+	 */
+	public static String getCantidadArticuloDelPedido(String articulo) {//Recuperar la cantidad del artículo desde la pantalla RESUMEN PEDIDO
+		String botonSuprimirArticulo = "//label[contains(text(), '1 x "+articulo +"')]//parent::div//following-sibling::div//app-input-number-spinner//*[contains(@class, 'number-spinner-spinner right-spinner')]";
+		return botonSuprimirArticulo;
+	}
+	
+	/*
+	 * Pantalla de pago del pedido
+	 * Medio de pago Bizum
+	 * 
+	 */
 	public static class Bizum {
 		
 		public static String waitFormularioBizumXpath = "//div[contains(@class, 'wrapper position-relative')]"; // El formulario de la plataforma de pago del banco
@@ -61,6 +87,14 @@ public class PaymentResource {
 			String diasable = String.valueOf(disabled);
 			return disabled ?  "//div/button[contains(@class, 'bBizInit') and contains(@disabled, '"+diasable+"')]" :  "//div/button[contains(@id, 'bBizInit')]";
 		}
+		
+	}
+	
+	/*
+	 * Pantalla de pago
+	 * Medio de pago Redsys
+	 */
+	public static class Redsy {
 		
 	}
 

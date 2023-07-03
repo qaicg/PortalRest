@@ -124,6 +124,7 @@ public class AbrirUrl extends TestBase {
 	      this.pedido.setTipoPedido(orderType);
     	  //empezamos a guardar el pedido para completarlo. Vamos utilizar el objecto pedido para guardar pedido y hacer validacion del pedido
     	  Data.getInstance().setPedido(pedido);
+    	  
 	  }
 	
 }

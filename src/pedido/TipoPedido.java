@@ -159,5 +159,7 @@ public class TipoPedido extends TestBase{
 		this.hora = hora;
 	}
 
-
+	public int getId() {
+		return this.id;
+	}
 }
