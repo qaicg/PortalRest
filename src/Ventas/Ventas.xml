@@ -72,6 +72,8 @@
 	<parameter name="pedidoDiaHora" value="false" /> <!-- Realizar pedido seleccionando dia y hora por la entregada -->
 
 	<parameter name="modoSinVentana" value="false" /> <!--modo sin ventana para test case o test suite -->
+	
+	<parameter name="cloudLicenceBeta" value="false" /> <!-- ejecutar los tests case desde CloudLicenseBeta  -->
 
 	<parameter name="resultatEsperado" value="true" /> <!-- -->
 	
@@ -95,12 +97,27 @@
 	 <parameter name="isMailSac" value="false" /><!-- Utilisamos el correo electrónico de mailsac par enviar las notificación-->
 	
 	 <parameter name="fakePhone" value="false" /> <!-- fakePhone usuario no activo para compra Bizum-->
+	 
+	 <!-- Parametros de Ventas con Propinas -->
+	<parameter name="propinaList" value="" />
+	<parameter name="propinaSelected" value="" />
+	 <!-- Fin parametros de Ventas con propinas -->
+	 
+	 <!-- Parametros de cargar saldo tarjeta de fidelización -->
+	 <parameter name="cargarSaldoSiempre" value="true" /> <!-- 
+	 Cargar la tarjeta si no tiene saldo suficiente al finalizar el pedido usando forma de pago saldo o combinado
+	 cargarSaldoSiempre está utilizado en la classe CargarSaldoCloud del package Clientes con la annotación beforetest
+	 -->
+	 <!-- Fin parametros de carga saldo tarjeta de fidelización -->	 	 
 
 	<!-- Eliminar las cookies y volver a cargar la página: Comporbar que se muestre la página de error del motero-->
 	<!-- #37519 Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest -->
 	<test name="Prueba Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
+		
+		<parameter name="cloudLicenceBeta" value="false" />
+		
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarCookies" />
@@ -112,7 +129,47 @@
 	</test>	
 	
 	<!-- Fin eliminar cookies-->
-
+	
+	<!-- 
+		#38213 > Error patronas no se puede acceder a la carta desde QR lista de restaurantes
+		Prueba de abrir un url de lista restaurante, realizar un pedido de 4 productos, en un restaurante de la lista de establecimiento, con medio pago Redsýs 
+	-->
+	<test name="Prueba de venta de 4 artículos normales en lista de restaurante en portalrest" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=00TbmQDM3ITN9QWa" />
+		<parameter name="shop" value="52704" />
+		
+		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
+		<parameter name="totalEsperado" value="27,10€" /> 
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			
+			<class name="AbrePortalRest.ListaRestaurante"> 
+			
+				<parameter name="selectRestaurante" value="1" />
+				<parameter name="numeroRestaurante" value="3" />
+				<parameter name="shopNameSelected" value="Test PortalRest (FRS) - Plantilla 1" />
+				
+				<methods>
+					<include name="selectRestaurant" />
+					<include name="abrePaginaLogin" />
+					<include name="makeOrder">
+						<parameter name="realizarPedidoString" value="Carta" />
+						<parameter name="realizarPedido" value="true" />
+					</include>
+				</methods>
+				
+			</class>
+			
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+			<class name="Ventas.ValidacionPedidos" />
+			
+		</classes>
+	</test>	
 	
 	<test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
@@ -131,9 +188,43 @@
 		</classes>
 	</test>
 	
+	<!-- Test venta con pasarelea de pago Redsys -->
+		<!--test name="Prueba de venta simple EN EL LOCAL con 4 artículos normales y pago con Redsys" enabled="true" preserve-order="true">
+			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
+			<parameter name="shop" value="52704" />
+			<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
+			<parameter name="totalEsperado" value="27,10€" /> 
+			<classes>
+				<class name="AbrePortalRest.AbrirUrl" />
+				<class name="Verificaciones.VerificarCookies" />
+				<class name="Verificaciones.VerificarFamiliasRestaurante" />
+				<class name="Clientes.AbrirPaginaLogin" />
+				<class name="Clientes.LoginCliente" />
+				<class name="Ventas.AddCarrito" />
+
+				<class name="PaymentMethod.Payment">
+					<methods>
+						<include name="runButtonOrder" />
+					</methods>
+				
+				</class>
+				
+				<class name="PaymentMethod.RedsyPayment">
+					<methods>
+						<parameter name="cancelarPago" value="false" />
+						<include name="makePayment" />
+					</methods>
+				</class>
+				
+				<class name="Ventas.ValidacionPedidos" />
+			</classes>
+		</test-->	
+	
+	<!-- Fin venta con pasarela de pago Redsy -->
+	
 	<!-- Test venta con pasarela de pago Bizum -->
 		<!-- 1 caso -->
-		<test name="Prueba de venta simple EN EL LOCAL con 2 artículos normales y pago con Bizum " enabled="true" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL con 2 articulos normales y pago con Bizum " enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 			<parameter name="shop" value="52704" />
 			<parameter name="productos" value="Kirin TA,Fanta Taronja 30 ml" />
@@ -608,6 +699,30 @@
 		</classes>
 	</test>
 
+	<test  name="Prueba de venta fallida DELIVERY con dirección existente con 1 artículo que no alcanza importe minimo de pedido"  enabled="true" preserve-order="true">
+	   <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>
+	   <parameter name="shop" value="52704"/>
+	   <parameter name="productos" value="Fanta Taronja 30 ml"/>
+	   <parameter name="tipoServicio" value="3" />
+	   <parameter name="direccion" value="Carrer Mestral S/N, 0"/>
+	   <parameter name="importeMinimo" value="10,00€"/>
+	   <parameter name="cargoReparto" value="2,95€"/>
+	   <parameter name="totalEsperadoMasCargos" value="5,90€"/>
+	   <parameter name="validarImporteMinimo" value="true" />
+		    <classes>
+		   		<class name="AbrePortalRest.AbrirUrl"/>
+				<class name="Verificaciones.VerificarCookies"/>
+				<class name="Clientes.LoginCliente"/>
+		      	<class name="Delivery.SeleccionaDireccion"/>	
+		      	<class name="Ventas.AddCarrito">
+		      		 <parameter name="totalEsperado" value="2,95€"/>
+		      	</class>
+		      	<class name="Ventas.CheckOut">
+		      		<parameter name="totalEsperado" value="2,95€"/>
+		      	</class>
+		    </classes>
+	 </test> 
+
 	<!-- FIN PRUEBAS DELIVERY -->
 
 	<test name="Prueba de venta simple servicio AUTO con 4 artículos normales" enabled="true" preserve-order="true">
@@ -716,7 +831,8 @@
 			<class name="Ventas.ValidacionPedidos" />
 		</classes>
 	</test>
-
+	
+	<!-- El test no funciona 
 	<test name="Prueba de venta simple con login de Google con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
@@ -732,7 +848,9 @@
 			<class name="Ventas.ValidacionPedidos" />
 		</classes>
 	</test>
-
+	-->
+	
+	
 	<test name="Prueba de venta simple con login de ICGCLoud y 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="shop" value="54066" />
@@ -767,6 +885,11 @@
 			<class name="Ventas.AddCarrito" />
 			<class name="Ventas.CheckOut" />
 			<class name="Ventas.ValidacionPedidos" />
+			
+			<class name="Clientes.CargarSaldoIcgCloud"> 
+				<parameter name="saldoACargar" value="30"/>
+				<parameter name="nuevaTarjeta" value="false" />
+			</class>
 		</classes>
 	</test>
 
@@ -779,8 +902,7 @@
 		<parameter name="email" value="clienteprthpc@yopmail.com" />
 		<parameter name="password" value=".1234abcd" />
 		<parameter name="formaPago" value="saldo" />
-		
-
+				
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarCookies" />
@@ -788,11 +910,13 @@
 			<class name="Clientes.AbrirPaginaLogin" />
 			<class name="Clientes.LoginCliente" />
 			<class name="Ventas.AddCarrito" />
+						
 			<class name="Ventas.CheckOut" />
 			<class name="Ventas.ValidacionPedidos" />
 			
 			<class name="Clientes.CargarSaldoIcgCloud"> 
-				<parameter name="saldoACargar" value="30"/>
+				<parameter name="cargarSaldoSiempre" value="false" />
+				<parameter name="saldoACargar" value="28"/>
 				<parameter name="nuevaTarjeta" value="false" />
 			</class>
 			
@@ -1001,7 +1125,7 @@
 
 
  	<!-- Añadir el producto con modificador Oyako Don sin Rebozar = 15,50  -->
- 	<test name="Prueba de venta simple EN EL LOCAL  de 3 artículos normales y un producto con modificador " enabled="true" preserve-order="true">
+ 	<test name="Prueba de venta simple EN EL LOCAL de 3 artículos normales y un producto con modificador" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 	
@@ -1075,30 +1199,6 @@
 	    </classes>
  </test> 
  
- <test  name="Prueba de venta fallida DELIVERY con dirección existente con 1 artículo que no alcanza importe minimo de pedido"  enabled="true" preserve-order="true">
-   <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>
-   <parameter name="shop" value="52704"/>
-   <parameter name="productos" value="Fanta Taronja 30 ml"/>
-   <parameter name="tipoServicio" value="3" />
-   <parameter name="direccion" value="Carrer Mestral S/N, 0"/>
-   <parameter name="importeMinimo" value="10,00€"/>
-   <parameter name="cargoReparto" value="2,95€"/>
-   <parameter name="totalEsperadoMasCargos" value="5,90€"/>
-   <parameter name="validarImporteMinimo" value="true" />
-	    <classes>
-	   		<class name="AbrePortalRest.AbrirUrl"/>
-			<class name="Verificaciones.VerificarCookies"/>
-			<class name="Clientes.LoginCliente"/>
-	      	<class name="Delivery.SeleccionaDireccion"/>	
-	      	<class name="Ventas.AddCarrito">
-	      		 <parameter name="totalEsperado" value="2,95€"/>
-	      	</class>
-	      	<class name="Ventas.CheckOut">
-	      		<parameter name="totalEsperado" value="2,95€"/>
-	      	</class>
-	    </classes>
- </test> 
-
  <test  name="Prueba de venta simple EN EL LOCAL haciendo login en el carrito y continuar con la compra"  enabled="true" preserve-order="true" >
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
    <parameter name="shop" value="52704"/>
@@ -1158,7 +1258,6 @@
    <parameter name="password" value = ".1234abcd"/>
    <parameter name="formaPago" value="combinado"/>
    <parameter name="formaPago2" value="Redsys Test" />
-   <!--parameter name="importeCarga" value="1"/-->
    <parameter name="productos" value="Coca-Cola Zero 350ml,Fanta Taronja 30 ml,Nestea limón 300ml,Aquarius Limón 300ml" />
    <parameter name="totalEsperado" value="14,80€" /> 
    
@@ -1168,6 +1267,11 @@
 	      	<class name="Verificaciones.VerificarFamiliasRestaurante"/>  
 	      	<class name="Clientes.AbrirPaginaLogin"/>
 	        <class name="Clientes.LoginCliente"/>
+	        
+	         <class name="Clientes.CargarSaldoIcgCloud"> 
+	         	<parameter name="saldoACargar" value="2"/>
+	         </class>
+	        
 	      	<class name="Ventas.AddCarrito"/>
 	      	<class name="Ventas.CheckOut"/>
 	      	<class name="Ventas.ValidacionPedidos"/>

@@ -1,5 +1,7 @@
 package utils;
 
+import Objects.Customer;
+import Objects.LoyaltyCard;
 import Reservas.BookingInformation;
 import pedido.Pedido;
 
@@ -14,10 +16,30 @@ public class Data {
     private boolean entornoTest=true;
     private boolean runAllTests=true;
     private boolean runTestsFailed = true;
-    private String pedidoActual;
+    private boolean runTestOnCloudLicenseBeta = false;
+    
+    private Customer user;
+
+	private String pedidoActual;
     private BookingInformation bookingInformation;
     
-    private Pedido pedido;
+    public boolean isRunTestOnCloudLicenseBeta() {
+		return runTestOnCloudLicenseBeta;
+	}
+
+	public void setRunTestOnCloudLicenseBeta(boolean runTestOnCloudLicenseBeta) {
+		this.runTestOnCloudLicenseBeta = runTestOnCloudLicenseBeta;
+	}
+	
+	public Customer getUser() {
+		return user;
+	}
+
+	public void setUser(Customer user) {
+		this.user = user;
+	}
+
+	private Pedido pedido;
     
     public Pedido getPedido() {
 		return pedido;

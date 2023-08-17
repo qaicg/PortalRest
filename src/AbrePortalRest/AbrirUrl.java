@@ -41,6 +41,9 @@ public class AbrirUrl extends TestBase {
 	 @Parameters({ "Url", "pedidoMasTarde", "pedidoDiaHora", "tipoPedido"})
 	  public void abrirURL(String Url, @Optional("false") boolean pedidoMasTarde, @Optional("false") boolean pedidoDiaHora, @Optional("1") String tipoPedido) {
 		boolean paginaCargada = false;  
+		
+		Url = this.getUrl(Url);
+		
 		espera(500);
 		  driver.get(Url);
 		  espera(500);
@@ -126,5 +129,17 @@ public class AbrirUrl extends TestBase {
     	  Data.getInstance().setPedido(pedido);
     	  
 	  }
+	
+	//Ejecutar los tests desde CloudLicenseBeta o desde CloudLicense
+	public String getUrl(String url) {
+		boolean runTestOnCloudLicenseBeta = Data.getInstance().isRunTestOnCloudLicenseBeta();
+		
+		if(runTestOnCloudLicenseBeta) {
+			url = url.replace("https://www.portalrest.com", "https://beta.portalrest.com"); 
+		}
+		//pintar la url del test
+		log("La Url del test --> " + url);
+		return url;
+	}
 	
 }

@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
+import Objects.Customer;
 import graphql.Assert;
 import utils.Data;
 import utils.Decrypt;
@@ -101,6 +103,15 @@ public class LoginCliente extends TestBase {
 					Assert.assertTrue(false);
 				}
 
+		  }
+		  
+		  //Todo ha pasado bien: Guardar la informacion del usuario connectado 
+		  Customer user = new Customer();
+		  user.setUserEmail(email);
+		  user.setUserPassword(password);
+		  Data.getInstance().setUser(user);
+		  if(StringUtils.isAllEmpty(Data.getInstance().getBD())) {
+			 Data.getInstance().setBD("DB"+shop);
 		  }
 		   
 	  }else {

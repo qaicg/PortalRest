@@ -78,7 +78,7 @@ public class BorraDireccion  extends TestBase{
 	     				log("Error. La dirección se encuentra activa en BBDD");
 	     				log(SQL);
 	     				Assert.assertTrue(false);
-	     			}else {
+	     			} else {
 	     				log("Direccion ya no se encuentra activa en BBDD");	
 	     			}
 	     			

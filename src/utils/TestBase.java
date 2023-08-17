@@ -105,6 +105,15 @@ public class TestBase extends StringUtils {
 
 	protected static WebDriver driver;
 	protected DatabaseConnection databaseConnection = new DatabaseConnection();;
+
+	public DatabaseConnection getDatabaseConnection() {
+		return databaseConnection;
+	}
+
+	public void setDatabaseConnection(DatabaseConnection databaseConnection) {
+		this.databaseConnection = databaseConnection;
+	}
+
 	TrayIconDemo td = new TrayIconDemo();
 	protected static HashMap<String, String> biblioteca;
 	ExtentReports extent;
@@ -149,8 +158,8 @@ public class TestBase extends StringUtils {
 	}
 
 	@BeforeTest
-	@Parameters({"modoSinVentana"})
-	public void beforeTest(final ITestContext testContext, @Optional("false") boolean modoSinVentana) {
+	@Parameters({"modoSinVentana", "cloudLicenceBeta"})
+	public void beforeTest(final ITestContext testContext, @Optional("false") boolean modoSinVentana, @Optional("false") boolean cloudLicenceBeta) {
 		
 		if(!isNullOrEmpty(Data.getInstance().getNewUserMail())){
 			Data.getInstance().setNewUserMail(null);
@@ -175,6 +184,11 @@ public class TestBase extends StringUtils {
 		if (Data.getInstance().isModoSinVentana() || modoSinVentana) {
 			options.addArguments("--headless");// ESTOS PARAMETROS EJECUTAN EL NAVEGADOR SIN PANTALLA
 			options.addArguments("--disable-gpu");// ESTOS PARAMETROS EJECUTAN EL NAVEGADOR SIN PANTALLA
+		}
+		
+		//Ejecutar los tests desde CloudLicenseBeta
+		if(cloudLicenceBeta && !Data.getInstance().isRunTestOnCloudLicenseBeta()) {
+			Data.getInstance().setRunTestOnCloudLicenseBeta(cloudLicenceBeta);
 		}
 
 		driver = new ChromeDriver(options);
@@ -286,11 +300,11 @@ public class TestBase extends StringUtils {
 		espera();
 	}
 
-	public void espera() {
+	public static void espera() {
 		espera(1000);
 	}
 
-	public boolean isElementPresent(By by) {
+	public static boolean isElementPresent(By by) {
 		try {
 			List<WebElement> elements;
 			elements = driver.findElements(by);
@@ -312,7 +326,7 @@ public class TestBase extends StringUtils {
 		Reporter.log(s + "<br>");
 	}
 
-	public void clicJS(WebElement element) {
+	public static void clicJS(WebElement element) {
 		try {
 			element.click();
 		} catch (Exception e) {
@@ -449,7 +463,7 @@ public class TestBase extends StringUtils {
 		return convertedRankList;
 	}
 
-	public void espera(long time) {
+	public static void espera(long time) {
 		try {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
@@ -465,13 +479,6 @@ public class TestBase extends StringUtils {
 			e.printStackTrace();
 		}
 	}
-	
-//	public boolean isNullOrEmpty(String variable) {
-//	   if(StringUtils.isNullOrEmpty(variable))
-//		   return true;
-//	   else
-//		   return false;
-//	}
 	
 	public static String stripAccents(String input) {
 	    return input == null ? null :
@@ -681,8 +688,6 @@ public class TestBase extends StringUtils {
  	
     }  
     
-    
-    
     /*
      * Waiting 30 seconds for an element to be present on the page, checking
      * for its presence once every 5 seconds.
@@ -704,6 +709,24 @@ public class TestBase extends StringUtils {
 		
 		return element;
 	}
+	
+	public static List<WebElement> getElementsByFluentWait(By by, @Optional("30") int withTimeout, @Optional("5") int pollingEvery){
+		// Waiting 30 seconds for an element to be present on the page, checking
+		// for its presence once every 5 seconds.
+		List<WebElement> elementList = null;
+		
+		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+		  .withTimeout(Duration.ofSeconds(withTimeout))
+		  .pollingEvery(Duration.ofSeconds(pollingEvery))
+		  .ignoring(NoSuchElementException.class);
+	
+		elementList = wait.until( driver -> {
+			ExpectedConditions.presenceOfAllElementsLocatedBy(by);
+			return driver.findElements(by);
+		});
+		
+		return elementList;
+	}	
 	
 	//Methodo para eliminar las cookies de portalRest
     public void clear_cache() {
@@ -743,7 +766,7 @@ public class TestBase extends StringUtils {
     	driver.findElement(By.tagName("body")).sendKeys(Keys.CONTROL, Keys.TAB);
     }
     
-	private double round (double value, int precision) {
+	public static double round (double value, int precision) {
 		int scale = (int) Math.pow(10, precision);
 		return (double) Math.round(value * scale) / scale;
 	}
@@ -836,4 +859,9 @@ public class TestBase extends StringUtils {
 
 		return 0;
 	}
+	
+	public static void back() {
+		clicJS(driver.findElement(By.xpath("//mat-icon[text()='keyboard_arrow_left']")));	
+	}
+
 }

@@ -255,10 +255,10 @@ public class CheckOut extends TestBase{
 
 	}
 
-	private static double round (double value, int precision) {
-		int scale = (int) Math.pow(10, precision);
-		return (double) Math.round(value * scale) / scale;
-	}
+//	private static double round (double value, int precision) {
+//		int scale = (int) Math.pow(10, precision);
+//		return (double) Math.round(value * scale) / scale;
+//	}
 
 	private void pagarPedidoPagarEnCaja(String formaPago, String pedidoConfirmadoString) {
 		log("Se paga el pedido con "+ formaPago);
@@ -428,9 +428,9 @@ public class CheckOut extends TestBase{
 		Assert.assertTrue(true);
 	}
 
-	private void back() {
-		clicJS(driver.findElement(By.xpath("//mat-icon[text()='keyboard_arrow_left']")));	
-	}
+//	private void back() {
+//		clicJS(driver.findElement(By.xpath("//mat-icon[text()='keyboard_arrow_left']")));	
+//	}
 
 	private boolean validaPantalla(String[] arrayNombres,String totalEsperado, String unidades, String totalEsperadoMasCargos, String repartoPermitido) {
 

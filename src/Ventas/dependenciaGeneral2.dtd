@@ -1,5 +1,0 @@
-<!ELEMENT groups (dependencies)>
-<!ELEMENT dependencies (group+)>
-<!ELEMENT group EMPTY>
-<!ATTLIST group name NMTOKEN #REQUIRED>
-<!ATTLIST group depends-on NMTOKEN #REQUIRED>

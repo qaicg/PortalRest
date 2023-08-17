@@ -226,9 +226,12 @@ public class AddCarrito extends TestBase {
 					
 					//Set Cantidad
 					String unidadXpath = "//div[contains(@class,'dishItem')]//div[contains(@class, 'product-item-add')]//child::app-input-number-spinner//div[contains(@class, 'number-spinner-value')]";
+					
+					waitUntilPresence(unidadXpath, true);
+					
 					if(isElementPresent(By.xpath(unidadXpath)) && Utils.isNullOrEmpty(cantidadProducto)) {
 						log("Añadir la cantidad");
-						List<WebElement> productUnit = driver.findElements(By.xpath(unidadXpath));
+						List<WebElement> productUnit = getElementsByFluentWait(By.xpath(unidadXpath), 30, 5);//driver.findElements(By.xpath(unidadXpath));
 						if(productUnit.size() == 1) {
 							cantidadProducto = productUnit.get(0).getAttribute("innerText");
 						} 

@@ -14,7 +14,51 @@ import org.testng.annotations.Optional;
 import graphql.Assert;
 import pedido.Formato;
 
-public class PortalRestOrderElements extends TestBase{
+public class PortalRestOrderElements extends TestBase {
+	
+	//**Pantalla ¿CÓMO? en pedido PortalRest **/
+	public static final String paginalPrincipalHow = "//app-how-when";
+	public static final String listaBotonesComoXpath = "//div[contains(@class, 'how-when-button-list')]//button[contains(@class, 'how-when-button')]";
+	public static final String literalListaBotonesComoXpath = "//div[contains(@class, 'how-when-button-list')]//button[contains(@class, 'how-when-button')]//div[contains(@class, 'how-when-button-wrapper')]";
+	public static final String[] listaLiteralBotonesComoText = {"En el local", "Para llevar", "A domicilio", "Auto", "En la mesa"};
+	
+	/*
+	 * Lista de restaurante del cliente 
+	 * 
+	 */
+	public static class  ListaRestaurante {
+		//página principal del listado restaurantes del cliente
+		public static final String paginalPrincipalShopList =  "//app-shop-list";
+		
+		public static final String botonMenuXpath = "//div[contains(@class, 'header-icon')]//mat-icon";
+		
+		public static final String buttonCuisineTypesXpath = "//div[contains(@class, 'list')]//div[contains(@class, 'cuisine-types-wrapper')]";
+		
+		public static final String listaTipoCosinaCheckBoxXpath = "//app-cuisine-filters//div[contains(@class, 'filters-wrapper')]//mat-checkbox";
+		
+		public static final String buttonAccpetSelectCuisineTypesXpath = "//div[contains(@class, 'accept-button')]//button[contains(@class, 'basket-button')]";
+		
+		//mostra el nombre 
+		public static final String literalTipoCosinaXpath = "//app-cuisine-filters//div[contains(@class, 'filters-wrapper')]//mat-checkbox//label//span[contains(@class, 'mat-checkbox-label')]";
+		
+		
+		public static final String showMenuListXpath =  "//button[contains(@class, 'mat-menu-item')]";
+		
+		public static final String showListShopWrapperXpath = "//div[contains(@class, 'list-shop-wrapper')]"; //Página principal del listado de resuatante del cliente
+		
+		//Los botones de los restaurantes
+		public static final String botonesRestauranteXpath = "//div[contains(@class, 'list-shop-element-wrapper')]";
+		
+		//El nombre del restaurante a seleccionar en el listado restaurantes:
+		public static final String getNameShopSelected (String shopeNameSelected) {
+			return  "//div[contains(@class, 'second-row')]//div[contains(@class, 'shop-data-name') and contains(text(), '"+ shopeNameSelected + "')]";
+		}
+		
+		//Lista restaunrantes que tiene el cliente
+		public static final String shopNameListXpath = "//div[contains(@class, 'second-row')]//div[contains(@class, 'shop-data-name')]";
+		
+		
+	}
 	
 	public static class PedidoDiaHora {		
 		
@@ -247,8 +291,6 @@ public class PortalRestOrderElements extends TestBase{
 	 *  scrollpage
 	 *  addProduct
 	 */
-	
-	
 	public static class RestaurantMenuPage extends TestBase {
 		public static String sProductListElement = "//span[contains(@class,'test-product-item')]";
 		public static String sCartPageFooter = "//div[contains(@class,'footer-item')]";

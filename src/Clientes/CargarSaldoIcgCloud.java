@@ -2,6 +2,13 @@ package Clientes;
 
 import static org.testng.Assert.assertTrue;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -10,26 +17,71 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import Objects.LoyaltyCard;
 import Ventas.AddCarrito;
 import Ventas.CheckOut;
 import Ventas.ValidacionPedidos;
+import io.opentelemetry.api.internal.Utils;
+import utils.Data;
 import utils.TestBase;
 
 public class CargarSaldoIcgCloud extends TestBase {
 	String balanceBeforeLoading = "";
 	String balanceAfterLoading = "";
-	String balanceToLoad = "";
+	String balanceFromDB = ""; //En HPC no FRS con ICGCLOUD
 	String validateChargedBalance = "";
+	boolean checkLoadLoyaltyCardAlways;
+	
+	String ICGCloud;
+	String importe; //indicar el importe a cargar en la tarjeta de saldo 
+	
+	LoyaltyCard tarjetaSaldo;
+	
+	@BeforeMethod
+	@Parameters({"cargarSaldoSiempre", "saldoACargar",  "formaPago", "totalEsperado", "ICGCloud"})
+	public void checkLoardLoyaltyCardAlways(boolean cargarSaldoSiempre, String saldoACargar, String formaPago, String totalEsperado, String ICGCloud) {
+		this.ICGCloud = ICGCloud;
+		this.importe = saldoACargar + ",00";
+		/*cargarSaldoSiempre: 
+		 * 	true -> Siempre cargar la tarjeta de fidelizacion independamente del saldo y del total a pagar del pedido
+		 * 	False -> Siempre verificamos si el saldo es suficiente antes de cargar la tarjeta cuando el forma de pago no es combinado
+		 */
+		if(!utils.Utils.isNullOrEmpty(this.ICGCloud) && !this.ICGCloud.equalsIgnoreCase("true") || utils.Utils.isNullOrEmpty(this.ICGCloud)) { //Estamos en HPC no con FRS ICGCLOUD
+			//LoyaltyCard tarjetaSaldo = getInformationLoayaltyCardFromDB();
+			tarjetaSaldo = getInformationLoayaltyCardFromDB();
+			
+			tarjetaSaldo.setCargarSaldoSiempre(cargarSaldoSiempre);
+			
+			Data.getInstance().getUser().setTarjetaSaldo(tarjetaSaldo);
+			
+			Data.getInstance().getUser().getTarjetaSaldo().setCargarSaldoSiempre(cargarSaldoSiempre);
+			
+			this.checkLoadLoyaltyCardAlways = checkLoadLoyaltyCardAlways(saldoACargar, formaPago, totalEsperado);
+		}
+		
+	}
 	
 	@Test(description="Prueba de login de un cliente en ICGCLoud y realizar carga de su tarjeta de fidelizacion", priority=1, groups = {"cargaSaldoIcgCloud"})
-	@Parameters({"saldoACargar","miMonederoString","cargarSaldoString", "nuevaTarjeta","testCardNumber","cad1","cad2","cvv"})
+	@Parameters({"saldoACargar","miMonederoString","cargarSaldoString", 
+		"nuevaTarjeta","testCardNumber","cad1","cad2","cvv", 
+		"formaPago", "totalEsperado", "cargarSaldoSiempre"})
 	public void cargarSaldo(String importe, String miMonederoString, String cargarSaldoString,
 	    @Optional ("true") String nuevaTarjeta, @Optional ("") String testCardNumber,
-		@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv) {
+		@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv,
+		String  formaPago, String totalEsperado, String cargarSaldoSiempre) {
+		
+		//Verificar si vamos cargar  la tarjeta o no
+		if( ( (!utils.Utils.isNullOrEmpty(this.ICGCloud) && !this.ICGCloud.equalsIgnoreCase("true")) || utils.Utils.isNullOrEmpty(this.ICGCloud) ) 
+				&& !checkLoadLoyaltyCardAlways) {
+			return; //no cargar	
+		}
 		
 		//espera(500);
 		abrirMiMonedero(miMonederoString);
@@ -65,7 +117,8 @@ public class CargarSaldoIcgCloud extends TestBase {
 			WebElement sCargar = driver.findElement(By.xpath("//div[contains(@class, 'mat-form-field-infix')]/child::input"));
 			String inputValue = sCargar.getAttribute("value");
 							
-			importe +=",00";
+			//importe +=",00";
+			importe = this.importe;//getImporteACargar(balanceSaldo, totalEsperado, importe, formaPago)
 			
 			if(!inputValue.equalsIgnoreCase(importe)) {
 				//if(setInputValueJS(By.xpath("//input[contains(@id, 'mat-input-2')]"), importe)) {	
@@ -247,4 +300,229 @@ public class CargarSaldoIcgCloud extends TestBase {
 			Assert.assertTrue(false);
 		}
 	}
+	
+	//Verificar si cargamos la tarjeta o non
+	private boolean checkLoadLoyaltyCardAlways(String saldoACargar, String formaPago, String totalEsperado) {
+		LoyaltyCard tarjetaSaldo = Data.getInstance().getUser().getTarjetaSaldo();
+				
+		String balance = tarjetaSaldo.getBalanceDB();
+		
+		boolean isBalanceSuperiorTotalEsperado = isBalanceSuperiorTotalEsperado(balance, totalEsperado);
+		
+		if(tarjetaSaldo.isCargarSaldoSiempre()) {
+			return true; // Siempre cargar la tarjeta 
+		}
+		
+		//No cargar siempre la tarjeta
+		if(!tarjetaSaldo.isCargarSaldoSiempre()) {
+			//Forma de pago combinado
+			//Tenemos un poco de saldo, en el caso que hay saldo cargar la tarjeta
+			if(formaPago.equalsIgnoreCase("combinado")) {
+				if((!isBalanceSuperiorTotalEsperado && Double.parseDouble(balance) < 1 )) {  //No hay saldo suficiente
+					log("Cargar la tarjeta de fidelizacion por que no tenemos saldo suficiente " + balance);
+					
+					//en caso que la balance sea 0.00 y  el importe a cargar superior or igual al precio del pedido --> cambiar el importe a cargar en la tarjeta por una cuantidad inferior al total del pedido. 
+					//Así se podra aplicar el modo combinado 									
+					this.importe = getImporteACargar(this.balanceFromDB, totalEsperado, importe, formaPago);
+										
+					isBalanceSuperiorTotalEsperado = true;
+				}
+				else if(!isBalanceSuperiorTotalEsperado && Double.parseDouble(balance) > 0 ) { //Hay suficiente saldo en la tarjeta
+					log("methodo checkLoadLoyaltyCardAlways: No Cargar la t fidelizacion por que hay saldo suficiente " + balance);
+					isBalanceSuperiorTotalEsperado = false;
+				}
+				else if (isBalanceSuperiorTotalEsperado) {
+					//La balance de la carte en la BBDD es superior al precio total esperado del pedido
+					//Regularisamos el saldo de la carta para permitir pagar con el modo combinado saldo
+					//modificar el saldo insertando otra linea hasta que el saldo en BBDD sea inferior al precio total del pedido
+					log("modificar el saldo de la tarjeta en la BBDD hasta sea inferior al precio total del pedido");
+					this.insertIntoLoyCardMovement(Double.parseDouble(balance), Double.parseDouble(totalEsperado.replace("€", "").replace(",", ".")));
+					driver.navigate().refresh();
+					//isBalanceSuperiorTotalEsperado = false;
+				}
+				
+			}
+			
+			//Forma de pago Saldo
+			if(formaPago.equalsIgnoreCase("saldo")) {
+				if(isBalanceSuperiorTotalEsperado || (!isBalanceSuperiorTotalEsperado && isBalanceEqualsTotalEsperado(balance, totalEsperado))) { //Hay suficiente saldo en la tarjeta
+					isBalanceSuperiorTotalEsperado = false;
+				}
+				else if(!isBalanceSuperiorTotalEsperado) { //No hay saldo suficiente
+					
+					isBalanceSuperiorTotalEsperado = true;
+				}
+			}
+		}
+		
+		return isBalanceSuperiorTotalEsperado;
+	}
+	
+	
+	//Comparar totalEsperado a la balance 
+	public boolean isBalanceSuperiorTotalEsperado(String balance, String totalesprado) {
+		
+		Double  mountExpect =  Double.parseDouble(totalesprado.replace("€", "").replace(",", "."));
+		
+		Double  mountBalance =   Double.parseDouble(balance); 
+		
+		log("Balance de la t.Saldo " + balance + " es superior al total esperado " + totalesprado +  " -->  rsTest: " + (mountBalance > mountExpect ? true : false));
+		
+		return mountBalance > mountExpect;
+	}
+	
+	//Comparar totalEsperado a la balance 
+	public boolean isBalanceEqualsTotalEsperado(String balance, String totalesprado) {
+		
+		Double  mountExpect =  Double.parseDouble(totalesprado.replace("€", "").replace(",", "."));
+		
+		log("Balance de la t.Saldo " + balance + " es igual al total esperado " + totalesprado);
+		
+		Double  mountBalance =   Double.parseDouble(balance); 
+				
+		return mountBalance.compareTo(mountExpect) == 0 ? true : false;
+	}
+	
+	
+	// Recuperar información de la tarjeta de solde desde la BBDD
+	private LoyaltyCard getInformationLoayaltyCardFromDB() {
+		
+		LoyaltyCard tarjetaSaldo = new LoyaltyCard();
+		
+		String email = Data.getInstance().getUser().getUserEmail();
+		log("El email del user -> " + email);
+		String scriptSQL = LoyaltyCard.getScriptSqlLoyaltyCard(email);
+		String shopOrDB = Data.getInstance().getBD();
+		
+		log("La BBDD del cliente --> " +  shopOrDB);
+		ResultSet rs =  databaseConnection.ejecutarSQL(scriptSQL, shopOrDB); 
+
+	  	
+	  	 if (rs!=null) {
+	  		 try {	
+	  			Assert.assertFalse(rs.getFetchSize() > 1, "Error: Hemos encontrado más de 1 tarjeta que admite saldo");
+	  			
+	  			if (rs.first()) {
+	  				log("Tarjeta de fidelización del usuario encontrada en BBDD " + rs.getFloat("cardBalance"));
+	  				
+		  				DecimalFormat formato1 = new DecimalFormat("#.00");
+		  				String saldo = rs.getFloat("cardBalance") == 0.0 ? "0.00" : formato1.format(rs.getFloat("cardBalance")); 
+	  				
+	  				log("String.valueOf(rs.getString(\"cardBalance\")) " + saldo);
+	  				
+	  				tarjetaSaldo.setAliasOrName(rs.getString("loyaltyCardName"));
+	  				tarjetaSaldo.setBalanceDB(saldo);
+	  				tarjetaSaldo.setCardId(String.valueOf(rs.getInt("cardId")));
+	  				this.balanceFromDB = saldo;
+	  			} else {
+	  				log("Error. No tenemos resultados para la tarjeta saldo del usuario en BBDD");
+	  				log(scriptSQL);
+	  				Assert.assertTrue(false);
+	  			}
+	  			
+	  		} catch (Exception e) {
+	  			// TODO Auto-generated catch block
+	  			e.printStackTrace();
+	  			log(scriptSQL);
+	  			Assert.assertTrue(false);
+	  		}finally {
+	  			databaseConnection.desconectar();
+	  		}
+	  	 } else {
+	  		log(scriptSQL);
+	  		Assert.assertTrue(false);
+	  	 }
+		
+		return tarjetaSaldo;
+	}
+	
+	//Importe al cargar saldo con medio de pago combinado
+	/* en caso que la balance sea 0.00 y  el importe a cargar superior or igual al precio del pedido:
+	 *  cambiar el importe a cargar en la tarjeta por una cuantidad inferior al total del pedido. 
+	 *  Así se podra aplicar el modo combinado 
+	 */
+	private String getImporteACargar(String balanceSaldo, String totalEsperado, String saldoACargar, String formaPago) {
+		//en caso que la balance sea 0.00 y  el importe a cargar superior or igual al precio del pedido --> cambiar el importe a cargar en la tarjeta por una cuantidad inferior al total del pedido. 
+		//Así se podra aplicar el modo combinado 
+		Double  totalPedidoExpext =  Double.parseDouble(totalEsperado.replace("€", "").replace(",", "."));
+		Double  cargar =  Double.parseDouble(saldoACargar.replace("€", "").replace(",", "."));
+		
+		if(Double.parseDouble(balanceSaldo) == 0.00 && cargar >= totalPedidoExpext && formaPago.equalsIgnoreCase("combinado")) {
+			cargar = cargar >= totalPedidoExpext ? cargar - totalPedidoExpext : cargar - 0.10; //quitamos 0,10 del importe a cargar definido en el fichero xml de test suite.
+			
+			while(cargar >= totalPedidoExpext) {
+				cargar -=  totalPedidoExpext;
+			}
+			
+		}
+		
+		if(Double.parseDouble(balanceSaldo) > 0.00 && formaPago.equalsIgnoreCase("combinado")) {
+			cargar = cargar >= totalPedidoExpext ? cargar - totalPedidoExpext : cargar - 0.10; //quitamos 0,10 del importe a cargar definido en el fichero xml de test suite.
+			
+			while(cargar >= totalPedidoExpext || ( Double.parseDouble(balanceSaldo) + cargar ) >= totalPedidoExpext) {
+				cargar -= totalPedidoExpext;
+			}			
+		}
+				
+		DecimalFormat formato = new DecimalFormat("#.00");
+		
+		this.importe = formato.format(cargar).replace(".", ",");
+		
+		log("Cambiar el importe a cargar en la tageta de saldo usando el forma de pago combinado");
+		log("Se ha cambiado el importe a ingresar en la tarjeta de saldo " + saldoACargar + " por la cuantidad: " + this.importe);
+				
+		return this.importe;
+	}
+	
+	
+	private int getLastCardMovementId() {
+		int cardMovementId = 1 ;
+		String sql = LoyaltyCard.getScriptLastCardMovementId();
+		String db = Data.getInstance().getBD();
+		try {
+			ResultSet rs =  databaseConnection.ejecutarSQL(sql, db);
+			log("Res rs " + rs.toString());
+			if(rs!= null && rs.first()) {
+				cardMovementId = rs.getInt("CardMovementId");
+				log("cardMovementId " + cardMovementId);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+						
+		}	
+		return cardMovementId;
+	}
+	
+	private void insertIntoLoyCardMovement(double balance, double totalEsperado) {
+		String db = Data.getInstance().getBD();
+		int cardMovementID = getLastCardMovementId() + 1;
+		double amount = getAmountInsert(balance, totalEsperado);
+		int cardId = Integer.parseInt(Data.getInstance().getUser().getTarjetaSaldo().getCardId());
+		
+		String sql = LoyaltyCard.getScriptInsertIntoLoyCardMovement(balance, totalEsperado, amount, cardMovementID, cardId);
+		
+		log("Insercion Datos " + sql);
+		
+		boolean rs =  databaseConnection.execute(sql, db);
+		
+		Assert.assertTrue(rs, "No se ha podido insertar la linea: " + sql);
+		
+	} 
+
+	private double getAmountInsert(double balance, double totalEsperado) {
+		double dAmount = -(balance - totalEsperado + 1);
+		
+		DecimalFormat formato1 = new DecimalFormat("#.00");
+		
+		String saldo = formato1.format(dAmount);
+		
+		dAmount = Double.parseDouble(saldo);
+		
+		return dAmount;
+	}
+	
+	private float getBalance() {
+		return 11;
+	}
+ 
 }

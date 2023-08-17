@@ -19,12 +19,7 @@ public class Utils extends TestBase {
     public static boolean isNullOrEmpty(String string) {
         return string == null || string.trim().isEmpty();
     }
-    
-	public static double round (double value, int precision) {
-		int scale = (int) Math.pow(10, precision);
-		return (double) Math.round(value * scale) / scale;
-	}
-	
+    	
 	public static double sGetDecimalStringAnyLocaleAsDouble (String value) {
 
 		Locale theLocale = null;
@@ -62,22 +57,4 @@ public class Utils extends TestBase {
 		}
 	}
 	
-//	public static void log(String s) {
-//		System.out.println(s);
-//		Reporter.log(s + "<br>");
-//	}
-//	
-//	public static Locale getLocale() {
-//		String language = getNavigatorLanguage();
-//		Locale locale = new Locale(language, language.toUpperCase());
-//		return locale;
-//	}
-//	
-//	public static String getNavigatorLanguage() {
-//		JavascriptExecutor executor = (JavascriptExecutor) driver;
-//        String language = executor.executeScript("return window.navigator.userlanguage || window.navigator.language").toString();
-//        //espera(1500);
-//		
-//        return language;
-//	}
 }

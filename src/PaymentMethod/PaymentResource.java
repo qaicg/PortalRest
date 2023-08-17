@@ -1,8 +1,14 @@
 package PaymentMethod;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import utils.TestBase;
+
 public class PaymentResource {
 	
 	public static String botonVerPedidoPantallaCarritoXpath = "//button[contains(@class,'basket-button')]";
+	
 	public static String[] labelBotonVerPedidoPantallaCarrito = {"Ver pedido", "Pedir ahora"}; //0 > pedido, 1 > hioPay  
 	
 	public static String pantallaResumenPedido = "//div[contains(@class,'basket-lines-container')]"; //Pantalla Resumen de pedido: elegir el medio de pago
@@ -10,6 +16,9 @@ public class PaymentResource {
 	public static String checkBoxeXpath = "//div[contains(@class,'mat-checkbox-inner-container')]"; // check botón de aceptar condiciones y terminos de pago
 	
 	public static String botonPagarXpath = "//button[contains(@class,'basket-button')]"; // se muestran en botón el importe total del pedido
+	
+	public static String precioBotonPagarXpath = "//div[contains(@class, 'basket-button-amount')]"; // el precio pintado en el botón Pagar
+		
 	
 	public static String getButtonFormaPagoXpath(String formaPago) { // Escoger el medio de pago para finalizar el pedido
 		
@@ -94,7 +103,58 @@ public class PaymentResource {
 	 * Pantalla de pago
 	 * Medio de pago Redsys
 	 */
-	public static class Redsy {
+	public static class Redsys {
+		public static String matSelectPaymentCard = "//mat-select[contains(@class, 'mat-select payment-card-select')]";
+		public static String selectPaymentCard = "//mat-select[contains(@class, 'mat-select payment-card-select')]//div[contains(@class, 'mat-select-value')]";
+		
+		public static String selectCard = "//div[contains(@class, 'mat-select-arrow-wrapper')]/div";
+		public static String elementNuevaTarjeta ="//span[contains(@class, 'mat-option-text')]//label[contains(text(), 'Nueva tarjeta')]";
+		
+	}
+	
+	/*
+	 * Propinas 
+	 * 	
+	 */
+	public static class Propina {
+		public static String waitFormularioPropinaXpath = "//app-tip[@class='basket-tip-wrapper']"; // el apartado de las propinas
+		
+		public static String listadoPropinasXpath = "//div[contains(@class, 'tip-percentage')]/ancestor::div[contains(@class, 'tip')]"; //listado de propina
+		
+		public static String propinaSelectedXpath = "//div[@class='tip selected']" ;// la propina seleccionada
+		
+		public static String precioPorpinaSeleccionadaXpath = "//div[contains(@class, 'price-breakdown-line')]//child::div[contains(text(), 'Propina')]/following-sibling::div"; // Precio de la propina elegina
+		
+		public static String subTotalSinPropinaXpath = "//div[contains(@class, 'price-breakdown-line')]//child::div[contains(text(), 'Subtotal')]/following-sibling::div"; // subTotal
+		
+		public static String precioTotalPagarXpath = "//div[contains(@class, 'price-breakdown-line')]//child::div[contains(text(), 'Total')]/following-sibling::div"; //Total a pagar co
+		
+		
+		public static String getSubTotal() {
+			WebElement subTotal = TestBase.getElementByFluentWait(By.xpath(subTotalSinPropinaXpath), 30, 5);
+			return subTotal.getText();
+		}
+		
+		public static String getPrecioPropina() {
+			WebElement precioPropina = TestBase.getElementByFluentWait(By.xpath(precioPorpinaSeleccionadaXpath), 30, 5);
+			return precioPropina.getText();
+		}
+		
+		public static String getPrecioTotalPagar() {
+			WebElement precioTotalPaga = TestBase.getElementByFluentWait(By.xpath(precioTotalPagarXpath), 30, 5);
+			return precioTotalPaga.getText();
+		}
+		
+		public static String getPrecioTotalBotonPagar() {
+			WebElement precioTotalPagaBotonPagar = TestBase.getElementByFluentWait(By.xpath(precioBotonPagarXpath), 30, 5);
+			return precioTotalPagaBotonPagar.getText();
+		}
+		
+		public static boolean isPropinaSelected () {
+			
+			return TestBase.isElementPresent(By.xpath(propinaSelectedXpath)) && TestBase.isElementPresent(By.xpath(precioPorpinaSeleccionadaXpath));
+	
+		}
 		
 	}
 

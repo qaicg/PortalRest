@@ -18,6 +18,16 @@ public class PaymentCard {
 	public String telephone;
 	public String fakePhone; // fakePhone usuario no activo para compra Bizum
 	
+	public String fakeIban; // fake numero de tajeta bancaria que nos debe funcionar en la plataforma del banco
+	
+	public String getFakeIban() {
+		return fakeIban;
+	}
+
+	public void setFakeIban(String fakeIban) {
+		this.fakeIban = fakeIban;
+	}
+
 	public CardType cardType;//indique el tipo de tarjeta de pagament si es Visa, Master o otra
 	
 	
@@ -130,7 +140,11 @@ public class PaymentCard {
 		this.telephone = telephone;
 		this.cardType = cardType;
 		
-		if(getPaymentName().equalsIgnoreCase("Bizum")) setFakePhone("765432019"); else setFakePhone(null);
+		if(getPaymentName().equalsIgnoreCase("Bizum")) 
+			setFakePhone("765432019"); 
+		else {
+			setFakePhone(null);
+		}
 	}
 	
 }
