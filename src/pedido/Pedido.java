@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mysql.cj.util.StringUtils;
+
 import graphql.Assert;
 import utils.Utils;
 
@@ -33,7 +35,7 @@ public class Pedido {
 	public void setTotalUnidades() {
 		int quantity = 0;
 		for(Product p: product) {
-			quantity += Integer.parseInt(p.getUnidad());
+			quantity +=  !StringUtils.isNullOrEmpty(p.getUnidad()) ? Integer.parseInt(p.getUnidad()) : 1;
 		}
 		
 		this.totalUnidades = String.valueOf(quantity);

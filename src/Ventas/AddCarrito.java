@@ -67,6 +67,9 @@ public class AddCarrito extends TestBase {
 		//fin test 08/05/23
 		
 		//List<Formato> articleformats = new ArrayList<Formato>();
+		 
+		 List<Integer> platosToSelect = new ArrayList<Integer>();
+		 List<WebElement> arrayPlatosMenu = new ArrayList<WebElement>();
 		
 		if(goBack.equalsIgnoreCase("true")) {
 			fOrderProducts = firstOrderProducts.split(",");			
@@ -152,8 +155,10 @@ public class AddCarrito extends TestBase {
 						espera(1000);
 						if (isElementPresent(By.tagName("app-menu-dialog"))) { // ES UN MENÚ
 							//EL OBJETIVO ES CLICAR LAS PRIMERAS OPCIONES DE TODOS LOS ORDENES.
-							List<WebElement> arrayPlatosMenu = driver.findElements(By.xpath("//app-menu-dialog//div[contains(@class,'dish-menu-item')]"));
-							List<Integer> platosToSelect = stringArrayToInteger(opcionesMenu);
+							//List<WebElement> arrayPlatosMenu = driver.findElements(By.xpath("//app-menu-dialog//div[contains(@class,'dish-menu-item')]"));
+							//List<Integer> platosToSelect = stringArrayToInteger(opcionesMenu);
+							arrayPlatosMenu = driver.findElements(By.xpath("//app-menu-dialog//div[contains(@class,'dish-menu-item')]"));
+							platosToSelect = stringArrayToInteger(opcionesMenu);
 							espera(1000);
 							log("Añado menú");
 							for (int x=0;x<platosToSelect.size();x++) {
@@ -166,6 +171,9 @@ public class AddCarrito extends TestBase {
 							
 							//El menú tiene como cantidadProducto = "1"
 							cantidadProducto = "1";
+							//platosToSelect = null;
+							//opcionesMenu = null;
+							//arrayPlatosMenu = null;
 
 						}
 
@@ -226,8 +234,11 @@ public class AddCarrito extends TestBase {
 					
 					//Set Cantidad
 					String unidadXpath = "//div[contains(@class,'dishItem')]//div[contains(@class, 'product-item-add')]//child::app-input-number-spinner//div[contains(@class, 'number-spinner-value')]";
-					
-					waitUntilPresence(unidadXpath, true);
+										
+					if(Utils.isNullOrEmpty(cantidadProducto)) {
+						getElementByFluentWait(By.xpath(unidadXpath), 50, 5);
+						//waitUntilPresence(unidadXpath, true);
+					}
 					
 					if(isElementPresent(By.xpath(unidadXpath)) && Utils.isNullOrEmpty(cantidadProducto)) {
 						log("Añadir la cantidad");
@@ -239,6 +250,7 @@ public class AddCarrito extends TestBase {
 							cantidadProducto = productUnit.get(productUnit.size() -1).getAttribute("innerText");
 						} else {
 							log("Error cantidad 1 : No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
+							extentTest.warning("Error cantidad 1 : No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
 							//Assert.assertTrue(false);
 						}
 					}
@@ -325,6 +337,7 @@ public class AddCarrito extends TestBase {
 					
 					//Save order products in Data for using it  later to  validation order
 					Data.getInstance().getPedido().setProduct(orderProductList);
+					
 					log("El precio total del pedido con todos los prodcutos en la cesta  --> " + Data.getInstance().getPedido().getPrecioTotal());
 					log("Total unidades muestrado en el boton ver pedido / pedir ahora y añadido en la cesta  --> " + Data.getInstance().getPedido().getTotalUnidades());
 
@@ -370,7 +383,8 @@ public class AddCarrito extends TestBase {
 		log("Validaciones de botón flotante de carrito");
 
 		//VALIDAMOS UNIDADES TOTALES AÑADIDAS AL CARRITO Y VISIBLES EN EL BOTÓN FLOTANTE..
-		if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-units')]")).getAttribute("innerText").equalsIgnoreCase(String.valueOf(productosEncontrados))) {
+		//if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-units')]")).getAttribute("innerText").equalsIgnoreCase(String.valueOf(productosEncontrados))) {
+		if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-units')]")).getText().equalsIgnoreCase(productosEncontrados)) {
 			log("- "+productosEncontrados + " productos añadidos");
 		}else {
 			log("- Error en validación de unidades añadidas al carrito -> Esperadas:" + productosEncontrados + " Visibles: "+ driver.findElement(By.xpath("//div[contains(@class,'basket-button-units')]")).getAttribute("innerText") );
@@ -378,14 +392,16 @@ public class AddCarrito extends TestBase {
 		}
 
 		//VALIDAMOS IMPORTE TOTAL VISIBLE DESDE EL BOTÓN DEL CARRITO FLOTANTE
-		if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-amount')]")).getAttribute("innerText").equalsIgnoreCase(String.valueOf(totalEsperado))) {
+		//if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-amount')]")).getAttribute("innerText").equalsIgnoreCase(String.valueOf(totalEsperado))) {
+		if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-amount')]")).getText().equalsIgnoreCase(totalEsperado)) {
 			log("- "+totalEsperado + " total validado");
 		}else {
 			log("- Error en validación de total visible en carrito" );
 			return(false);
 		}
 
-		if(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")).getAttribute("innerText").equalsIgnoreCase("")) {
+		//if(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")).getAttribute("innerText").equalsIgnoreCase("")) {
+		if(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")).getText().equalsIgnoreCase("")) {
 			log("- Error en validación del string del botón flotante del carrito, está vacio (debería aparecer algo como Ver pedido)" );
 			return(false);
 		}

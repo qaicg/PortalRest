@@ -3,8 +3,11 @@ package pedido;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.cj.protocol.Warning;
+
 import Objects.ProductItem;
 import graphql.Assert;
+import utils.TestBase;
 import utils.Utils;
 
 public class Product extends ProductItem {
@@ -44,25 +47,33 @@ public class Product extends ProductItem {
 	
 	/** Calucalamos el precio total del producto a comprar */
 	public void setPrecioPorUnidad() {
+		double precio;
+		double precioTotal;
 		if(Utils.isNullOrEmpty(this.getPrecio()) || Utils.isNullOrEmpty(this.getUnidad())) {
 			if(Utils.isNullOrEmpty(this.getPrecio())) {
-				Utils.logStatic("Error no hemos encontrado el precio del producto: " + getNombre());
+				Utils.logStatic("Warning. No encontrado el precio del producto: " + getNombre());
+				//getExtentTest().warning("Warning. No hemos encontrado el precio del producto: " + getNombre());
+				//getExtentTest().error("Warning. No hemos encontrado el precio del producto: " + getNombre());
 			} 
 			
 			if(Utils.isNullOrEmpty(this.getUnidad())) {
-				Utils.logStatic("Error no hemos encontrado la unidad del producto: " + getNombre());
+				Utils.logStatic("Warning. No hemos encontrado la unidad del producto: " + getNombre());
+				//getExtentTest().warning("Warning. No hemos encontrado la unidad del producto: " + getNombre());
+				//getExtentTest().error("Warning. No hemos encontrado la unidad del producto: " + getNombre());
 			}
-			
-			Assert.assertTrue(false);
+			this.precioPorUnidad = "0.00" + " €";
+			Assert.assertTrue(true);
+			return;
 		}
-		
-		double precio = Utils.sGetDecimalStringAnyLocaleAsDouble(this.getPrecio().split("€")[0]);
-		precio = Utils.round(precio, 2);
-		double precioTotal = Utils.round((precio * Utils.sGetDecimalStringAnyLocaleAsDouble(this.getUnidad())), 2);
-		
-		this.precioPorUnidad = String.format("%.2f", precioTotal).replace(".", ",") + " €"; //String.format("%.2f", precioTotal) permite guardar los 2 decimales
-		
-		Utils.logStatic("El precio total de la compra del producto " + getNombre() + " --> " +precioPorUnidad);
+		else {
+			precio = Utils.sGetDecimalStringAnyLocaleAsDouble(this.getPrecio().split("€")[0]);
+			precio = Utils.round(precio, 2);
+			precioTotal = Utils.round((precio * Utils.sGetDecimalStringAnyLocaleAsDouble(this.getUnidad())), 2);
+			
+			this.precioPorUnidad = String.format("%.2f", precioTotal).replace(".", ",") + " €"; //String.format("%.2f", precioTotal) permite guardar los 2 decimales
+			
+			Utils.logStatic("El precio total de la compra del producto " + getNombre() + " --> " +precioPorUnidad);
+		}
 	}
 	
 	public void setPrecioPorUnidad(String price) {

@@ -85,9 +85,7 @@ public class testRunner {
 			} else {
 				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)
 				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)");
-				
-				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\AbrePortalRest\\AbrirPortalRest.xml");
-				
+								
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
 				
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");
