@@ -13,7 +13,7 @@ public enum PaymentGateways {
 		public PaymentCard getPayment() {
 			if(!PaymentCard.getPaymentName().contentEquals("Redsys")) PaymentCard.setPaymentName("Redsys");
 			String name = "Redsys";
-			String cardNumber = "4548812049400004";
+			String cardNumber = "4548810000000003";
 			String[] expirationDate = {"12", "26"};
 			String DatosCVV = "123";
 			PaymentCard card = new PaymentCard(name, cardNumber, expirationDate, DatosCVV, CardType.DEFAULTS);

@@ -70,7 +70,7 @@ public class RepeatAddCarrito extends TestBase {
 		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", 
 		"totalEsperado", "goBackByAddOrderButton", "importeMinimo","validarImporteMinimo"})	
 	public void checkOutPedido(@Optional ("") String repeatProductos, @Optional ("") String repeatProductosTotalPrice, String formaPago,
-			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
+			@Optional ("true") String nuevaTarjeta, @Optional ("4548810000000003") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv, String pedidoConfirmadoString, 
 			String shop, String customerMail, @Optional ("")String miMonederoString, @Optional ("") String formaPago2, 
 			String tipoServicio, @Optional ("") String unidades, @Optional ("") String mesa, @Optional ("") String totalEsperadoMasCargos,

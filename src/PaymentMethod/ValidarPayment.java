@@ -13,9 +13,22 @@ import utils.TestBase;
 public class ValidarPayment extends TestBase {
 
 	public static boolean validaPantalla(String[] arrayNombres,String totalEsperado, String unidades, String totalEsperadoMasCargos, String repartoPermitido, String tipoServicio) {
-
+		String basketDateElementXpath = null;
 		String basketTitle = w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'basket-ticket-title')]"))).getAttribute("innerText");
-		String basketDate = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'basket-ticket-row')]"))).getAttribute("innerText"); 
+
+//		String basketDate = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'basket-ticket-row')]"))).getAttribute("innerText"); 
+		if(Data.getInstance().isServerCloudQuality04()) {
+			logStatic("the test server:  cloudquality04"); 
+			basketDateElementXpath = "//div[contains(@class,'basket-ticket-header-wrapper')]";
+		} else if(Data.getInstance().isServerCloudQuality03()) {
+			logStatic("the test server:  cloudquality03");
+			basketDateElementXpath = "//div[contains(@class,'basket-ticket-row')]";
+		}
+		
+		//Testear que tenemos la información de la fecha pedido
+		String basketDate = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath(basketDateElementXpath))).getAttribute("innerText"); 
+		
+		
 		int unidadesInteger=1;
 		List<WebElement> basketLines = driver.findElements(By.tagName("app-basket-line"));
 

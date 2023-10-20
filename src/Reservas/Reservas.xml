@@ -99,6 +99,10 @@
 	<parameter name="resultatEsperado" value="true" /> <!-- -->
 	
 	<parameter name="modoSinVentana" value="false" /> <!--modo sin ventana para test case o test suite -->
+
+	 <!-- Determinar el servidor -->
+	 <parameter name="servidor" value="cloudquality03" />
+
 	
 	<!-- Comprobar la descaga de correo electronico de yahoo mail-->
 	<!--test name="Prueba de reserva simple para connectar en webmail yahoo" enabled="true" preserve-order="true">
@@ -129,13 +133,15 @@
 			<class name="Reservas.Reserva">
 				<methods>
 					<parameter name="room" value="Piscina" />
-					<parameter name="dia" value="02/03/2023" />
-					<parameter name="hora" value="14:00" />
+					<parameter name="dia" value="07/12/2023" />
+					<parameter name="hora" value="20:30" />
 					<parameter name="numeroCliente" value="1" />
-					<parameter name="citaReserva" value="jueves, 2 de marzo de 2023" />
+					<parameter name="citaReserva" value="jueves, 7 de diciembre de 2023" />
 					<parameter name="infoDetails" value="persona a las" />
 					
 					<parameter name="testPlusMenosBtn" value="false" />
+					
+					<parameter name="telefono" value="" />
 					
 					<include name="selectedDay" />
 					
@@ -200,6 +206,8 @@
 					
 					<parameter name="testPlusMenosBtn" value="false" />
 					
+					<parameter name="telefono" value="" />
+					
 					<include name="selectedDay" />
 					
 					<include name="inputNumberPerson" />
@@ -229,6 +237,8 @@
 		<parameter name="existeRoom" value="true" />
 		<parameter name="insertBooking" value="true" />
 		<parameter name="ingresarDatosPorDefecto" value="true" /><!-- Seleccionar datos disponible a ingresar en la reserva   -->
+		
+		<parameter name="telefono" value="" />
 		
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
@@ -261,7 +271,7 @@
 	<!-- -->
 
 	<!-- Realizar nueva reserva sin datos parametrados de Sala, Hora, día y hora. Luego al finalizar la reserva, verificar que llegue la notitficación al email del Cliente y del Restaurante  -->
-	<test name="Prueba de realizar nueva reserva sin datos parametrados, con sala. Después verificar la llega de notificación de confirmación al Cliente y  al Restaurante" enabled="true" preserve-order="true">
+	<test name="Prueba de realizar nueva reserva sin datos parametrados, con sala. Después verificar la llega de notificación de confirmación al Cliente y al Restaurante" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://booking00.hiopos.com/booking?data=%3D%3DQZzxWYm1jbp1GZhZSO2EDN2ETPklEcvh2c" />
 		<parameter name="shop" value="43496" />
 		<parameter name="existeRoom" value="true" />
@@ -284,7 +294,9 @@
 					
 					<parameter name="testPlusMenosBtn" value="false" />
 					
-					<include name="createReservation" />
+					<include name="createReservation">
+						<parameter name="telefono" value="" />
+					</include>
 									
 				</methods>
 			</class>
@@ -321,21 +333,23 @@
 	<!-- -->
 
 	<!-- Realizar nueva reserva con datos parametrados de Sala, Hora, día y hora. Luego al finalizar la reserva, verificar que llegue la notitficación al email del Cliente y del Restaurante  -->
-	<test name="Prueba de realizar nueva reserva simple con datos parametrados Sala, Hora, día y hora. Luego verificar la notificación de confirmación al cliente y  al restaurante" enabled="true" preserve-order="true">
+	<test name="Prueba de realizar nueva reserva simple con datos parametrados Sala, Hora, día y hora. Luego verificar la notificación de confirmación al cliente y al restaurante" 
+	enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://booking00.hiopos.com/booking?data=%3D%3DQZzxWYm1jbp1GZhZSO2EDN2ETPklEcvh2c" />
 		<parameter name="shop" value="43496" />
 		<parameter name="existeRoom" value="true" />
 		<parameter name="insertBooking" value="true" />
-		<parameter name="ingresarDatosPorDefecto" value="false" /><!-- Seleccionar datos disponible a ingresar en la reserva   -->
+		<parameter name="ingresarDatosPorDefecto" value="true" /><!-- Seleccionar datos disponible a ingresar en la reserva   -->
 		
+				
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarCookies" />
 			<class name="Reservas.CreateBooking">
 				<methods>
 					<parameter name="room" value="Piscina" />
-					<parameter name="dia" value="02/03/2023" />
-					<parameter name="hora" value="14:00" />
+					<parameter name="dia" value="07/12/2023" />
+					<parameter name="hora" value="" />
 					<parameter name="citaReserva" value="" />
 					<parameter name="infoDetails" value="" />
 					
@@ -343,8 +357,10 @@
 					<parameter name="resultatEsperado" value="true" />
 					
 					<parameter name="testPlusMenosBtn" value="false" />
-					
-					<include name="createReservation" />
+										
+					<include name="createReservation">
+						<parameter name="telefono" value="" />
+					</include>
 									
 				</methods>
 			</class>
@@ -382,7 +398,7 @@
 		<parameter name="shop" value="43496" />
 		<parameter name="existeRoom" value="true" />
 		<parameter name="insertBooking" value="false" />
-		
+				
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarCookies" />
@@ -394,6 +410,8 @@
 					<parameter name="hora" value="" />
 					
 					<parameter name="testPlusMenosBtn" value="true" />
+					
+					<parameter name="telefono" value="" />
 					
 					<include name="selectedDay" />
 					
@@ -483,7 +501,7 @@
 		</classes>
 	</test-->
 	
-	<!-- Comprobar la descaga de correo electronico de yahoo mail-->
+	<!-- Comprobar la descaga de correo electronico de yahoo mail
 	<test name="Prueba de reserva simple para connectar en webmail yahoo" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://booking00.hiopos.com/booking?data=%3D%3DQZzxWYm1jbp1GZhZSO2EDN2ETPklEcvh2c" />
 		<parameter name="shop" value="43496" />
@@ -496,6 +514,6 @@
 			</class>
 		</classes>
 		
-	</test>
+	</test> -->
 	
 </suite>

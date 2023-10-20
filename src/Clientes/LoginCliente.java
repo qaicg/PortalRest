@@ -89,6 +89,7 @@ public class LoginCliente extends TestBase {
 				if(isElementPresent(By.xpath("//div[contains(@class, 'rounded-buttons-wrapper')]"))) {
 					espera(500);
 					w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[contains(@class, 'main-text')  and text()='" + realizarPedidoString + "']//ancestor::app-circle-progress-button")));
+					
 					if(isElementPresent(By.xpath("//label[contains(@class, 'main-text')  and text()='" + realizarPedidoString + "']//ancestor::app-circle-progress-button"))) {
 						log("Pulsar el botón Realizar pedido en la ficha principal del restaurante.");
 						clicJS(driver.findElement(By.xpath("//label[contains(@class, 'main-text')  and text()='" + realizarPedidoString + "']//ancestor::app-circle-progress-button")));

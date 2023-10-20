@@ -85,6 +85,7 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentAventReporter;
 import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.github.javafaker.Faker;
 import com.google.gson.annotations.Until;
 import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
@@ -95,6 +96,7 @@ import Cadenas.Es;
 import Objects.ProductItem;
 import Windows.TrayIconDemo;
 import enums.CookiesPortalRest;
+import enums.Servidor;
 import lombok.var;
 import main.Correo;
 import main.Reader;
@@ -104,7 +106,7 @@ import java.util.*;
 public class TestBase extends StringUtils {
 
 	protected static WebDriver driver;
-	protected DatabaseConnection databaseConnection = new DatabaseConnection();;
+	protected DatabaseConnection databaseConnection = new DatabaseConnection();
 
 	public DatabaseConnection getDatabaseConnection() {
 		return databaseConnection;
@@ -125,6 +127,12 @@ public class TestBase extends StringUtils {
 	ChromeOptions options;
 	
 	public ExtentTest extentTest;
+	
+	Faker fakePedio = new Faker();
+	
+	public Faker getFakePedio() {
+		return this.fakePedio;
+	}
 	
 	@BeforeClass
 	@Parameters({"test"})
@@ -158,8 +166,8 @@ public class TestBase extends StringUtils {
 	}
 
 	@BeforeTest
-	@Parameters({"modoSinVentana", "cloudLicenceBeta"})
-	public void beforeTest(final ITestContext testContext, @Optional("false") boolean modoSinVentana, @Optional("false") boolean cloudLicenceBeta) {
+	@Parameters({"modoSinVentana", "cloudLicenceBeta", "servidor"})
+	public void beforeTest(final ITestContext testContext, @Optional("false") boolean modoSinVentana, @Optional("false") boolean cloudLicenceBeta, String servidor) {
 		
 		if(!isNullOrEmpty(Data.getInstance().getNewUserMail())){
 			Data.getInstance().setNewUserMail(null);
@@ -224,6 +232,8 @@ public class TestBase extends StringUtils {
 			e.printStackTrace();
 			
 		}
+		
+		initServerTestCloudQuality(servidor);
 	}
 
 	@AfterMethod
@@ -863,5 +873,53 @@ public class TestBase extends StringUtils {
 	public static void back() {
 		clicJS(driver.findElement(By.xpath("//mat-icon[text()='keyboard_arrow_left']")));	
 	}
-
+		
+	public void initServerTestCloudQuality(String servidor) {
+		log("\rDeterminamos el servidor donde se executa el test: \n" + getServerTestList() + "\r");
+		
+		if(!org.apache.commons.lang3.StringUtils.isBlank(servidor)  ) {
+			log("El parametro del servido de test está definido en el fichero testsuite");
+			
+			if(servidor.contains(Servidor.QUALITY03.getServerName())) {
+				Data.getInstance().setServerCloudQuality03(true);
+				log("El servidor de test:" + Servidor.QUALITY03.getServerName() + "\r");
+			} 
+			else if(servidor.contains(Servidor.QUALITY04.getServerName())) {
+				Data.getInstance().setServerCloudQuality04(true);
+				log("El servidor de test:" + Servidor.QUALITY04.getServerName() + "\r");
+			}
+			else {
+				log("Error: no se ha detectado el servidor de test\r");
+				Assert.assertTrue(false, "Error: no se ha detectado el servidor");
+			}
+		}
+		else if(driver.getCurrentUrl().contains(Servidor.QUALITY03.getServerName())) {
+			Data.getInstance().setServerCloudQuality03(true);
+			log("Se ha definido el servidor de test:" + Servidor.QUALITY03.getServerName() + "\r");
+		} 
+		else if(driver.getCurrentUrl().contains(Servidor.QUALITY04.getServerName())) {
+			Data.getInstance().setServerCloudQuality04(true);
+			log("Se ha definido el servidor de test:" + Servidor.QUALITY04.getServerName() + "\r");
+			
+		}
+		else {
+			log("Error: no se ha detectado el servidor de test" + "\r");
+			Assert.assertTrue(false, "Error: no se ha detectado el servidor");
+		}
+		
+	}
+	
+	public String getServerTestList() {
+		String servidores = "";
+		
+		for(Servidor srv: Servidor.values()) {
+			if(srv.ordinal() != Servidor.values().length - 1) {
+				servidores += "Server " + srv.name() + " -> " + srv.getServerName() + " \n" ;
+			}
+			else
+				servidores += "Server " + srv.name() + " -> " + srv.getServerName();
+		}
+				
+		return servidores;
+	}
 }

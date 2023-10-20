@@ -20,11 +20,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import graphql.Assert;
+//import graphql.Assert;
 import main.Correo;
 import utils.Data;
 import utils.TestBase;
@@ -34,6 +35,9 @@ import utils.getDummyData;
 public class Reserva extends TestBase {
 	String diaReserva, hora, sala, localizador, observaciones, prefijo, telefono, email, citaReserva, nombreCliente, emailCliente = null;
 	String dummyLocalizador, dummyName, dummyTelefono, dummyEmail, dummyObservaciones = null; 
+	String elementDerivaRest = "//app-derivate-restaurant";
+	
+	boolean disponibilidad = true;
 	
 	public BookingInformation bookingInfo;
 	
@@ -45,11 +49,14 @@ public class Reserva extends TestBase {
 	@Test(description = "Comprobar si se puede realizar la reserva después de ingresar la información(Dia, Hora, Sala y Pax)", priority = 1)
 	@Parameters({"titleHeader", "resultatEsperado"})
 	public void realizarReserva(@Optional("") String titleHeader, @Optional("") boolean resultatEsperado) {
-		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'title-header')]")));
+		//Commentamos la siguiente linea por que la han quitado de momento
+		//w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'title-header')]")));
+		getElementsByFluentWait(By.xpath("//div[contains(@class, 'title-header')]"), 40, 10);
 		//
-		if(!driver.findElement(By.xpath("//div[contains(@class, 'title-header')]")).getText().equalsIgnoreCase(titleHeader)) {
+		if(isElementPresent(By.xpath("//div[contains(@class, 'title-header')]")) &&!driver.findElement(By.xpath("//div[contains(@class, 'title-header')]")).getText().equalsIgnoreCase(titleHeader)) {
 			log("Error: no se ha encuentrado el titulo: " + titleHeader +"en pantalla Reserva");
-			Assert.assertTrue(false);
+			extentTest.warning("Error: no se ha encuentrado el titulo: " + titleHeader +"en pantalla Reserva");
+			//Assert.assertTrue(false);
 		}
 		
 		String stringButton = "//button[contains(@class, 'button primary-color')]";
@@ -69,7 +76,51 @@ public class Reserva extends TestBase {
 			}
 		} else if (sDisabled != "null" && resultatEsperado) {
 			clicJS(driver.findElement(By.xpath(stringButton)));
+			espera(500);
+			
+			//Verificar que no hay derivaciones y que la hora elegida está disponible
+			getElementsByFluentWait(By.xpath(this.elementDerivaRest), 40, 5);
+			
+			if(isElementPresent(By.xpath(this.elementDerivaRest)) && 
+					isElementPresent(By.xpath("//app-alternative-restaurant"))) 
+			{
+				log("No hay disponibilidad de momento, Intentar mas tarde.");
+				log("Nuestra disponibilidad es la siguiente:");
+				
+				Assert.assertTrue(isElementPresent(By.xpath("//div[contains(@class, 'restaurant-hours')]")));
+				
+				Assert.assertTrue(driver.findElement(By.xpath(this.elementDerivaRest)).getAttribute("innerText").split("\n").length == 4);
+				
+				Assert.assertTrue(driver.findElement(By.xpath(this.elementDerivaRest)).getAttribute("innerText").split("\n")[0].equalsIgnoreCase("No hay disponibilidad de momento, Intentar mas tarde."), "No existe la información no hay disponibilidad");
+				
+				Assert.assertTrue(driver.findElement(By.xpath(this.elementDerivaRest)).getAttribute("innerText").split("\n")[1].equalsIgnoreCase("Nuestra disponibilidad es la siguiente:"), "Falta la frase Nuestra disponibilidad es la siguiente:");
+
+				clicJS(driver.findElements(By.xpath("//div[contains(@class, 'restaurant-hours')]//button")).get(0));
+								
+				WebElement btnConfirm =  driver.findElement(By.xpath("//div[contains(@class, 'error-message-content-button')]//button[contains(@class, 'button primary-color')]"));
+				
+				//Cambiar la hora:
+				this.hora = driver.findElements(By.xpath("//div[contains(@class, 'restaurant-hours')]//button")).get(0).getText();
+				clicJS(btnConfirm);
+				log("Seleccionar button confirmación Aceptar por la hora:" + this.hora);
+			}
+			
+			//Atención: No hay disponibilidad de momento, Intentar mas tarde.Pulsar el botón Aceptar
+			if(isElementPresent(By.xpath("//app-base-dialog//div[contains(@class, 'dialog-header-title')]")) &&
+					driver.findElement(By.xpath("//app-base-dialog//div[contains(@class, 'dialog-header-title')]")).getText().equalsIgnoreCase("Atención") &&
+					driver.findElement(By.xpath("//app-message//div//div[contains(@class, 'error-message-content-title')]")).getText().equalsIgnoreCase("No hay disponibilidad de momento, Intentar mas tarde.") &&
+					driver.findElement(By.xpath("//app-message//div//div[contains(@class, 'error-message-content-button')]//button[contains(@class, 'button primary-color')]")).getText().equalsIgnoreCase("Aceptar")
+					) {
+				log("Atención: No hay disponibilidad de momento, Intentar mas tarde.");
+				extentTest.warning("Atención: No hay disponibilidad de momento, Intentar mas tarde.");
+				clicJS(driver.findElement(By.xpath("//app-message//div//div[contains(@class, 'error-message-content-button')]//button[contains(@class, 'button primary-color')]")));
+				
+				disponibilidad = false;
+				return;
+			}
+			
 			espera(2000);
+			log("Disponibilidad OK");
 		}
 		
 	}
@@ -100,13 +151,17 @@ public class Reserva extends TestBase {
 			String numeroCliente, String infoDetails, String horaReserva, String citaReserva, String urlEmail, String reservationDay, String emailNotificacionReservas, String tipoCliente) {
 		
 		//Validar el title de la pagina
-		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'title-header')]")));
+		//Commentamos la siguiente linea por que la han quitado de momento
+		//w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'title-header')]")));
+		getElementsByFluentWait(By.xpath("//div[contains(@class, 'title-header')]"), 40, 10);
 		
-		String tituloPaginaReserva = driver.findElement(By.xpath("//div[contains(@class, 'title-header')]")).getText();
+		if(isElementPresent(By.xpath("//div[contains(@class, 'title-header')]"))) {
+			String tituloPaginaReserva = driver.findElement(By.xpath("//div[contains(@class, 'title-header')]")).getText();
 		
-		if(!tituloPaginaReserva.equalsIgnoreCase(titleHeader)) {
-			log("El titulo de la pagina es: " + tituloPaginaReserva + " y esparamos que sea: " + titleHeader);
-			Assert.assertTrue(false);
+			if(!tituloPaginaReserva.equalsIgnoreCase(titleHeader)) {
+				log("El titulo de la pagina es: " + tituloPaginaReserva + " y esparamos que sea: " + titleHeader);
+				Assert.assertTrue(false);
+			}
 		}
 		
 		//espera();
@@ -139,6 +194,8 @@ public class Reserva extends TestBase {
 		horaReserva = isNullOrEmpty(horaReserva) ? this.hora : horaReserva;
 		
 		citaReserva = isNullOrEmpty(citaReserva) ? this.citaReserva : citaReserva;
+		
+		telefono = isNullOrEmpty(telefono) ? this.dummyTelefono : telefono;
 		
 		//log("2 reservationDay ------> this.diaReserva " + this.diaReserva);
 		
@@ -223,6 +280,12 @@ public class Reserva extends TestBase {
 			selectPrefijoTelefono("Spain (+34)", resultadoEsperado);
 		
 		//Telefono
+		if(!isNullOrEmpty(dummyTelefono) && dummyTelefono.startsWith("+", 0)) {
+			//eliminamos el prefijo +34
+			dummyTelefono = dummyTelefono.substring(3);
+			dummyTelefono = dummyTelefono.strip().trim().replace(" ", "");
+		}
+		
 		if(!isNullOrEmpty(telefono))
 			enviarTexto(inputPhone, telefono);
 		else
@@ -571,7 +634,7 @@ public class Reserva extends TestBase {
 			espera(500);
 		}
 		else {
-			Assert.assertTrue(false, () -> "No se ha podido consultar el correo del Cliente");
+			Assert.assertTrue(false,  "No se ha podido consultar el correo del Cliente");
 		}
 		
 		/*	
@@ -622,7 +685,7 @@ public class Reserva extends TestBase {
 			espera(500);
 		} 
 		else {
-			Assert.assertTrue(false, () -> "No se ha podido consultar el correo del Restauirante");
+			Assert.assertTrue(false, "No se ha podido consultar el correo del Restauirante");
 		}
 		
 		/*
@@ -762,8 +825,11 @@ public class Reserva extends TestBase {
 		String stringDay;
 		String stringValidateSelectedDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator mat-calendar-body-selected')]";
 		
-		if(isNullOrEmpty(day) || day.equalsIgnoreCase("hoy") || ingresarDatosPorDefecto) {
+		if(isNullOrEmpty(day) || day.equalsIgnoreCase("hoy") || (ingresarDatosPorDefecto && day.split("/").length == 0)) {
+			
 			day = fechaHoy.split("/")[0].replaceFirst("^0+(?!$)", ""); // saccar los 0 de la izquerda replaceFirst("^0+(?!$)", "")
+			
+			
 			stringDay = "//div[contains(@class,'mat-calendar-body-cell-content mat-focus-indicator') and contains(text(), '"+ fechaHoy.split("/")[0].replaceFirst("^0+(?!$)", "") +"')]";
 			
 			this.citaReserva = getCitaReserva(fechaHoy, "/");

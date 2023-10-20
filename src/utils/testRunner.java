@@ -13,13 +13,19 @@ import org.testng.TestNG;
 public class testRunner {
 	 //POR DEFECTO EJECUTA LOS TESTS DE LA VERSIÓN MASTER DE PORTALREST (QA09)
 	//VARIABLES DE SELECCIÓN DE ENTORNO DE EJECUCIÓN//
+
+	/*Cambio en las versiones: 19/09/2023
+	 * VERISON ESTABLE --> QA09
+	 * VERSION MASTER --> QA08 -- > QA10
+	 * 
+	 */
 	
 													//-------------------**********DEFINIDIR CONSTANTES***********--------------------------//
-														static boolean RUNALLTESTS = false; //RUNALLTESTS: true --> VERSION ESTABLE (QA08) y VERSION MASTER (QA09)
+														static boolean RUNALLTESTS = true; //RUNALLTESTS: true --> VERSION ESTABLE (QA08) y VERSION MASTER (QA09)
 														
 														static boolean SINVENTANA = false;
 														
-														static boolean ENTORNOTEST = true; //ENTORNOTEST: false --> VERSION ESTABLE (QA08); true --> VERSION MASTER (QA09)
+														static boolean ENTORNOTEST = true; //ENTORNOTEST: false --> VERSION ESTABLE (QA09); true --> VERSION MASTER (QA10)
 														
 														static boolean BETATEST = false; //BETATEST: true -->Tests en CloudLicenceBeta, false --> Tests en CloudLicence
 												   //-------------------******************************************--------------------------//
@@ -36,34 +42,34 @@ public class testRunner {
 			ENTORNOTEST = true;
 		}
 				
-		if(RUNALLTESTS) { // EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA09) Y DESPUES EN LA VERSION ESTABLE (QA08)
-			log("EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA09) Y DESPUES EN LA VERSION ESTABLE (QA08)");
+		if(RUNALLTESTS) { // EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA09) Y DESPUES EN LA VERSION ESTABLE (QA10)
+			log("EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA09) Y DESPUES EN LA VERSION ESTABLE (QA10)");
 			Data.getInstance().setRunAllTests(RUNALLTESTS);
 			
-			// EJECUTA LOS TESTS EN LA VERSION MASTER (QA09)
-			log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA09)");
+			// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA09)
+			log("EJECUTA LOS TESTS VENTAS EN LA VERSION ESTABLE (QA09) del servidor CloudQuality03");
 			
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
 			
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
 			
-			//Run tests Ventas con propinas en el servidor Master
-			addTestsVentasPropinas(true);
+			//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03
+			addTestsVentasPropinas(true, false);
 			
-			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
+			//Test Booking 
+			log("EJECUTA LOS Tests Booking en servidor cloudQuality03");
+			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
 			
 			
-			// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)
-			log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)");
-			
-			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\AbrePortalRest\\AbrirPortalRest.xml");
+			// EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)
+			log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)");
 			
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
 			
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");	
 			
-			//Run tests Ventas con propinas en el servidor de producción
-			addTestsVentasPropinas(false);
+			//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04
+			addTestsVentasPropinas(false, true);
 		
 			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
 			
@@ -74,24 +80,27 @@ public class testRunner {
 				// EJECUTA LOS TESTS EN LA VERSION MASTER (QA09)
 				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA09)");
 				
+				//Test clientes
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
 				
+				//Test ventas
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
 				
-				//Test Ventas con propinas
-				addTestsVentasPropinas(true);
+				//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03
+				addTestsVentasPropinas(true, false);
 				
-				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
+				//Test Booking
+				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
 			} else {
-				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)
-				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA08)");
+				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA10)
+				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA10)");
 								
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
 				
 				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");
 				
-				//Test Ventas con propinas
-				addTestsVentasPropinas(false);
+				//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04
+				addTestsVentasPropinas(false, true);
 				
 				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
 			}
@@ -134,16 +143,18 @@ public class testRunner {
 		Reporter.log(s + "<br>");	
 	}
 	
-	private static void addTestsVentasPropinas(boolean ServidorTest) {
+	private static void addTestsVentasPropinas(boolean ServidorCloudQuality03, boolean ServidorCloudQuality04) {
 		
-		if(ServidorTest) { // Servidor Master --> 
-			log("Añadimos los Tests de Ventas con propinas en el servidor Master");
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\Propinas.xml");
+		if(ServidorCloudQuality03) { // Servidor CloudQuality03 --> 
+			log("Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03");
+			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\Propinas.xml");
+			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\PropinasCloudQuality03.xml");
 		}
-		else { 
+		
+		if(ServidorCloudQuality04) {
 			//TODO: implementar los tests de propinas en Servidor de producción
-			log("Añadimos los Tests de Ventas con propinas en el servidor Producción");
-			suitefiles.add(null); //Servidor Estable --> Produccion
+			log("Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04");
+			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\PropinasCloudQuality04.xml"); //Servidor Estable --> Produccion
 		}
 	}
 }

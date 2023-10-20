@@ -145,6 +145,21 @@ public class AddCarrito extends TestBase {
 						addFromProductSheet(currentItem.getImagenElement(), currentItem.getNombre());
 					} else {
 						clicJS(currentItem.getBoton());
+						espera(100);
+						
+						//if(currentItem.getNombre().equals("Oyako Don")) {
+							//Test si se habre la fiche del artículo: 16/10/2023
+							String articleInfosXpath = "//div[contains(@class, 'product-info-wrapper-scrollable')]";
+							
+							if(isElementPresent(By.className("product-info-wrapper-scrollable"))) {
+								addFromProductSheet(currentItem.getNombre());
+							}
+							else {
+								log("Se ha añadido el producto " +  currentItem.getNombre() + " con exíto.");
+							}
+							//							
+						//}
+						
 					}
 					
 					productosAddeds.add(currentItem);
@@ -476,5 +491,42 @@ public class AddCarrito extends TestBase {
 		
 		log("Producto" + productName + " añadido desde la ficha");
 	}
+	
+	public void addFromProductSheet(String productName) {
+				
+		String sProductInfoWrapper = "//div[contains(@class, 'product-info-wrapper-scrollable')]";
+		
+		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(sProductInfoWrapper)));
+		
+		if(!driver.findElement(By.xpath(sProductInfoWrapper)).getAttribute("textContent").contains(productName)) {
+			String errorMensaje = "Errror: no se ha encontrado el producto " + productName + " en la ficha abierta";
+			log(errorMensaje);
+			Assert.assertTrue(false);
+		}
+		
+		String sButtonAdd = "//app-basket-button//button[contains(@class, 'main-btn basket-button')]";
+		String sButtonAddLabel1 = "+ Añadir al pedido";
+		String sButtonAddLabel2 = "Aceptar"; //cuando ya se abre la ficha con el producto añadido en la cesta. Falta solo aceptar.
+		w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(sButtonAdd)));
+		
+		if(!isElementPresent(By.xpath(sButtonAdd))) {
+			String errorMensaje = "Errror: no se ha encontrado el button  " + sButtonAddLabel1 + "/" + sButtonAddLabel2 + " en la ficha abierta para añadir el artículo a la cesta";
+			log(errorMensaje);
+			Assert.assertTrue(false);
+		}
+		
+		if(driver.findElements(By.xpath(sButtonAdd)).size() > 0) {
+			List<WebElement> elmeBtn = driver.findElements(By.xpath(sButtonAdd));
+			elmeBtn.forEach(btn -> {
+				if(btn.getText().contains(sButtonAddLabel1) || btn.getText().contains(sButtonAddLabel2)) {
+					clicJS(btn);  //CLIC EN AÑADIR A CARRITO
+				}
+			});
+		} else {
+			clicJS(driver.findElement(By.xpath(sButtonAdd))); //CLIC EN AÑADIR A CARRITO
+		}
+		
+	}
+	
 	
 }

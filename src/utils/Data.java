@@ -18,10 +18,30 @@ public class Data {
     private boolean runTestsFailed = true;
     private boolean runTestOnCloudLicenseBeta = false;
     
-    private Customer user;
+    private boolean serverCloudQuality04 = false;
+    
+	private boolean serverCloudQuality03 = false;
+    
+	private Customer user;
 
 	private String pedidoActual;
     private BookingInformation bookingInformation;
+
+    public boolean isServerCloudQuality04() {
+		return serverCloudQuality04;
+	}
+
+	public void setServerCloudQuality04(boolean serverCloudQuality04) {
+		this.serverCloudQuality04 = serverCloudQuality04;
+	}
+	
+    public boolean isServerCloudQuality03() {
+		return serverCloudQuality03;
+	}
+    
+	public void setServerCloudQuality03(boolean serverCloudQuality03) {
+		this.serverCloudQuality03 = serverCloudQuality03;
+	}   
     
     public boolean isRunTestOnCloudLicenseBeta() {
 		return runTestOnCloudLicenseBeta;

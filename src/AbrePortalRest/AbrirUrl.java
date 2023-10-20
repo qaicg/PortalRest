@@ -9,7 +9,10 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import org.testng.Reporter;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -19,7 +22,8 @@ import org.testng.annotations.Test;
 import com.aventstack.extentreports.MediaEntityBuilder;
 
 import Verificaciones.VerificarCookies;
-import graphql.Assert;
+import enums.Servidor;
+//import graphql.Assert;
 import interfaces.ITipoPedido;
 import interfaces.ITipoPedidoAhora;
 import interfaces.ITipoPedidoDiaHora;
@@ -140,6 +144,15 @@ public class AbrirUrl extends TestBase {
 		//pintar la url del test
 		log("La Url del test --> " + url);
 		return url;
+	}
+	
+	//Determinamos el servidor donde se executa el test: cloudquality03 o cloudquality04
+	@AfterClass
+	public void initServerTestCloudQuality() {
+		if(!Data.getInstance().isServerCloudQuality03() && !Data.getInstance().isServerCloudQuality04()) {
+			initServerTestCloudQuality(null);
+		}
+
 	}
 	
 }

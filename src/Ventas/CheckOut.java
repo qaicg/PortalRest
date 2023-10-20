@@ -43,7 +43,7 @@ public class CheckOut extends TestBase{
 	@Parameters({"productos","totalEsperado","formaPago","nuevaTarjeta","testCardNumber","cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
 		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "goBackByAddOrderButton", "importeMinimo", "validarImporteMinimo"})
 	public void finalizarPedido(String productos, String totalEsperado, String formaPago,
-			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
+			@Optional ("true") String nuevaTarjeta, @Optional ("4548810000000003") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv, String pedidoConfirmadoString, 
 			String shop, String customerMail, @Optional ("")String miMonederoString, @Optional ("") String formaPago2, 
 			String tipoServicio, @Optional ("") String unidades, @Optional ("") String mesa, @Optional ("") String totalEsperadoMasCargos,
@@ -138,7 +138,7 @@ public class CheckOut extends TestBase{
 	}
 
 	private void pagarPedidoSaldo(String formaPago, String formaPago2, String pedidoConfirmadoString, String totalEsperado , String miMonederoString, String validarImporteMinimo, 
-			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
+			@Optional ("true") String nuevaTarjeta, @Optional ("4548810000000003") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv) {
 		log("Se paga el pedido con "+ formaPago);
 		
@@ -433,9 +433,20 @@ public class CheckOut extends TestBase{
 //	}
 
 	private boolean validaPantalla(String[] arrayNombres,String totalEsperado, String unidades, String totalEsperadoMasCargos, String repartoPermitido) {
-
+		String basketDateElementXpath = null;
 		String basketTitle = w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'basket-ticket-title')]"))).getAttribute("innerText");
-		String basketDate = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'basket-ticket-row')]"))).getAttribute("innerText"); 
+
+		if(Data.getInstance().isServerCloudQuality04()) {
+			log("the test server:  cloudquality04"); 
+			basketDateElementXpath = "//div[contains(@class,'basket-ticket-header-wrapper')]";
+		} else if(Data.getInstance().isServerCloudQuality03()) {
+			log("the test server:  cloudquality03");
+			basketDateElementXpath = "//div[contains(@class,'basket-ticket-row')]";
+		}
+		
+		//Testear que tenemos la información de la fecha pedido
+		String basketDate = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath(basketDateElementXpath))).getAttribute("innerText"); 
+		
 		int unidadesInteger=1;
 		List<WebElement> basketLines = driver.findElements(By.tagName("app-basket-line"));
 

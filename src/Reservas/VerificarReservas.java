@@ -70,17 +70,17 @@ public class VerificarReservas extends TestBase {
 			
 			textConfirmacionReservaAlCliente = textConfirmacionReservaAlCliente.replace("{ln}", "\n");
 			
-			log("Text 0001 de textConfirmacionReservaAlCliente --> " + textConfirmacionReservaAlCliente);
+			//log("Text 0001 de textConfirmacionReservaAlCliente --> " + textConfirmacionReservaAlCliente);
 			
 			textConfirmacionReservaAlCliente = textConfirmacionReservaAlCliente.replace("{nombreCliente}", Data.getInstance().getBookingInformation().getUserName())
 					.replace("{fechaReserva}", fechaReserva).replace("{horaReserva}", Data.getInstance().getBookingInformation().getReservationHour())
 					.replace("{paxPersona}", paxPersona).replace("{NombreRestaurante}", "'"+ Data.getInstance().getBookingInformation().getRestaurantName() + "'");
 			
-			log("Text 00022 de textConfirmacionReservaAlCliente --> " + textConfirmacionReservaAlCliente);
+			//log("Text 00022 de textConfirmacionReservaAlCliente --> " + textConfirmacionReservaAlCliente);
 			
 			String newTextConfirmacionReservaAlCliente = textConfirmacionReservaAlCliente;
 			
-			log("Text de ewTextConfirmacionReservaAlCliente --> " +newTextConfirmacionReservaAlCliente);
+			//log("Text de ewTextConfirmacionReservaAlCliente --> " +newTextConfirmacionReservaAlCliente);
 			
 			log("Remitente de notificación al cliente -> " + remitenteEmailCliente);
 			log("Asunto de la notificación al cliente -> " + asuntoEmailCliente);
@@ -148,7 +148,7 @@ public class VerificarReservas extends TestBase {
 			}
 			
 			log("ultimo mensaje al Cliente: Cuerpo --> " + infosClientEmail.getCuerpo());
-			if(!infosClientEmail.getCuerpo().contains(mensajeEmail)) {
+			if(!infosClientEmail.getCuerpo().strip().contains(mensajeEmail.strip())) {
 				log("Error: ha fallado el mensaje del email enviado al cliente");
 				log("Mensaje encontrado --> \n " + mensajeEmail);
 				Assert.assertTrue(false);

@@ -15,7 +15,7 @@ public class LoyaltyCardPayment extends TestBase {
 	//**********************   Pagar con tarjeta de fidelización  ***********************//
 	
 	public void pagarPedidoSaldo(String formaPago, String formaPago2, String pedidoConfirmadoString, String totalEsperado , String miMonederoString, String validarImporteMinimo, 
-			@Optional ("true") String nuevaTarjeta, @Optional ("4548812049400004") String testCardNumber,
+			@Optional ("true") String nuevaTarjeta, @Optional ("4548810000000003") String testCardNumber,
 			@Optional ("01") String cad1, @Optional ("28") String cad2, @Optional ("123") String cvv) {
 		log("Se paga el pedido con "+ formaPago);
 		

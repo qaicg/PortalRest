@@ -49,6 +49,15 @@
 	<parameter name="aceptarTerminosCondiciones" value="true" /> <!-- Aceptar los terminos y condiciones del restaurante-->
 	<parameter name="aceptarPoliticaCancelacion" value="true" /> <!-- Aceptar la politica de cancelación del restaurante-->
 	<parameter name="aceptarComunicacionesComerciales" value="false" /> <!-- Aceptar recibir las comunicaciones comerciales del restaurante-->
+
+	<parameter name="testPlusMenosBtn" value="false" /> <!-- Botones plus menos (- +) -->
+	
+	<parameter name="resultatEsperado" value="true" /> <!-- -->
+	
+	<parameter name="modoSinVentana" value="false" /> <!--modo sin ventana para test case o test suite -->
+
+	 <!-- Determinar el servidor -->
+	 <parameter name="servidor" value="cloudquality03" />
 	
 
 	<!--Prueba  de Reserva simple con salas -->

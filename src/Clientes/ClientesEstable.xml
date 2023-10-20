@@ -33,6 +33,9 @@
 	
 	<parameter name="modoSinVentana" value="false" /> <!--modo sin ventana para test case o test suite -->
 
+	<!-- Determinar el servidor -->
+	<parameter name="servidor" value="cloudquality04" />
+
 
 	<test thread-count="5" name="Creación de nuevo cliente PRT" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
