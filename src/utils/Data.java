@@ -3,6 +3,8 @@ package utils;
 import Objects.Customer;
 import Objects.LoyaltyCard;
 import Reservas.BookingInformation;
+import configuration.ConfigServer;
+import configuration.Server;
 import pedido.Pedido;
 
 public class Data {
@@ -26,8 +28,26 @@ public class Data {
 
 	private String pedidoActual;
     private BookingInformation bookingInformation;
+    
+ //   private ConfigServer configServer;
+    private Server configServer;    
 
-    public boolean isServerCloudQuality04() {
+//    public ConfigServer getConfigServer() {
+//		return configServer;
+//	}
+    public Server getConfigServer() {
+		return configServer;
+	}    
+   
+
+//	public void setConfigServer(ConfigServer configServer) {
+//		this.configServer = configServer;
+//	}
+	public void setConfigServer(Server configServer) {
+		this.configServer = configServer;
+	}    
+
+	public boolean isServerCloudQuality04() {
 		return serverCloudQuality04;
 	}
 

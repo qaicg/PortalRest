@@ -147,8 +147,9 @@ public class Reserva extends TestBase {
 			@Optional("") String nombreCliente, @Optional("") String emailCliente, @Optional("") String observaciones, 	
 			@Optional ("true") boolean aceptoTerminos, @Optional ("true") boolean aceptoPoliticaCancelacion, @Optional ("true") boolean aceptoComunicacionesComerciales, 
 			@Optional("") String titleHeader, @Optional() String literalLocalizador, @Optional("") String literalObserciones, @Optional("true") boolean insertBooking,
-			String iconeNotification, String confirmacionReseva, String nombreRestaurante, String direccionRestaurante, String telefonoRestaurante, 
-			String numeroCliente, String infoDetails, String horaReserva, String citaReserva, String urlEmail, String reservationDay, String emailNotificacionReservas, String tipoCliente) {
+			@Optional("") String iconeNotification, @Optional("") String confirmacionReseva, @Optional("") String nombreRestaurante, @Optional("") String direccionRestaurante, 
+			@Optional("") String telefonoRestaurante, @Optional("") String numeroCliente, @Optional("") String infoDetails, @Optional("") String horaReserva, @Optional("") String citaReserva, 
+			@Optional("") String urlEmail, @Optional("") String reservationDay, @Optional("") String emailNotificacionReservas, @Optional("") String tipoCliente) {
 		
 		//Validar el title de la pagina
 		//Commentamos la siguiente linea por que la han quitado de momento

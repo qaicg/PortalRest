@@ -9,6 +9,12 @@ import java.util.List;
 
 import org.testng.Reporter;
 import org.testng.TestNG;
+import org.testng.annotations.BeforeSuite;
+
+import configuration.ConfigServer;
+import configuration.ConfigServerPanel;
+import configuration.EnumServidor;
+import configuration.Server;
 
 public class testRunner {
 	 //POR DEFECTO EJECUTA LOS TESTS DE LA VERSIÓN MASTER DE PORTALREST (QA09)
@@ -16,7 +22,7 @@ public class testRunner {
 
 	/*Cambio en las versiones: 19/09/2023
 	 * VERISON ESTABLE --> QA09
-	 * VERSION MASTER --> QA08 -- > QA10
+	 * VERSION MASTER -->  QA10
 	 * 
 	 */
 	
@@ -28,10 +34,25 @@ public class testRunner {
 														static boolean ENTORNOTEST = true; //ENTORNOTEST: false --> VERSION ESTABLE (QA09); true --> VERSION MASTER (QA10)
 														
 														static boolean BETATEST = false; //BETATEST: true -->Tests en CloudLicenceBeta, false --> Tests en CloudLicence
+														
+														static EnumServidor SERVERTEST = EnumServidor.QUALITY04; //Definimos el servidor de test(VERSION MASTER)
 												   //-------------------******************************************--------------------------//
 	private static List<String> suitefiles = new ArrayList<String>();
+
+	private static Server serverTest;
+	private static Server serverProduction;
 	
+	public Server getServerTest() {
+		return serverTest;
+	}
+
+	public Server getServerProduction() {
+		return serverProduction;
+	}
+
 	public static void main(String[] args) {
+
+		defineServerTest();
 		
 		TestNG runner = new TestNG();
 		
@@ -46,63 +67,35 @@ public class testRunner {
 			log("EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA09) Y DESPUES EN LA VERSION ESTABLE (QA10)");
 			Data.getInstance().setRunAllTests(RUNALLTESTS);
 			
-			// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA09)
-			log("EJECUTA LOS TESTS VENTAS EN LA VERSION ESTABLE (QA09) del servidor CloudQuality03");
+			getTests(true, true);
 			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
-			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
-			
-			//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03
-			addTestsVentasPropinas(true, false);
-			
-			//Test Booking 
-			log("EJECUTA LOS Tests Booking en servidor cloudQuality03");
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
-			
-			
-			// EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)
-			log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)");
-			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
-			
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");	
-			
-			//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04
-			addTestsVentasPropinas(false, true);
-		
-			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
 			
 		} else {
 			Data.getInstance().setEntornoTest(ENTORNOTEST);
-			
-			if(ENTORNOTEST) {	
-				// EJECUTA LOS TESTS EN LA VERSION MASTER (QA09)
-				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA09)");
+
+			if(ENTORNOTEST) {
+				if(serverTest.isTest()) {
+					if(serverTest.getName().contains(EnumServidor.QUALITY03.getServerName())) {
+						getTests(ENTORNOTEST, false); //Ejecuta los test del servidor cloudquality03
+					}
+					
+					if(serverTest.getName().contains(EnumServidor.QUALITY04.getServerName())) {
+						getTests(false, ENTORNOTEST); //Ejecuta los test del servidor cloudquality04
+					}
+				}			
 				
-				//Test clientes
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\Clientes.xml");
-				
-				//Test ventas
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\Ventas.xml");
-				
-				//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03
-				addTestsVentasPropinas(true, false);
-				
-				//Test Booking
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\Reservas.xml");
 			} else {
 				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA10)
 				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA10)");
-								
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesEstable.xml");
-				
-				suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasEstable.xml");
-				
-				//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04
-				addTestsVentasPropinas(false, true);
-				
-				//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasEstable.xml");
+				if(serverProduction.isProduction()) {
+					if(serverProduction.getName().contains(EnumServidor.QUALITY03.getServerName())) {
+						getTests(true, ENTORNOTEST); //Ejecuta los test del servidor cloudquality03
+					}
+					
+					if(serverProduction.getName().contains(EnumServidor.QUALITY04.getServerName())) {
+						getTests(ENTORNOTEST, true); //Ejecuta los test del servidor cloudquality04
+					}
+				}
 			}
 		}
 		
@@ -143,11 +136,52 @@ public class testRunner {
 		Reporter.log(s + "<br>");	
 	}
 	
+	private static void getTests(boolean cloudQuality03, boolean cloudQuality04) {
+		if(cloudQuality03)
+			getTestsFromCloudQuality03();
+		
+		if(cloudQuality04)
+			getTestsFromCloudQuality04();
+	}
+	
+	private static void getTestsFromCloudQuality03() {
+		// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA09)
+		log("EJECUTA LOS TESTS EN  servidor CloudQuality03");
+		
+		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesCloudQuality03.xml");
+		
+		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasCloudQuality03.xml");
+		
+		//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03
+		addTestsVentasPropinas(true, false);
+		
+		//Test Booking 
+		log("EJECUTA LOS Tests Booking en servidor cloudQuality03");
+		//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasCloudQuality03.xml");
+		
+	}
+	
+	private static void getTestsFromCloudQuality04() {
+		
+		// EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)
+		log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)");
+		
+		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesCloudQuality04.xml");
+		
+		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasCloudQuality04.xml");	
+		
+		//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04
+		addTestsVentasPropinas(false, true);
+		
+		//Test Booking 
+		log("EJECUTA LOS Tests Booking en servidor cloudQuality04");
+		//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasCloudQuality04.xml");		
+	}
+	
 	private static void addTestsVentasPropinas(boolean ServidorCloudQuality03, boolean ServidorCloudQuality04) {
 		
 		if(ServidorCloudQuality03) { // Servidor CloudQuality03 --> 
 			log("Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03");
-			//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\Propinas.xml");
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\PropinasCloudQuality03.xml");
 		}
 		
@@ -156,5 +190,19 @@ public class testRunner {
 			log("Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04");
 			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\PropinasCloudQuality04.xml"); //Servidor Estable --> Produccion
 		}
+	}
+	
+	//Defición del servidor de test para la configurción en el fichero config.xml
+	public static void defineServerTest() {
+		ConfigServer configServer = new ConfigServer();
+		configServer.modifyXmlConfigServer(new Server(SERVERTEST, true, false));
+		
+	  	if(configServer.getServerTest().isTest()  // verifcar que tenemos el nuevo servidor de test: Cambiar de servidor de test
+	    	&& !configServer.getServerTest().getName().equals(SERVERTEST.getServerName())) {
+	  		configServer = new ConfigServer();
+	  	}
+		
+	  	serverTest = configServer.getServerTest();
+	  	serverProduction =  configServer.getServerProduction();
 	}
 }

@@ -6,17 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.testng.Assert;
+
+import com.mongodb.connection.Server;
+
+import configuration.EnumServidor;
+//import graphql.Assert;
+
 public class DatabaseConnection {
-	
-	//POR DEFECTO DEJAMOS PARAMETROS DE ENTORNO TEST
-	/*
-	private static String urlConexion="jdbc:mysql://213.99.41.61:3306/";
-	private static String userName="cloud";
-	private static String password="d4PKLWwrhFcdwnB1";
-	*/
-	private static String urlConexion = "jdbc:mysql://213.99.41.60:3306/";
-	private static String userName = "cloud";
-	private static String password = "gKeQf6xfsIHLJXVy";
+		
+	private static String urlConexion, userName, password;
 	
 	private String BBDD = "";
 	
@@ -43,49 +42,43 @@ public class DatabaseConnection {
 	
 	public void defineEntorno(int entorno, String database) {
 		
-		//if (entorno == ENTORNOPRODUCION) {
-		if (entorno == ENTORNOTEST) {
-			urlConexion = "jdbc:mysql://213.99.41.60:3306/"+database;
-			userName = "cloud";
-			password = "gKeQf6xfsIHLJXVy";
-			BBDD =  database;
+		if (entorno != ENTORNOTEST && entorno != ENTORNOPRODUCION) {
+			System.out.println("NO HAY UN ENTORNO DEFINIDO VÁLIDO");
+			Assert.assertTrue(entorno != ENTORNOTEST && entorno != ENTORNOPRODUCION, "NO HAY UN ENTORNO DEFINIDO VÁLIDO");
 		}
-		
-		//else if (entorno == ENTORNOTEST) {
-		else if (entorno == ENTORNOPRODUCION) {
-			urlConexion = "jdbc:mysql://213.99.41.61:3306/"+database;
-			userName = "cloud";
-			password = "d4PKLWwrhFcdwnB1";
-			BBDD =  database;
-		}
-		
-		Data.getInstance().setBD(BBDD);
+
+		setConfigBBDD(database);
 	}
 	
 	public void defineEntorno(String database) {
 		
-		//if (ENTORNODEFINIDO == ENTORNOPRODUCION) {
-		if (ENTORNODEFINIDO == ENTORNOTEST) {
-			urlConexion = "jdbc:mysql://213.99.41.60:3306/"+database;
-			userName = "cloud";
-			password = "gKeQf6xfsIHLJXVy";
-			BBDD =  database;
-		}
-		
-		//else if (ENTORNODEFINIDO == ENTORNOTEST) {
-		else if (ENTORNODEFINIDO == ENTORNOPRODUCION) {
-			urlConexion = "jdbc:mysql://213.99.41.61:3306/"+database;
-			userName = "cloud";
-			password = "d4PKLWwrhFcdwnB1";
-			BBDD =  database;
-		}else {
+		if (ENTORNODEFINIDO != ENTORNOTEST && ENTORNODEFINIDO != ENTORNOPRODUCION) {
 			System.out.println("NO HAY UN ENTORNO DEFINIDO VÁLIDO");
+			Assert.assertTrue(ENTORNODEFINIDO != ENTORNOTEST && ENTORNODEFINIDO != ENTORNOPRODUCION, "NO HAY UN ENTORNO DEFINIDO VÁLIDO");
 		}
 		
-		Data.getInstance().setBD(BBDD);
+		setConfigBBDD(database);
 	}
 	
+	public void defineEntorno(EnumServidor servidor, String database) {
+		
+		if (servidor != EnumServidor.QUALITY03 && servidor != EnumServidor.QUALITY04) {
+			System.out.println("NO HAY UN ENTORNO DEFINIDO VÁLIDO");
+			Assert.assertTrue(servidor != EnumServidor.QUALITY03 && servidor != EnumServidor.QUALITY04, "NO HAY UN ENTORNO DEFINIDO VÁLIDO");
+		}
+		
+		setConfigBBDD(database);
+	}	
 	
+	private void setConfigBBDD(String database) {
+		urlConexion = Data.getInstance().getConfigServer().getUrlConnexion() + database; //"jdbc:mysql://213.99.41.60:3306/"+database;
+		userName = Data.getInstance().getConfigServer().getUserName();//"cloud";
+		password = Data.getInstance().getConfigServer().getPassword();
+		BBDD =  database;
+		
+		Data.getInstance().setBD(BBDD);
+		
+	}	
 	//REALIZA CONEXIÓN AL ENTORNO CONFIGURADO
 	public void conectar() {
 		  try {

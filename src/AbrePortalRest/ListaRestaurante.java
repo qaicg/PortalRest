@@ -11,6 +11,8 @@ import org.testng.annotations.Test;
 
 import Clientes.AbrirPaginaLogin;
 import Clientes.LoginCliente;
+import configuration.EnumServidor;
+import utils.Data;
 import utils.PortalRestOrderElements;
 import utils.TestBase;
 
@@ -89,7 +91,8 @@ public class ListaRestaurante extends TestBase{
 	@Test(priority = 3, groups = { "loginCliente" })
 	@Parameters({"resultadoEsperado", "email","password","rememberMe","shop","loginCheckout","login", "realizarPedido", "realizarPedidoString", "isMailSac"})
 	public void makeOrder(@Optional ("true") String resultadoEsperado, String email, String password, @Optional ("false") String rememberMe, 
-			String shop, @Optional ("false") boolean loginCheckout, String loginString, @Optional("false") boolean realizarPedido, @Optional("") String realizarPedidoString, @Optional("false") boolean isMailSac) {
+			String shop, @Optional ("false") boolean loginCheckout, String loginString, @Optional("false") boolean realizarPedido, 
+			@Optional("") String realizarPedidoString, @Optional("false") boolean isMailSac) {
 		
 		LoginCliente dologin = new LoginCliente();
 		dologin.loginCliente(resultadoEsperado, email, password, rememberMe, shop, loginCheckout, loginString, realizarPedido, realizarPedidoString, isMailSac);
@@ -113,7 +116,14 @@ public class ListaRestaurante extends TestBase{
 		org.testng.Assert.assertTrue(howButtonSelect.get(0).getText().contentEquals(literalButtonSelect), "Error: No hemos encontrado El literal " + literalButtonSelect + " esperado en el botón uno de ¿Cómo? ");
 		
 		//clicar en el local
-		howButtonSelect.get(0).click();
+		if(Data.getInstance().getConfigServer().getName() == EnumServidor.QUALITY04.getServerName()) {
+			String buttonEnLocalXpath = "//button[@class='how-when-button ng-star-inserted']//div/div[contains(text(), 'En el local')]";
+			WebElement buttonEnLocal = getElementByFluentWait(By.xpath(buttonEnLocalXpath), 30, 5);
+			clicJS(buttonEnLocal);
+		}
+		else 
+			howButtonSelect.get(0).click();
+		
 		espera(1100);
 
 	}

@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 import com.aventstack.extentreports.MediaEntityBuilder;
 
 import Verificaciones.VerificarCookies;
-import enums.Servidor;
+import configuration.EnumServidor;
 //import graphql.Assert;
 import interfaces.ITipoPedido;
 import interfaces.ITipoPedidoAhora;

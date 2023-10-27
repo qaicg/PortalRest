@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="config.xsd">
+	<server name="cloudquality03">
+		<test>0</test><!-- Servidor de test-->
+		<production>1</production><!-- Servidor de produccion-->
+		<urlConnexion>jdbc:mysql://213.99.41.60:3306/</urlConnexion>
+		<userName>cloud</userName>
+		<password>gKeQf6xfsIHLJXVy</password>
+	</server>
+	<server name="cloudquality04">
+		<test>1</test>
+		<production>0</production>
+		<urlConnexion>jdbc:mysql://213.99.41.61:3306/</urlConnexion>
+		<userName>cloud</userName>
+		<password>d4PKLWwrhFcdwnB1</password>
+	</server>
+</configuration>

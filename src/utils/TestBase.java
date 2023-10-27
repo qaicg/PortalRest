@@ -95,8 +95,10 @@ import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
 import Cadenas.Es;
 import Objects.ProductItem;
 import Windows.TrayIconDemo;
+import configuration.ConfigServer;
+import configuration.EnumServidor;
+import configuration.Server;
 import enums.CookiesPortalRest;
-import enums.Servidor;
 import lombok.var;
 import main.Correo;
 import main.Reader;
@@ -130,23 +132,47 @@ public class TestBase extends StringUtils {
 	
 	Faker fakePedio = new Faker();
 	
+	public ConfigServer configServer;
+	
 	public Faker getFakePedio() {
 		return this.fakePedio;
 	}
 	
-	@BeforeClass
-	@Parameters({"test"})
-	public void configure(@Optional ("true") boolean test) {
+	@BeforeSuite
+	@Parameters({"servidor"})
+	public void configure(String servidor) {
+		
+		ConfigServer configServer = new ConfigServer();
+		List<Server> serverList = configServer.getServerList();
+		configServer.setServerList();
+		
+		Server myServerTesting = configServer.findServer(servidor); //Buscar el servidor para llevar sus parametros de configuración
+		
+		if(myServerTesting.getName().equals(EnumServidor.QUALITY03.getServerName())) {
+			log("Estamos con el servidor --> " + EnumServidor.QUALITY03.getServerName());
+			Data.getInstance().setServerCloudQuality03(true);
+		}		
+		else if(myServerTesting.getName().equals(EnumServidor.QUALITY04.getServerName())) {
+			log("Estamos con el servidor --> " + EnumServidor.QUALITY04.getServerName());
+			Data.getInstance().setServerCloudQuality04(true);
+		}
+		else {
+			Assert.assertTrue(false, "Error de configuración: No se ha encontrado el servidor definido en el testsuite: " + servidor);
+		}
+
+		boolean test = myServerTesting.isTest();
 		
 		if(test) {
 			databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOTEST;
-			
-
 		} else {
 			databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOPRODUCION;
 		}
 		
-		Data.getInstance().setEntornoTest(test);
+		if(serverList.stream().filter(srv -> srv.getName().contains(servidor)).findAny().get().getName().contains(servidor)) {
+			Data.getInstance().setEntornoTest(test);
+			
+			Data.getInstance().setConfigServer(myServerTesting);
+		}
 	}
 
 	@BeforeSuite
@@ -880,26 +906,26 @@ public class TestBase extends StringUtils {
 		if(!org.apache.commons.lang3.StringUtils.isBlank(servidor)  ) {
 			log("El parametro del servido de test está definido en el fichero testsuite");
 			
-			if(servidor.contains(Servidor.QUALITY03.getServerName())) {
+			if(servidor.contains(EnumServidor.QUALITY03.getServerName())) {
 				Data.getInstance().setServerCloudQuality03(true);
-				log("El servidor de test:" + Servidor.QUALITY03.getServerName() + "\r");
+				log("El servidor de test:" + EnumServidor.QUALITY03.getServerName() + "\r");
 			} 
-			else if(servidor.contains(Servidor.QUALITY04.getServerName())) {
+			else if(servidor.contains(EnumServidor.QUALITY04.getServerName())) {
 				Data.getInstance().setServerCloudQuality04(true);
-				log("El servidor de test:" + Servidor.QUALITY04.getServerName() + "\r");
+				log("El servidor de test:" + EnumServidor.QUALITY04.getServerName() + "\r");
 			}
 			else {
 				log("Error: no se ha detectado el servidor de test\r");
 				Assert.assertTrue(false, "Error: no se ha detectado el servidor");
 			}
 		}
-		else if(driver.getCurrentUrl().contains(Servidor.QUALITY03.getServerName())) {
+		else if(driver.getCurrentUrl().contains(EnumServidor.QUALITY03.getServerName())) {
 			Data.getInstance().setServerCloudQuality03(true);
-			log("Se ha definido el servidor de test:" + Servidor.QUALITY03.getServerName() + "\r");
+			log("Se ha definido el servidor de test:" + EnumServidor.QUALITY03.getServerName() + "\r");
 		} 
-		else if(driver.getCurrentUrl().contains(Servidor.QUALITY04.getServerName())) {
+		else if(driver.getCurrentUrl().contains(EnumServidor.QUALITY04.getServerName())) {
 			Data.getInstance().setServerCloudQuality04(true);
-			log("Se ha definido el servidor de test:" + Servidor.QUALITY04.getServerName() + "\r");
+			log("Se ha definido el servidor de test:" + EnumServidor.QUALITY04.getServerName() + "\r");
 			
 		}
 		else {
@@ -912,8 +938,8 @@ public class TestBase extends StringUtils {
 	public String getServerTestList() {
 		String servidores = "";
 		
-		for(Servidor srv: Servidor.values()) {
-			if(srv.ordinal() != Servidor.values().length - 1) {
+		for(EnumServidor srv: EnumServidor.values()) {
+			if(srv.ordinal() != EnumServidor.values().length - 1) {
 				servidores += "Server " + srv.name() + " -> " + srv.getServerName() + " \n" ;
 			}
 			else

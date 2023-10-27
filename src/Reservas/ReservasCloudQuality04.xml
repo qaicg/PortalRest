@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="*Test* Pruebas de Reservas en Booking versión 2 -> Realizar, Modificar y cancelar Reservas (**Servidor Estable QA08 -> https://cloudquality04.hiopos.com/portalrest**)" verbose="1" preserve-order="true">
+<suite name="*Test* Pruebas de Reservas en Booking versión 2 -> Realizar, Modificar y cancelar Reservas (**Servidor MASTER QA10 -> https://cloudquality04.hiopos.com/portalrest**)" verbose="1" preserve-order="true">
 	
 	<listeners>
 		<listener class-name="com.vimalselvam.testng.listener.ExtentTestNgFormatter" />
@@ -10,8 +10,29 @@
 	<parameter name="report.config" value="C:\Users\QA\portalrestproject\test-output\extent-config.xml" />
 	<parameter name="expectedTitle" value="PortalRest Booking" /> <!--Titulo de la página -->
 	<parameter name="titleHeader" value="Ingrese los detalles de su reserva" /> <!-- Titulo formulario Reserva-->
+
+	<!-- Informacion del Restaurante -->
+		<parameter name="emailRestaurante" value="portalrestcomercio@mailsac.com" /> <!-- el correo elctronico del establecimiento/Restaurante portalrestcomercio@mailsac.com; prtreservascomercio@yahoo.com -->
+		<parameter name="passwordRestaurante" value="k_kJafj5UAsHjv3pY68wNCdpvhXbw7RMvUtZolnMQ1dfa" /> <!-- Contraseña yahoo(.1234abcd2023), mailsac(k_kJafj5UAsHjv3pY68wNCdpvhXbw7RMvUtZolnMQ1dfa)-->
+		<parameter name="nombreRestaurante" value="hosteleriab9" /> <!-- el nombre del  establecimiento/Restaurante -->
+		<parameter name="direccionRestaurante" value="Mestral S/N, 25123 Torrefarrera" /> <!-- Direccion del establecimiento/Restaurante --> 
+		<parameter name="telefonoRestaurante" value="973123456" /> <!-- Telefono del cliente -->
+		<parameter name="emailNotificacionReservas" value="portalrestcomercio@mailsac.com" /> <!-- El email de notificacion de reservas al restaurante portalrestcomercio@mailsac.com; prtreservascomercio@yahoo.com -->
 	
-	<parameter name="test" value="false" /> <!-- Entorno de produción(Estable) -->
+	<!-- FIN Informacion del Restaurante -->
+	
+	<!-- Informacion del Cliente -->
+		<parameter name="telefono" value="666554433" /> <!-- Telefono del cliente -->
+		<parameter name="prefijo" value="+34" /> <!-- Prefijo telefónico o indicativo del pais -->
+		
+		<parameter name="tipoCliente" value="Estándar" /> <!-- indicar el tipo de cliente para la reserva -->
+		<parameter name="nombreCliente" value="" /> <!-- Nombre del cliente -->
+		
+		<parameter name="emailCliente" value="portalrestcliente@mailsac.com" /> <!-- el correo electronico del cliente portalrestcliente@mailsac.com; prtreservascliente@yahoo.com-->
+		<parameter name="passwordCliente" value="k_kJafj5UAsHjv3pY68wNCdpvhXbw7RMvUtZolnMQ1dfa" /> <!-- Contraseña yahoo(.1234abcd2023), mailsac(k_kJafj5UAsHjv3pY68wNCdpvhXbw7RMvUtZolnMQ1dfa)-->
+
+	<!-- FIN Informacion del Cliente -->
+
 	
 	<parameter name="dia" value="hoy" /> <!-- El dia de la reserva-->
 	<parameter name="hora" value="" /> <!-- Elegir la hora de la reserva-->
@@ -45,6 +66,13 @@
 	
 	
 	<parameter name="numeroCliente" value="1" /> <!-- Numero cliente -->
+	
+	<parameter name="insertBooking" value="true" />  <!-- Creacion de la reserva -->
+	<parameter name="iconeNotification" value="check_circle_outline" /> <!-- Icono notificación de confirmación nueva reserva en booking-->	
+	
+	<parameter name="confirmacionReseva" value="Tu reserva ha sido confirmada" /><!-- confirmacion de la nueva reserva al cliente/admin-->
+
+	
 	<parameter name="testPlusMenosBtn" value="false" /> <!-- Botones plus menos (- +) -->
 	<parameter name="aceptarTerminosCondiciones" value="true" /> <!-- Aceptar los terminos y condiciones del restaurante-->
 	<parameter name="aceptarPoliticaCancelacion" value="true" /> <!-- Aceptar la politica de cancelación del restaurante-->
@@ -57,8 +85,9 @@
 	<parameter name="modoSinVentana" value="false" /> <!--modo sin ventana para test case o test suite -->
 
 	 <!-- Determinar el servidor -->
-	 <parameter name="servidor" value="cloudquality03" />
+	 <parameter name="servidor" value="cloudquality04" />
 	
+	<parameter name="test" value="true" /> <!-- Entorno de Test(MASTER) -->	
 
 	<!--Prueba  de Reserva simple con salas -->
 	<test name="Prueba de reserva simple con salas en booking de PortalRest" enabled="true" preserve-order="true">
@@ -72,10 +101,12 @@
 			<class name="Reservas.Reserva">
 				<methods>
 					<parameter name="room" value="Terrazza" />
-					<parameter name="dia" value="12" />
-					<parameter name="hora" value="12:30" />
+					<parameter name="dia" value="07/12/2023" />
+					<parameter name="hora" value="20:30" />
 					<parameter name="numeroCliente" value="2" />
 					
+					<parameter name="citaReserva" value="jueves, 7 de diciembre de 2023" />
+										
 					<parameter name="testPlusMenosBtn" value="true" />
 					
 					<include name="selectedDay" />

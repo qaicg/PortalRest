@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
 
-<suite name="Pruebas de Clientes en PortalRest -> Login,Registro y validación (**Servidor Master QA09 -> https://cloudquality03.hiopos.com/portalrest**)" verbose="1" preserve-order="true">
+<suite name="Pruebas de Clientes en PortalRest -> Login,Registro y validación (**Servidor ESTABLE QA09 -> https://cloudquality03.hiopos.com/portalrest**)" verbose="1" preserve-order="true">
 
 	<listeners>
 		<listener class-name="com.vimalselvam.testng.listener.ExtentTestNgFormatter" />
@@ -10,7 +10,7 @@
 
 	<parameter name="login" value="Registrarme" />
 	<parameter name="report.config" value="C:\Users\QA\portalrestproject\test-output\extent-config.xml" />
-	<parameter name="test" value ="true" /> <!-- Entorno de ejecución TEST(Master)-->
+
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 
@@ -33,8 +33,8 @@
 	<parameter name="cloudLicenceBeta" value="false" /> <!-- ejecutar los tests case desde CloudLicenseBeta  -->
 	
 	<!-- Determinar el servidor -->
-	<parameter name="servidor" value="cloudquality03" /> 
-
+	<parameter name="servidor" value="cloudquality03" />
+	
 	<test thread-count="5" name="Creación de nuevo cliente PRT" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="aceptoTerminos" value="true" />
