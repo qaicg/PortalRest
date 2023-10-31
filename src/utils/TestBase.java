@@ -768,11 +768,11 @@ public class TestBase extends StringUtils {
     public void clear_cache() {
     	// """Clear the cookies and cache for the ChromeDriver instance."""
     	//Cookies de PortalRest: https://cloudquality04.hiopos.com
-	    	//portal-rest-web-cookie-geolocation
-	    	//cookie portal-rest-web-cookie-accept
-	    	//portal-rest-web-login
-	    	//porta-rest-web-language
-	    	//portal-rest-web-remember-map
+    	//portal-rest-web-cookie-geolocation
+    	//cookie portal-rest-web-cookie-accept
+    	//portal-rest-web-login
+    	//porta-rest-web-language
+    	//portal-rest-web-remember-map
     	
     	boolean refreshApp = false;
     	cookie.deleteAllCookiesPortalRest(refreshApp);
@@ -855,26 +855,12 @@ public class TestBase extends StringUtils {
 		String login = "Registrarme";
 		cerrarSesion(login);
 	}
-	//
-			  
-	//***
-	
 	
 	public void scrollPage (WebElement element) {
 		JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 		javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
 	}
 	 
-	/// <summary>
-	/// Determines if the specified element has the aria-disabled attribute
-	/// </summary>
-	/// <param name="locator">The locator of the desired element</param>
-	/// <returns>A tuple of the element and a bool as true if the element has the aria-disabled attribute, false otherwise.</returns>
-//	public (IWebElement, bool) IsAriaDisabled(By locator)
-//	{
-//	    IWebElement e = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementExists(locator));
-//	    return (e, "true" == e.GetAttribute("aria-disabled"));
-//	}
 	public int getLastDoc__Doc(String db) {
 
 		String queryMaxPedido = "select MAX(DocId) as DocId from Doc__Doc dd";
@@ -908,11 +894,11 @@ public class TestBase extends StringUtils {
 			
 			if(servidor.contains(EnumServidor.QUALITY03.getServerName())) {
 				Data.getInstance().setServerCloudQuality03(true);
-				log("El servidor de test:" + EnumServidor.QUALITY03.getServerName() + "\r");
+				log("El test se ejecuta en el servidor: " + EnumServidor.QUALITY03.getServerName() + "\r");
 			} 
 			else if(servidor.contains(EnumServidor.QUALITY04.getServerName())) {
 				Data.getInstance().setServerCloudQuality04(true);
-				log("El servidor de test:" + EnumServidor.QUALITY04.getServerName() + "\r");
+				log("El test se ejecuta en el servidor: " + EnumServidor.QUALITY04.getServerName() + "\r");
 			}
 			else {
 				log("Error: no se ha detectado el servidor de test\r");
@@ -921,11 +907,11 @@ public class TestBase extends StringUtils {
 		}
 		else if(driver.getCurrentUrl().contains(EnumServidor.QUALITY03.getServerName())) {
 			Data.getInstance().setServerCloudQuality03(true);
-			log("Se ha definido el servidor de test:" + EnumServidor.QUALITY03.getServerName() + "\r");
+			log("Se ha definido el servidor: " + EnumServidor.QUALITY03.getServerName() + "\r");
 		} 
 		else if(driver.getCurrentUrl().contains(EnumServidor.QUALITY04.getServerName())) {
 			Data.getInstance().setServerCloudQuality04(true);
-			log("Se ha definido el servidor de test:" + EnumServidor.QUALITY04.getServerName() + "\r");
+			log("Se ha definido el servidor: " + EnumServidor.QUALITY04.getServerName() + "\r");
 			
 		}
 		else {

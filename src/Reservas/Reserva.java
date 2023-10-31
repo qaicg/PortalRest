@@ -25,6 +25,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import configuration.EnumServidor;
 //import graphql.Assert;
 import main.Correo;
 import utils.Data;
@@ -455,11 +456,13 @@ public class Reserva extends TestBase {
 	public void validateRestaurantName(String nombreRestaurante) {
 		/* el nombre del restaurante */ 
 		log("Validación: El nombre del restaurante -> " + nombreRestaurante);
-		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante +"')]")));
-		
-		if(driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante + "')]")).size() > 1) {
+		String elementNombreRestauteXpath = "//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante +"')]";
 			
-			String sNombreRestauranteValided = driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante +"')]")).get(0).getAttribute("innerText");
+		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(elementNombreRestauteXpath)));
+		
+		if(driver.findElements(By.xpath(elementNombreRestauteXpath)).size() > 1) {
+			
+			String sNombreRestauranteValided = driver.findElements(By.xpath(elementNombreRestauteXpath)).get(0).getAttribute("innerText");
 			
 			if(!sNombreRestauranteValided.contentEquals(nombreRestaurante)) {
 				log("Error en la Validación: nombre del restaurante -> " + nombreRestaurante);
@@ -468,7 +471,8 @@ public class Reserva extends TestBase {
 				Assert.assertTrue(false);
 			}
 		} else {
-			String sNombreRestauranteValided = driver.findElements(By.xpath("//div[contains(@class, 'info-wrapper border-content')]/h3[contains(text(), '" + nombreRestaurante +"')]")).get(0).getAttribute("innerText");
+			String sNombreRestauranteValided = driver.findElements(By.xpath(elementNombreRestauteXpath)).get(0).getAttribute("innerText");
+			
 			if(!sNombreRestauranteValided.contentEquals(nombreRestaurante)) {
 				log("Error en la Validación: nombre del restaurante -> " + nombreRestaurante);
 				log("Se ha encuentrado otro nombre para el restaurante: " + sNombreRestauranteValided);
@@ -766,13 +770,23 @@ public class Reserva extends TestBase {
 		String stringElementPrefijo = "//div[contains(@class, 'mat-select-arrow-wrapper')]//child::div[contains(@class, 'mat-select-arrow')]";
 		String stringListPrefijo = "//mat-option[contains(@class, 'mat-option')]//child::span[contains(@class, 'mat-option-text')]";
 		if(!isNullOrEmpty(prefijo)) {
+			
 			String elemFijoSearch = "("+prefijo+")";
+			
+			if(Data.getInstance().getConfigServer().getName().equals(EnumServidor.QUALITY04.getServerName())) {
+				elemFijoSearch = prefijo;
+			}
+						
 			//validar si es el prefijo que está seleccionado por defecto en el listado
 			String valueSelectPrefijo = "//div//span//span[contains(@class, 'mat-select-min-line')]";
 			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(valueSelectPrefijo)));
+			
 			if(driver.findElement(By.xpath(valueSelectPrefijo)).getText().contains(elemFijoSearch)) {
 				log("el prefijo "+ prefijo +" del telefono está seleccionado por defecto en el listado ");
 				return;
+			}
+			else {
+				log("El prefijo que hay que seleccionar: " +driver.findElement(By.xpath(valueSelectPrefijo)).getText());
 			}
 			
 			//buscar y seleccionar el prefijo desde el listado

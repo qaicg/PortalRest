@@ -144,61 +144,60 @@ public class ConfigServer {
 		return serverProduction;
 	}
 	
-	private void getDataConfigFromXmlFile() {
-		
-	      try {
-	          DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-	          DocumentBuilder dBuilder;
+	private void getDataConfigFromXmlFile() {//Obtener la configuración de los servidores de test desde el fichero de configuración config.xml	
+      try {
+          DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+          DocumentBuilder dBuilder;
 
-	          dBuilder = dbFactory.newDocumentBuilder();
+          dBuilder = dbFactory.newDocumentBuilder();
 
-	          Document doc = dBuilder.parse(fileXmlConfigServer);
-	          doc.getDocumentElement().normalize();
+          Document doc = dBuilder.parse(fileXmlConfigServer);
+          doc.getDocumentElement().normalize();
 
-	          XPath xPath =  XPathFactory.newInstance().newXPath();
+          XPath xPath =  XPathFactory.newInstance().newXPath();
 
-	          String expression = "/configuration/server";	        
-	          NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(
-	             doc, XPathConstants.NODESET);
+          String expression = "/configuration/server";	        
+          NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(
+             doc, XPathConstants.NODESET);
 
-	          for (int i = 0; i < nodeList.getLength(); i++) {
-	        	  Server serve = new Server();
-	        	  
-	             Node nNode = nodeList.item(i);
-	             
-	             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-	                Element eElement = (Element) nNode;
-	                
-	                serve.setName(eElement.getAttribute("name"));
-	                	                
-	                serve.setTest(eElement.getElementsByTagName("test").item(0).getTextContent().contains("1") ? true : false);
-	                	                
-	                serve.setProduction(eElement.getElementsByTagName("production").item(0).getTextContent().contains("1") ? true : false);
-	                
-	                serve.setUrlConnexion((eElement.getElementsByTagName("urlConnexion").item(0).getTextContent()));
-	                
-	                serve.setUserName((eElement.getElementsByTagName("userName").item(0).getTextContent()));
-	                              
-	                serve.setPassword((eElement.getElementsByTagName("password").item(0).getTextContent()));
-	                	                
-	                serverList.add(serve);
-	             }
-	          }
-	       } catch (ParserConfigurationException e) {
-	          e.printStackTrace();
-	       } catch (SAXException e) {
-	          e.printStackTrace();
-	       } catch (IOException e) {
-	          e.printStackTrace();
-	       } catch (XPathExpressionException e) {
-	          e.printStackTrace();
-	       }
-		
+          for (int i = 0; i < nodeList.getLength(); i++) {
+        	  Server serve = new Server();
+        	  
+             Node nNode = nodeList.item(i);
+             
+             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                
+                serve.setName(eElement.getAttribute("name"));
+                	                
+                serve.setTest(eElement.getElementsByTagName("test").item(0).getTextContent().contains("1") ? true : false);
+                	                
+                serve.setProduction(eElement.getElementsByTagName("production").item(0).getTextContent().contains("1") ? true : false);
+                
+                serve.setUrlConnexion((eElement.getElementsByTagName("urlConnexion").item(0).getTextContent()));
+                
+                serve.setUserName((eElement.getElementsByTagName("userName").item(0).getTextContent()));
+                              
+                serve.setPassword((eElement.getElementsByTagName("password").item(0).getTextContent()));
+                	                
+                serverList.add(serve);
+             }
+          }
+       } catch (ParserConfigurationException e) {
+          e.printStackTrace();
+       } catch (SAXException e) {
+          e.printStackTrace();
+       } catch (IOException e) {
+          e.printStackTrace();
+       } catch (XPathExpressionException e) {
+          e.printStackTrace();
+       }
+	
 	}
 	
-	public void modifyXmlConfigServer(Server serverTest) {
+	public void modifyXmlConfigServer(Server serverTest) { //Modificar la configuración de los servidores de test en el fichero de configuración config.xml
 	      try {
-	          //Validamos el servidor 
+	          //Validamos el servidor del parametro
 	    	  Assert.assertTrue(EnumServidor.isValidServer(serverTest), "Error: No se ha encontrado el nuevo servidor de test: " + serverTest.getName());
 	    	  
 	    	  if(serverTest.isTest()  // verifcar que tenemos el nuevo servidor de test

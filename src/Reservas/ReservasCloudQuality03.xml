@@ -133,10 +133,10 @@
 			<class name="Reservas.Reserva">
 				<methods>
 					<parameter name="room" value="Piscina" />
-					<parameter name="dia" value="07/12/2023" />
+					<parameter name="dia" value="08/12/2023" />
 					<parameter name="hora" value="20:30" />
 					<parameter name="numeroCliente" value="1" />
-					<parameter name="citaReserva" value="jueves, 7 de diciembre de 2023" />
+					<parameter name="citaReserva" value="viernes, 8 de diciembre de 2023" />
 					<parameter name="infoDetails" value="persona a las" />
 					
 					<parameter name="testPlusMenosBtn" value="false" />

@@ -84,16 +84,15 @@
 	
 	<parameter name="modoSinVentana" value="false" /> <!--modo sin ventana para test case o test suite -->
 
-	 <!-- Determinar el servidor -->
-	 <parameter name="servidor" value="cloudquality04" />
+	<!-- Determinar el servidor -->
+	<parameter name="servidor" value="cloudquality04" />
 	
-	<parameter name="test" value="true" /> <!-- Entorno de Test(MASTER) -->	
-
 	<!--Prueba  de Reserva simple con salas -->
 	<test name="Prueba de reserva simple con salas en booking de PortalRest" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://booking00.hiopos.com/booking?data=%3D%3DQZzxWYm1jbp1GZhZSMwATN0ETPklEcvh2c" />
 		<parameter name="shop" value="36210" />
 		<parameter name="existeRoom" value="true" />
+		<parameter name="nombreRestaurante" value="Can Cargol" />
 		
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
@@ -102,7 +101,7 @@
 				<methods>
 					<parameter name="room" value="Terrazza" />
 					<parameter name="dia" value="07/12/2023" />
-					<parameter name="hora" value="20:30" />
+					<parameter name="hora" value="18:30" />
 					<parameter name="numeroCliente" value="2" />
 					
 					<parameter name="citaReserva" value="jueves, 7 de diciembre de 2023" />
@@ -111,9 +110,9 @@
 					
 					<include name="selectedDay" />
 					
-					<!--include name="verificarBotonesPlusMenos">
+					<include name="verificarBotonesPlusMenos">
 						<parameter name="numeroCliente" value="5" />
-					</include-->
+					</include>
 					
 					<include name="inputNumberPerson">
 						<parameter name="numeroCliente" value="2" />
@@ -134,42 +133,50 @@
 	
 	</test>
 
-	
 	<test name="Prueba de reserva simple sin salas en booking de PortalRest" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://booking00.hiopos.com/booking?data=%3D%3DQZzxWYm1jbp1GZhZiMwATN0ETPklEcvh2c" />
 		<parameter name="shop" value="36210" />
+		<parameter name="nombreRestaurante" value="Rest Hostal Estable - > Test Configuracion Salas y turnos" /><!-- Nombre del restaurante -->
+		
+		<parameter name="existeRoom" value="false" />
+		<parameter name="insertBooking" value="true" />
+		<parameter name="ingresarDatosPorDefecto" value="true" /><!-- Seleccionar datos disponible a ingresar en la reserva   -->
 		
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarCookies" />
 			<class name="Reservas.Reserva">
 				<methods>
-					<parameter name="dia" value="12" />
-					<parameter name="hora" value="12:30" />
+					<parameter name="room" value="" />
+					<parameter name="dia" value="" />
+					<parameter name="hora" value="" />
+					
+					<parameter name="citaReserva" value="" />
+					<parameter name="infoDetails" value="" />
+					
 					<parameter name="numeroCliente" value="2" />
 					
 					<parameter name="testPlusMenosBtn" value="true" />
 					
 					<include name="selectedDay" />
-					
-					<!--include name="verificarBotonesPlusMenos">
-						<parameter name="numeroCliente" value="5" />
-					</include-->
-					
+										
 					<include name="inputNumberPerson">
 						<parameter name="numeroCliente" value="2" />
 					</include>
 					
 					<include name="selectHour" />
+					
 					<include name="realizarReserva">
 						<parameter name="resultatEsperado" value="true" />
 					</include>
-					
+					<include name="createBooking">
+						<parameter name="aceptarComunicacionesComerciales" value="true" />
+					</include>				
+
 				</methods>
 			</class>
 		</classes>
 	
 	</test>
-
 
 </suite>

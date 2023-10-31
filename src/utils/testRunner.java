@@ -157,7 +157,7 @@ public class testRunner {
 		
 		//Test Booking 
 		log("EJECUTA LOS Tests Booking en servidor cloudQuality03");
-		//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasCloudQuality03.xml");
+		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasCloudQuality03.xml");
 		
 	}
 	
@@ -175,7 +175,7 @@ public class testRunner {
 		
 		//Test Booking 
 		log("EJECUTA LOS Tests Booking en servidor cloudQuality04");
-		//suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasCloudQuality04.xml");		
+		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasCloudQuality04.xml");		
 	}
 	
 	private static void addTestsVentasPropinas(boolean ServidorCloudQuality03, boolean ServidorCloudQuality04) {
