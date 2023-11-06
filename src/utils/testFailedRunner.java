@@ -5,19 +5,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.io.Writer;
+//import java.io.StringReader;
+//import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.XMLFormatter;
+//import java.util.logging.XMLFormatter;
 
-import javax.swing.text.Utilities;
+//import javax.swing.text.Utilities;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+//import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -28,18 +28,18 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+//import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.testng.Reporter;
 import org.testng.TestNG;
 import org.testng.annotations.Optional;
 import org.testng.internal.Utils;
-import org.testng.reporters.XMLUtils;
+//import org.testng.reporters.XMLUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+//import org.xml.sax.SAXException;
 
-import freemarker.core.OutputFormat;
+//import freemarker.core.OutputFormat;
 import graphql.Assert;
 
 public class testFailedRunner {
@@ -56,8 +56,8 @@ public class testFailedRunner {
 																	   //-------------------******************************************--------------------------//
 
 	public static void main(String[] args) {
-		TestNG runner = new TestNG();
-		List<String> suitefiles = new ArrayList<String>();
+		//TestNG runner = new TestNG();
+		//List<String> suitefiles = new ArrayList<String>();
 				
 		if(RUNTESTSFAILED) { // EJECUTA LOS TESTS EN LAS DOS VERSIONES, PRIMERO EN LA VERSION MASTER (QA08) Y DESPUES EN LA VERSION ESTABLE (QA07)
 			Data.getInstance().setRunTestsFailed(RUNTESTSFAILED);
@@ -83,8 +83,8 @@ public class testFailedRunner {
 	
 
 	private static void abrirReport() {
-		File oldFilePath = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report.html");
-		File filePath = new File("C:\\Users\\QA\\portalrestproject\\test-output\\"+ new Date().getTime());
+		File oldFilePath = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\test-output\\report.html");
+		File filePath = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\test-output\\"+ new Date().getTime());
 		filePath.mkdir();
 		File htmlFile = new File(filePath+"\\report.html");
 		oldFilePath.renameTo(htmlFile);

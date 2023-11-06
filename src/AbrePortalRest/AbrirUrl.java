@@ -19,10 +19,10 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.aventstack.extentreports.MediaEntityBuilder;
+//import com.aventstack.extentreports.MediaEntityBuilder;
 
 import Verificaciones.VerificarCookies;
-import configuration.EnumServidor;
+//import configuration.EnumServidor;
 //import graphql.Assert;
 import interfaces.ITipoPedido;
 import interfaces.ITipoPedidoAhora;

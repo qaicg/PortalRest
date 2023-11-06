@@ -15,9 +15,9 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.mysql.cj.util.StringUtils;
+//import com.mysql.cj.util.StringUtils;
 
-import lombok.ToString;
+//import lombok.ToString;
 import main.Correo;
 import utils.Data;
 import utils.TestBase;
@@ -78,7 +78,7 @@ public class VerificarReservas extends TestBase {
 			
 			//log("Text 00022 de textConfirmacionReservaAlCliente --> " + textConfirmacionReservaAlCliente);
 			
-			String newTextConfirmacionReservaAlCliente = textConfirmacionReservaAlCliente;
+			//String newTextConfirmacionReservaAlCliente = textConfirmacionReservaAlCliente;
 			
 			//log("Text de ewTextConfirmacionReservaAlCliente --> " +newTextConfirmacionReservaAlCliente);
 			

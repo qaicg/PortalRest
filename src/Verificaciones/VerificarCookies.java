@@ -2,7 +2,7 @@ package Verificaciones;
 
 import org.testng.annotations.Test;
 
-import graphql.Assert;
+//import graphql.Assert;
 
 import org.testng.annotations.Test;
 import java.time.Duration;

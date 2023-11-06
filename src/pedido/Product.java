@@ -3,11 +3,11 @@ package pedido;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.cj.protocol.Warning;
+//import com.mysql.cj.protocol.Warning;
 
 import Objects.ProductItem;
 import graphql.Assert;
-import utils.TestBase;
+//import utils.TestBase;
 import utils.Utils;
 
 public class Product extends ProductItem {

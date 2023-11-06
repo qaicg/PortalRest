@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import com.aventstack.extentreports.MediaEntityBuilder;
+//import com.aventstack.extentreports.MediaEntityBuilder;
 
 import Verificaciones.VerificarCookies;
 import graphql.Assert;

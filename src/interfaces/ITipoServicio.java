@@ -1,6 +1,6 @@
 package interfaces;
 
-import graphql.PublicApi;
+//import graphql.PublicApi;
 
 public interface ITipoServicio {
 	public int id = 0;

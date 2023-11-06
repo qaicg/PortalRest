@@ -3,7 +3,7 @@ package utils;
 import Objects.Customer;
 import Objects.LoyaltyCard;
 import Reservas.BookingInformation;
-import configuration.ConfigServer;
+//import configuration.ConfigServer;
 import configuration.Server;
 import pedido.Pedido;
 

@@ -12,7 +12,7 @@ import org.testng.Reporter;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import Cadenas.Es;
+//import Cadenas.Es;
 import utils.TestBase;
 
 public class VerificarPrimeraFamiliaRestaurante extends TestBase{

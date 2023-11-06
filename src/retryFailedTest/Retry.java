@@ -6,7 +6,8 @@ import java.util.Objects;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 import org.testng.annotations.Parameters;
-import org.testng.internal.reflect.Parameter;
+
+//import org.testng.internal.reflect.Parameter;
 
 @Parameters("maxTryParameter")
 public class Retry implements IRetryAnalyzer {

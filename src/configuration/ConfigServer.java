@@ -45,7 +45,7 @@ public class ConfigServer {
 	
 	List<Server> serverList = new ArrayList<Server>(); //retrive server form config xml
 	
-	private static File fileXmlConfigServer = new File("C:\\Users\\QA\\portalrestproject\\src\\configuration\\config.xml");
+	private static File fileXmlConfigServer = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\configuration\\config.xml");
 	
 	public static File getFileXmlConfigServer() {
 		return fileXmlConfigServer;

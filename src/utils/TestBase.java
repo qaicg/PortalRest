@@ -81,29 +81,29 @@ import org.xml.sax.InputSource;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.reporter.ExtentAventReporter;
-import com.aventstack.extentreports.reporter.ExtentKlovReporter;
+//import com.aventstack.extentreports.Status;
+//import com.aventstack.extentreports.reporter.ExtentAventReporter;
+//import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.github.javafaker.Faker;
-import com.google.gson.annotations.Until;
-import com.google.inject.spi.Element;
+//import com.google.gson.annotations.Until;
+//import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
-import org.apache.commons.lang3.StringUtils.*;
-import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
+//import org.apache.commons.lang3.StringUtils.*;
+//import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
 
-import Cadenas.Es;
-import Objects.ProductItem;
+//import Cadenas.Es;
+//import Objects.ProductItem;
 import Windows.TrayIconDemo;
 import configuration.ConfigServer;
 import configuration.EnumServidor;
 import configuration.Server;
-import enums.CookiesPortalRest;
-import lombok.var;
+//import enums.CookiesPortalRest;
+//import lombok.var;
 import main.Correo;
 import main.Reader;
 
-import java.util.*;
+//import java.util.*;
 
 public class TestBase extends StringUtils {
 
@@ -205,7 +205,7 @@ public class TestBase extends StringUtils {
 
 		System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
 		options = new ChromeOptions();
-		pathprofile = "C:\\Users\\QA\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
+		pathprofile = "C:\\Users\\"+TestBase.getCurrentUser()+"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
 		options.addArguments("user-data-dir=" + pathprofile);
 		options.addArguments("chrome.switches", "--disable-extensions");
 		options.addArguments("--start-maximized");
@@ -310,8 +310,7 @@ public class TestBase extends StringUtils {
 		extent.flush();
 		driver.manage().deleteAllCookies();
 		driver.quit();
-		
-		//driver = null; //15/05
+
 	}
 
 	@AfterSuite
@@ -322,7 +321,7 @@ public class TestBase extends StringUtils {
 			
 			//driver.manage().deleteAllCookies();
 			
-			//File htmlFile = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report"+new Date().getTime()+".html");
+			//File htmlFile = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\test-output\\report"+new Date().getTime()+".html");
 			//espera(2000);
 			//Desktop.getDesktop().browse(htmlFile.toURI());
 	
@@ -704,7 +703,7 @@ public class TestBase extends StringUtils {
     		if (failIfNotPresent) {
     			Assert.assertTrue(false);
     			System.exit(0);
-    		} 
+    		}
     	}
  	
     }
@@ -933,5 +932,11 @@ public class TestBase extends StringUtils {
 		}
 				
 		return servidores;
+	}
+	
+	//Get the Current user
+	public static String getCurrentUser() {
+		String currentUser = System.getProperty("user.name");
+		return currentUser;
 	}
 }

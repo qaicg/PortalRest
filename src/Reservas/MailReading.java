@@ -12,7 +12,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import AbrePortalRest.AbrirUrl;
+//import AbrePortalRest.AbrirUrl;
 import graphql.Assert;
 import main.Correo;
 import main.Reader;

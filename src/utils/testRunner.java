@@ -12,7 +12,7 @@ import org.testng.TestNG;
 import org.testng.annotations.BeforeSuite;
 
 import configuration.ConfigServer;
-import configuration.ConfigServerPanel;
+//import configuration.ConfigServerPanel;
 import configuration.EnumServidor;
 import configuration.Server;
 
@@ -31,7 +31,7 @@ public class testRunner {
 														
 														static boolean SINVENTANA = false;
 														
-														static boolean ENTORNOTEST = true; //ENTORNOTEST: false --> VERSION ESTABLE (QA09); true --> VERSION MASTER (QA10)
+														static boolean ENTORNOTEST = false; //ENTORNOTEST: false --> VERSION ESTABLE (QA09); true --> VERSION MASTER (QA10)
 														
 														static boolean BETATEST = false; //BETATEST: true -->Tests en CloudLicenceBeta, false --> Tests en CloudLicence
 														
@@ -118,8 +118,8 @@ public class testRunner {
 	}
 	
 	private static void abrirReport() {
-		File oldFilePath = new File("C:\\Users\\QA\\portalrestproject\\test-output\\report.html");
-		File filePath = new File("C:\\Users\\QA\\portalrestproject\\test-output\\"+ new Date().getTime());
+		File oldFilePath = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\test-output\\report.html");
+		File filePath = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\test-output\\"+ new Date().getTime());
 		filePath.mkdir();
 		File htmlFile = new File(filePath+"\\report.html");
 		oldFilePath.renameTo(htmlFile);
@@ -148,16 +148,16 @@ public class testRunner {
 		// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA09)
 		log("EJECUTA LOS TESTS EN  servidor CloudQuality03");
 		
-		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesCloudQuality03.xml");
+		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Clientes\\ClientesCloudQuality03.xml");
 		
-		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasCloudQuality03.xml");
+		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Ventas\\VentasCloudQuality03.xml");
 		
 		//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03
 		addTestsVentasPropinas(true, false);
 		
 		//Test Booking 
 		log("EJECUTA LOS Tests Booking en servidor cloudQuality03");
-		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasCloudQuality03.xml");
+		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Reservas\\ReservasCloudQuality03.xml");
 		
 	}
 	
@@ -166,29 +166,29 @@ public class testRunner {
 		// EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)
 		log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)");
 		
-		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Clientes\\ClientesCloudQuality04.xml");
+		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Clientes\\ClientesCloudQuality04.xml");
 		
-		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Ventas\\VentasCloudQuality04.xml");	
+		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Ventas\\VentasCloudQuality04.xml");	
 		
 		//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04
 		addTestsVentasPropinas(false, true);
 		
 		//Test Booking 
 		log("EJECUTA LOS Tests Booking en servidor cloudQuality04");
-		suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\Reservas\\ReservasCloudQuality04.xml");		
+		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Reservas\\ReservasCloudQuality04.xml");		
 	}
 	
 	private static void addTestsVentasPropinas(boolean ServidorCloudQuality03, boolean ServidorCloudQuality04) {
 		
 		if(ServidorCloudQuality03) { // Servidor CloudQuality03 --> 
 			log("Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03");
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\PropinasCloudQuality03.xml");
+			suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\VentasConPropinas\\PropinasCloudQuality03.xml");
 		}
 		
 		if(ServidorCloudQuality04) {
 			//TODO: implementar los tests de propinas en Servidor de producción
 			log("Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04");
-			suitefiles.add("C:\\Users\\QA\\portalrestproject\\src\\VentasConPropinas\\PropinasCloudQuality04.xml"); //Servidor Estable --> Produccion
+			suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\VentasConPropinas\\PropinasCloudQuality04.xml"); //Servidor Estable --> Produccion
 		}
 	}
 	
@@ -205,4 +205,6 @@ public class testRunner {
 	  	serverTest = configServer.getServerTest();
 	  	serverProduction =  configServer.getServerProduction();
 	}
+	
+
 }
