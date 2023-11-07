@@ -203,7 +203,9 @@ public class TestBase extends StringUtils {
 			Data.getInstance().setPedidoActual(null);
 		}
 
-		System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
+		//System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\driver\\ChromeDriver-104.0.5112.79\\chromedriver.exe");
+		
 		options = new ChromeOptions();
 		pathprofile = "C:\\Users\\"+TestBase.getCurrentUser()+"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
 		options.addArguments("user-data-dir=" + pathprofile);

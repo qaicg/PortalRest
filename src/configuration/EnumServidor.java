@@ -2,7 +2,10 @@ package configuration;
 
 public enum EnumServidor {
 	QUALITY03("cloudquality03", "jdbc:mysql://213.99.41.60:3306/", "cloud", "gKeQf6xfsIHLJXVy"),
-	QUALITY04("cloudquality04", "jdbc:mysql://213.99.41.61:3306/", "cloud", "d4PKLWwrhFcdwnB1");
+	QUALITY04("cloudquality04", "jdbc:mysql://213.99.41.61:3306/", "cloud", "d4PKLWwrhFcdwnB1"),
+	RUNALLTESTS("runAllTests", "", EnumServidor.QUALITY03.getServerName() 
+			+ "-" + 
+			EnumServidor.QUALITY04.getServerName(), "");//Definir para ejecutar todos los tests de los servidores cloudquality03 y cloudquality04
 	
 	private String serverName, urlConexion, userName, password;
 	

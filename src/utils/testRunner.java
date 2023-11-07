@@ -12,6 +12,7 @@ import org.testng.TestNG;
 import org.testng.annotations.BeforeSuite;
 
 import configuration.ConfigServer;
+import configuration.ConfigServerPanel;
 //import configuration.ConfigServerPanel;
 import configuration.EnumServidor;
 import configuration.Server;
@@ -28,29 +29,60 @@ public class testRunner {
 	
 													//-------------------**********DEFINIDIR CONSTANTES***********--------------------------//
 														static boolean RUNALLTESTS = true; //RUNALLTESTS: true --> VERSION ESTABLE (QA08) y VERSION MASTER (QA09)
-														
+
 														static boolean SINVENTANA = false;
 														
-														static boolean ENTORNOTEST = false; //ENTORNOTEST: false --> VERSION ESTABLE (QA09); true --> VERSION MASTER (QA10)
+														static boolean ENTORNOTEST = true; //ENTORNOTEST: false --> VERSION ESTABLE (QA09); true --> VERSION MASTER (QA10)
 														
 														static boolean BETATEST = false; //BETATEST: true -->Tests en CloudLicenceBeta, false --> Tests en CloudLicence
 														
 														static EnumServidor SERVERTEST = EnumServidor.QUALITY04; //Definimos el servidor de test(VERSION MASTER)
-												   //-------------------******************************************--------------------------//
-	private static List<String> suitefiles = new ArrayList<String>();
+																																										
+													//-------------------******************************************--------------------------//
+														private static List<String> suitefiles = new ArrayList<String>();
+													
+														private static Server serverTest;
+														
+														private static Server serverProduction;
 
-	private static Server serverTest;
-	private static Server serverProduction;
-	
-	public Server getServerTest() {
-		return serverTest;
-	}
-
-	public Server getServerProduction() {
-		return serverProduction;
-	}
-
+		//-------------------**********************Getters and Setters Constants*******************--------------------------//
+				public static boolean isRUNALLTESTS() {
+					return RUNALLTESTS;
+				}
+			
+				public static void setRUNALLTESTS(boolean rUNALLTESTS) {
+					RUNALLTESTS = rUNALLTESTS;
+				}
+				
+				public static boolean isENTORNOTEST() {
+					return ENTORNOTEST;
+				}
+			
+				public static void setENTORNOTEST(boolean eNTORNOTEST) {
+					ENTORNOTEST = eNTORNOTEST;
+				}	
+				
+				public static EnumServidor getSERVERTEST() {
+					return SERVERTEST;
+				}
+			
+				public static void setSERVERTEST(EnumServidor sERVERTEST) {
+					SERVERTEST = sERVERTEST;
+				}	
+				public Server getServerTest() {
+					return serverTest;
+				}
+			
+				public Server getServerProduction() {
+					return serverProduction;
+				}
+		//-------------------**********************AND Getters and Setters Constants*******************--------------------------//
+		
 	public static void main(String[] args) {
+		//
+		//ConfigServerPanel configServer = new ConfigServerPanel();
+		//configServer.main(args);
+		//
 
 		defineServerTest();
 		
@@ -75,6 +107,7 @@ public class testRunner {
 
 			if(ENTORNOTEST) {
 				if(serverTest.isTest()) {
+					
 					if(serverTest.getName().contains(EnumServidor.QUALITY03.getServerName())) {
 						getTests(ENTORNOTEST, false); //Ejecuta los test del servidor cloudquality03
 					}
@@ -88,6 +121,7 @@ public class testRunner {
 				// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA10)
 				log("EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA10)");
 				if(serverProduction.isProduction()) {
+					
 					if(serverProduction.getName().contains(EnumServidor.QUALITY03.getServerName())) {
 						getTests(true, ENTORNOTEST); //Ejecuta los test del servidor cloudquality03
 					}
