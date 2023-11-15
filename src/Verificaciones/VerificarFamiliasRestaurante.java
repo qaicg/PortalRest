@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -20,7 +21,7 @@ import org.testng.annotations.Test;
 
 //import Cadenas.Es;
 import Objects.ProductItem;
-import graphql.Assert;
+//import graphql.Assert;
 import utils.TestBase;
 
 public class VerificarFamiliasRestaurante extends TestBase {

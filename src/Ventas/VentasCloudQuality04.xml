@@ -117,6 +117,9 @@
 	 <!-- Determinar el servidor -->
 	 <parameter name="servidor" value="cloudquality04" />
 	 
+	 <!-- Para el test de consultar carta tras abrir portalrest en modo consulta teniendo la carta en forma imagen o PDF -->
+	 <parameter name="refrecaPaginaSinoFallaElTest" value="0"/> <!-- si no falla el test a la primera vez, refrescar la página x veces y volver a testear -->
+	 
 		 
 	<!-- Eliminar las cookies y volver a cargar la página: Comporbar que se muestre la página de error del motero-->
 	<!-- #37519 Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest -->
@@ -138,7 +141,78 @@
 	
 	<!-- Fin eliminar cookies-->
 	
-	<!-- -->
+	<!-- 
+		#42131 > No se muestra la carta en PDF a la hora de abrir portalrest en modo consulta
+		Mostra carta en formato imagen o pdf a la hora de abrir portalrest en modo consulta 
+	-->
+	<test name="Mostrar carta en formato pdf a la hora de abrir portalrest en modo consulta" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZiN4MjM4ITP0NXZSRWa" />
+		<parameter name="shop" value="57192" />
+		
+		<parameter name="documentName" value="cartaTonni" />
+		<parameter name="documentType" value=".pdf" />
+		<parameter name="refrecaPaginaSinoFallaElTest" value="3"/> <!-- si no falla el test a la primera vez, refrescar la página x veces y volver a testear -->
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+
+			<class name="Verificaciones.VerificarCartaElectronica">
+				<methods>
+					<include name="verifcarCartaEnModoConsulta" />
+				</methods>
+			</class>
+						
+		</classes>
+		
+	</test>
+	
+	<test name="Mostrar carta en forma Imagen a la hora de abrir portalrest en modo consulta" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSN4MjM4ITP0NXZSRWa" />
+		<parameter name="shop" value="57192" />
+		
+		<parameter name="documentName" value="cartaEnElRestFrutos" />
+		<parameter name="documentType" value=".jpeg" />
+		<parameter name="refrecaPaginaSinoFallaElTest" value="2"/> <!-- si no falla el test a la primera vez, refrescar la página x veces y volver a testear -->
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+
+			<class name="Verificaciones.VerificarCartaElectronica">
+				<methods>
+					<include name="verifcarCartaEnModoConsulta" />
+				</methods>
+			</class>
+						
+		</classes>
+		
+	</test>
+	<!-- Fin -->
+	
+	<!-- 
+		#41593 > Que no aparezca el icono flecha al pulsar sobre el logo	
+	<test name="No motrar el botón back tras pulsar logotipo a la hora de abrir pt con  tipo de servicio " enabled="true" preserve-order="true">
+		<parameter name="Url" value="" />
+		<parameter name="shop" value="57192" />
+		<parameter name="mostrarBotonBack" value="1" />
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+
+			<class name="Verificaciones.VerificarCartaElectronica">
+				<methods>
+					<include name="pulsarLogoTipoSinMostrarBotonBack" />
+				</methods>
+			</class>
+						
+		</classes>		
+		
+	</test>
+	-->
+	
+	
 	<!-- 
 		#38213 > Error patronas no se puede acceder a la carta desde QR lista de restaurantes
 		Prueba de abrir un url de lista restaurante, realizar un pedido de 4 productos, en un restaurante de la lista de establecimiento, con medio pago Redsýs 
@@ -1081,6 +1155,97 @@
 			<class name="Ventas.ValidacionPedidos" />
 		</classes>
 	</test>	
+
+	<!--  
+		#42296: Error al hacer pedido Portalrest NO SERVER FOUND IN PROFILE CloudClient
+		
+		Pedidos PortalRest FrontRest sin HioposCloud
+		Registrar cliente
+		logearse
+		Hacer pedido y finaizar la compra
+		Validar la compra en BBDD
+	-->
+	<test name="Registro de nuevo usuario y prueba de venta simple con 4 artículos normales en PRT(FRS sin HioPosCloud)" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCO1EzM4ITP0NXZSRWa" />
+		<parameter name="shop" value="66920" />
+		<parameter name="email" value="" />
+		<parameter name="nuevaTarjeta" value="true" />
+		
+		<parameter name="totalEsperado" value="10,45€" />
+				
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaRegistro" />
+			<class name="Clientes.CrearCliente" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+		</classes>
+	</test>
+	
+	<test name="Prueba de venta simple con 4 artículos normales y Registro de nuevo usuario en el carrito desde PRT(FRS sin HioPosCloud)" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCO1EzM4ITP0NXZSRWa" />
+		<parameter name="shop" value="66920" />
+		
+		<parameter name="email" value="" />
+		<parameter name="nuevaTarjeta" value="true" />
+		
+		<parameter name="loginCheckout" value="true"/>
+		
+		<parameter name="totalEsperado" value="10,45€" />
+
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+		</classes>
+	</test>	
+	
+	<test name="Prueba de venta simple con 4 artículos normales pagados con forma de pago pendiente desde PRT(FRS sin HioPosCloud)" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCO1EzM4ITP0NXZSRWa" />
+		<parameter name="shop" value="66920" />
+		<parameter name="formaPago" value="Pagar a la entrega" />
+		<parameter name="totalEsperado" value="10,45€" />
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+		</classes>
+	</test>
+	
+	<test name="Prueba de venta simple con 4 artículos normales pagados con pasarela de pago Redsys desde PRT(FRS sin HioPosCloud)" enabled="true" preserve-order="true">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCO1EzM4ITP0NXZSRWa" />
+		<parameter name="shop" value="66920" />
+		
+		<!-- 
+		<parameter name="nuevaTarjeta" value="true" />
+		-->
+		
+		<parameter name="totalEsperado" value="10,45€" />
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+		</classes>
+	</test>		
+	<!-- Fin PRT sin HioposCloud -->
 
 	<test name="Venta de artículos normales y con formatos con incrementos de precio" enabled="true" preserve-order="true" group-by-instances="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa" />
