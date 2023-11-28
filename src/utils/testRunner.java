@@ -182,8 +182,10 @@ public class testRunner {
 		// EJECUTA LOS TESTS EN LA VERSION ESTABLE (QA09)
 		log("EJECUTA LOS TESTS EN  servidor CloudQuality03");
 		
+		//Test Clientes
 		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Clientes\\ClientesCloudQuality03.xml");
 		
+		//Test Ventas
 		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Ventas\\VentasCloudQuality03.xml");
 		
 		//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality03
@@ -200,8 +202,10 @@ public class testRunner {
 		// EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)
 		log("EJECUTA LOS TESTS EN LA VERSION MASTER (QA10)");
 		
+		//Test Clientes
 		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Clientes\\ClientesCloudQuality04.xml");
 		
+		//Test Ventas
 		suitefiles.add("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\src\\Ventas\\VentasCloudQuality04.xml");	
 		
 		//Test Ventas con propinas: Añadimos los Tests de Ventas con propinas en el Servidor CloudQuality04

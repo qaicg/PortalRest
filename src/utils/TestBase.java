@@ -352,6 +352,26 @@ public class TestBase extends StringUtils {
 			return false;
 		}
 	}
+	
+	public static boolean isElementPresent(List<WebElement> elements) {
+		try {
+			if (elements.size() == 0)
+				return false;
+			return true;
+		} catch (Exception exception) {
+			return false;
+		}
+	}
+	
+	public static boolean isElementPresent(WebElement element) {
+		try {
+			if (Objects.isNull(element))
+				return false;
+			return true;
+		} catch (Exception exception) {
+			return false;
+		}
+	}
 
 	public void log(String s) {
 		System.out.println(s);

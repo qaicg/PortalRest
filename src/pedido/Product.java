@@ -2,6 +2,7 @@ package pedido;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //import com.mysql.cj.protocol.Warning;
 
@@ -23,7 +24,15 @@ public class Product extends ProductItem {
 
 	public Product() {
 		super();
-		// TODO Auto-generated constructor stub
+	}
+	
+	public Product(String nombre) {
+		super.setNombre(nombre);
+	}
+	
+	public Product(String nombre, String precio) {
+		super.setNombre(nombre);
+		super.setPrecio(precio);
 	}
 	
 	public Product(String nombre, String unidad, String precio) {
@@ -103,15 +112,45 @@ public class Product extends ProductItem {
 		this.formatos.add(formato);
 	}
 	
-	//Devuelve el formato seleccionado
+	//Devuelve el formato seleccionado	para el producto
 	public Formato getProductFormatSelected() {
+		return formatoSelected;
+	}
+	
+	//Definir el formato seleccionado	para el producto
+	public void setProductFormatSelected() {
 		formatos.stream().forEach(form -> {
 			if(form.isSelected()) {
 				formatoSelected = form;
 			}
-		});
+		});	
 		
-		return formatoSelected;
+		if(Objects.isNull(formatoSelected)) { //No hemos encontrado formato preseleccionado por defecto
+			System.out.println("No hemos encontrado formato preseleccionado por defecto");
+			System.out.println("Volver a preseleccionar el formato 0 de la lista de formatos ");
+			setformatoSelectPorDefecto();
+			setProductFormatSelected();
+		}
+	}
+	
+	//Definir el formato seleccionado	para el producto
+	public void SetProductFormatSelected(Formato productFormatSelected) {
+		formatoSelected = productFormatSelected;
+		
+	}
+	
+	//Definir el el formato uno a seleccionar por defecto
+	public void setformatoSelectPorDefecto() {
+		if(Objects.isNull(getProductFormatSelected())) {
+			getFormatos().get(0).setSelected(true);
+		}
+	}
+		
+	//Definir el el formato uno a seleccionar por defecto
+	public void setformatoSelectPorDefecto(int i) {
+		if(Objects.isNull(getProductFormatSelected())) {
+			getFormatos().get(i).setSelected(true);
+		}
 	}
 	
 	//El producto tiene formato, cambiar el precio por el precio del formato

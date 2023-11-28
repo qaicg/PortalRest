@@ -1,33 +1,27 @@
 package pedido;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+public class Modificador {
 
-public class Formato {
-	
 	private String nombre;
 	private String precio;
 	private boolean isSelected;
 	
-	private List<Modificador> modificadorList = new ArrayList<Modificador>();
-	
-	public Formato() {
+	public Modificador() {
 		super();
 	}	
 	
-	public Formato(String nombre) {
+	public Modificador(String nombre) {
 		super();
 		this.nombre = nombre;
 	}
 		
-	public Formato(String nombre, String precio) {
+	public Modificador(String nombre, String precio) {
 		super();
 		this.nombre = nombre;
 		this.precio = precio;
 	}
 	
-	public Formato(String nombre, String precio, boolean isSelected) {
+	public Modificador(String nombre, String precio, boolean isSelected) {
 		super();
 		this.nombre = nombre;
 		this.precio = precio;
@@ -57,17 +51,4 @@ public class Formato {
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 	}
-
-	public List<Modificador> getModificadorList() {
-		return modificadorList;
-	}
-
-	public void setModificadorList(List<Modificador> modificadorList) {
-		this.modificadorList = modificadorList;
-	}
-	
-	public void setModificadorList(Modificador modificador) {
-		this.modificadorList.add(modificador) ;
-	}	
-	
 }

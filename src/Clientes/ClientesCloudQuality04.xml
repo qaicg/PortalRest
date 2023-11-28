@@ -378,6 +378,9 @@
 		</classes>
 	</test> <!--Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT -->
 	
+	<!-- 
+		Bug: #42784 > Error Cannot read properties of undefined (reading 'setErrors') a la hora de crear nueva cuenta con email usado en PortalRest(FRS con Manager)
+	-->
 	<!-- Registrar nuevo usuario  con correo que ya está en uso en la tienda PRT(ICGCloud) -->
 	<test thread-count="5" name="Creación de nuevo cliente ICGCloud con correo que ya está en uso" enabled="true" preserve-order="true">
 	  <parameter name="resultadoEsperado" value="false"/>

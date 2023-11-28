@@ -1,18 +1,24 @@
 package utils;
 
+import static org.testng.Assert.assertThrows;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import org.testng.annotations.Optional;
 
-import graphql.Assert;
 import pedido.Formato;
+import pedido.Product;
 
 public class PortalRestOrderElements extends TestBase {
 	
@@ -228,23 +234,23 @@ public class PortalRestOrderElements extends TestBase {
 		
 		public static final String arrayFormatos = "//div[contains(@class,'format-element-wrapper')]";
 		
-		public static final List<WebElement> webElmtArrayFormatos = driver.findElements(By.xpath(arrayFormatos)); //m
+		public List<WebElement> webElmtArrayFormatos = driver.findElements(By.xpath(arrayFormatos)); //m
 		
 		public static final String arrayNombre = "//div[contains(@class,'format-element-wrapper')]//div[contains(@class, 'format-element-name')]";
 		
-		public static final List<WebElement> webElmtArrayNombre = driver.findElements(By.xpath(arrayNombre)); //m
+		public List<WebElement> webElmtArrayNombre = driver.findElements(By.xpath(arrayNombre)); //m
 		
 		public static final String arrayPrecio = "//div[contains(@class,'format-element-wrapper')]//div[contains(@class, 'format-element-price')]";
 		
-		public static final List<WebElement> webElmtArrayPrice = driver.findElements(By.xpath(arrayPrecio));
+		public List<WebElement> webElmtArrayPrice = driver.findElements(By.xpath(arrayPrecio));
 		
 		public static final String AddToOrderButton = "//button[contains(@class,'basket-button')]";
+		
 		
 		public List<Formato> formatList = new ArrayList<Formato>();		
 		
 		public Formatos() {
 			super();
-			// TODO Auto-generated constructor stub
 			setFormatList();
 		}
 
@@ -270,8 +276,6 @@ public class PortalRestOrderElements extends TestBase {
 					//Utils.logStatic("precio del formato: " + priceFormat);
 					
 					formato = new Formato(nameFormat, priceFormat);
-					//formato = new Formato(webElmtArrayNombre.get(i).getText(),  webElmtArrayPrice.get(i).getText());
-					//formato = new Formato(webElmtArrayNombre.get(i).getText(),  webElmtArrayPrice.get(i).getText());
 					this.formatList.add(formato);
 				}
 			}
@@ -281,6 +285,144 @@ public class PortalRestOrderElements extends TestBase {
 		public List<Formato> getFormatList() {
 			return this.formatList;
 		}
+		
+		public String getXpathAddFormatoCombinado(String modificador) {
+			return "//div[contains(@class, 'main-column fullWidth')]//child::div[contains(@class, 'dish-name line-clamp-2 modifier-menu-dish-name') and contains(text(), '"+ modificador +"')]//ancestor::div[contains(@class, 'main-column fullWidth')]//child::div[contains(@class, 'product-item-add')]";
+		}
+		
+		public String getXpathDeleteFormatoCopmbinado( String modificador) {
+			return "//div[contains(@class, 'main-column fullWidth')]//child::div[contains(@class, 'dish-name line-clamp-2 modifier-menu-dish-name') and contains(text(), '"+ modificador +"')]//ancestor::div[contains(@class, 'main-column fullWidth')]//child::div[contains(@class, 'number-spinner-spinner left-spinner')]";
+		}
+		
+		
+		//Validar los formatos desde un lista de formato
+		public void validarFormatosEsperados( List<Formato> formatos) {
+			List<Formato> formatoEncontradoList = getFormatList();
+			
+			//Ordonar los formatos
+			List<Formato> sortFormatoEncontradoList = sortedFormatoList(formatoEncontradoList);//.stream()
+			
+			sortFormatoEncontradoList.forEach(sorteFormat1 -> {
+				System.out.println("Lista de formatos encontrados y  ordonados " + sorteFormat1.getNombre());
+			});
+			
+			List<Formato> sortFormatosList = sortedFormatoList(formatos);//.stream()
+			
+			sortFormatosList.forEach(sorteFormat2 -> {
+				System.out.println("Lista de formatos esperados y ordonados " + sorteFormat2.getNombre());
+			});
+			
+			Assert.assertTrue(sortFormatoEncontradoList.size() == sortFormatosList.size(), "Error: no hemos encontrado todos los formatos(sortFormatosList y sortFormatoEncontradoList ) esperados en PT");
+			
+			List<Formato> newformatoList = new ArrayList<Formato>();
+		    for (Formato formatA: sortFormatoEncontradoList){
+		      boolean equals = false;
+		      for (Formato formatB: sortFormatosList) {
+		        if (formatA.getNombre().equals(formatB.getNombre())) {
+		          equals = true;
+		        }
+		      }
+		      if (!equals) {
+		    	  newformatoList.add(formatA);
+		      }
+		    }
+						
+			if(newformatoList.size() > 0) {
+				newformatoList.stream().forEach(format -> {
+					System.out.println("Error: No existen los siguiente formatos: " + format.getNombre());
+					
+				});
+				Assert.assertTrue(false);
+			}
+			else {
+				System.out.println("todos los formatos han sido validados ");
+			}
+			
+		}
+		
+		//Validar los formatos desde el producto
+		public void validarFormatosEsperados( Product product) {
+			validarFormatosEsperados( product.getFormatos());
+		}
+		
+		private static Comparator<Formato> formatoComparator() {
+
+		  return new Comparator<Formato>() {
+		      @Override
+		      public int compare(Formato form1, Formato form2) {
+		    	  return form1.getNombre().compareTo(form2.getNombre());
+		      }
+		  };
+
+		}
+		
+		public static List<Formato> sortedFormatoList(List<Formato> sortedFormatoList){
+			return sortedFormatoList.stream()
+					.sorted(formatoComparator())
+					.collect(Collectors.toList());
+		}
+		
+		public static void addFormato () {  //Añadir el formato en la cesta desde de la pantalla usando el botón +
+			
+		}
+		
+		public static void deleteFormato () { //Elimninar el formato de la cesta desde de la pantalla usando el botón -
+			
+		}
+		
+		//Obtener el webelement de formato con nombre y precio
+		public WebElement getFormatoElementByNameAndPrice(String formatoName, String formatoPrice) {
+			WebElement formatoElementByNameAndPrice = null;
+			
+			String nameFormat;
+			String priceFormat;
+									
+			waitUntilPresence(arrayFormatos);
+
+			waitUntilPresence(arrayNombre);
+			
+			waitUntilPresence(arrayPrecio);
+			
+			if(webElmtArrayFormatos.size() > 0) {
+				
+				for(int i = 0; i < webElmtArrayFormatos.size(); i++) {
+					
+					nameFormat = driver.findElements(By.xpath(arrayNombre)).get(i).getText().replaceAll("\\s","");
+					
+					priceFormat = driver.findElements(By.xpath(arrayPrecio)).get(i).getText().replaceAll("\\s","");
+					
+					if(nameFormat.contentEquals(formatoName.replaceAll("\\s","")) && priceFormat.contentEquals(formatoPrice.replaceAll("\\s",""))) {
+						formatoElementByNameAndPrice = webElmtArrayFormatos.get(i);
+						break;
+					}
+					
+					System.out.println("Error: No se ha encontrado el webElement del formato con el nombre y precio -> " + formatoName + " / " +formatoPrice);
+					System.out.println("Estamos con el webelment del formato con nombre y precio " + nameFormat + " / " +priceFormat);
+					
+					
+				}
+			}
+			
+			Assert.assertTrue(isElementPresent(formatoElementByNameAndPrice), "Error: No se ha encontrado el webElement del formato con el nombre y precio -> " + formatoName + " / " +formatoPrice);
+
+			return formatoElementByNameAndPrice;
+
+		}
+		
+		//Obtener el formato con nombre y precio
+		public Formato getFormatoByNameAndPrice(String formatoName, String formatoPrice) {
+			Formato formatoEncontrado = null;
+
+			formatoEncontrado = (Formato) getFormatList().stream()
+					.filter(formato -> formato.getNombre().contentEquals(formatoName))
+					.findFirst().get();
+			
+			Assert.assertTrue(!Objects.isNull(formatoEncontrado), "Error: No se ha encontrado el formato con el nombre y precio -> " + formatoName + " " +formatoPrice);
+			
+			return formatoEncontrado;
+
+		}
+
 		
 	}
 
@@ -367,5 +509,5 @@ public class PortalRestOrderElements extends TestBase {
 		public static String errorImageXpath= "//img[contains(@class, 'error-img')]";
 		
 	}
-
+	
 }

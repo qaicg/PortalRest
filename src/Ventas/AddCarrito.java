@@ -1,16 +1,19 @@
 package Ventas;
 
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-//import com.aventstack.extentreports.model.Log;
+import org.testng.Assert;
 
 import org.testng.AssertJUnit;
 
 import static org.testng.Assert.ARRAY_MISMATCH_TEMPLATE;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +22,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.LogManager;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -32,8 +37,8 @@ import org.testng.annotations.Test;
 
 import Objects.ProductItem;
 import dataProvider.StaticProvider;
-import graphql.Assert;
 import pedido.Formato;
+import pedido.Modificador;
 import pedido.Product;
 import utils.Data;
 import utils.PortalRestOrderElements;
@@ -51,34 +56,36 @@ public class AddCarrito extends TestBase {
 	Product order;
 	
 	List<Formato> articleformats = new ArrayList<Formato>();
+	
+	//Listado de formatos que son combinados con modificadore(s) definido desde el parametro del test
+	List<Formato> formatoCombinadoList = new ArrayList<Formato>(); //Los formatos combinados esperados en el test
+	
+	List<Formato> formatoEsperadoList = new ArrayList<Formato>(); //Los formatos esperados en el test 
+	
+	List<Product> articuloConFormatoEsperadoList = new ArrayList<Product>(); //Productos esperados en el test
+	
+	boolean isFormatoSelectdDefined = false; // permite saber si hay un formato a seleccionar en la lista de formatos
 
 	@Test (description="Este test busca un producto dado en el PortalRest actual" , priority=1, groups = { "carrito" })
 	@Parameters({"productos","totalEsperado","opcionesMenu","unidades", "goBack", "firstOrderProducts", "goBackByAddOrderButton", "abrirFichaProducto", "formatos"})
 	public void addCart(String productos, String totalEsperado, @Optional ("") String opcionesMenu, @Optional ("") String unidades,
-						@Optional ("") String goBack, @Optional ("") String firstOrderProducts,  @Optional ("") String goBackByAddOrderButton, @Optional("false") boolean abrirFichaArticulo, @Optional("") String formatos) {
+						@Optional ("") String goBack, @Optional ("") String firstOrderProducts,  @Optional ("") String goBackByAddOrderButton,
+						@Optional("false") boolean abrirFichaArticulo, @Optional("") String formatos) {
 		arrayNombres = productos.split(",");
 		
 		ArrayList<ProductItem> productosAddeds = new ArrayList<ProductItem> ();
 		
-		//test 08/05/23
-		 //this.getProductProvider(StaticProvider.ProductDataProvider.createProduct());
-		 ArrayList<Product> productDataProvider = StaticProvider.ProductDataProvider.getProductProvider();
-		
-		//fin test 08/05/23
-		
-		//List<Formato> articleformats = new ArrayList<Formato>();
-		 
-		 List<Integer> platosToSelect = new ArrayList<Integer>();
-		 List<WebElement> arrayPlatosMenu = new ArrayList<WebElement>();
+		ArrayList<Product> productDataProvider = StaticProvider.ProductDataProvider.getProductProvider();
+				 
+		List<Integer> platosToSelect = new ArrayList<Integer>();
+		List<WebElement> arrayPlatosMenu = new ArrayList<WebElement>();
 		
 		if(goBack.equalsIgnoreCase("true")) {
 			fOrderProducts = firstOrderProducts.split(",");			
 		} else {			
-			//w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(30));
 			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(@class,'familyItem')]")));	
 			List<WebElement> familias;
 			productosEncontrados=0;
-			//ArrayList<ProductItem> productosAddeds = new ArrayList<ProductItem> ();
 			
 			familias  = driver.findElements(By.xpath("//li[contains(@class,'familyItem')]"));
 			//ENTRO EN LA PRIMERA FAMILIA
@@ -147,18 +154,16 @@ public class AddCarrito extends TestBase {
 						clicJS(currentItem.getBoton());
 						espera(100);
 						
-						//if(currentItem.getNombre().equals("Oyako Don")) {
-							//Test si se habre la fiche del artículo: 16/10/2023
-							String articleInfosXpath = "//div[contains(@class, 'product-info-wrapper-scrollable')]";
-							
-							if(isElementPresent(By.className("product-info-wrapper-scrollable"))) {
-								addFromProductSheet(currentItem.getNombre());
-							}
-							else {
-								log("Se ha añadido el producto " +  currentItem.getNombre() + " con exíto.");
-							}
-							//							
-						//}
+						//Test si se habre la fiche del artículo: 16/10/2023
+						String articleInfosXpath = "//div[contains(@class, 'product-info-wrapper-scrollable')]";
+						
+						if(isElementPresent(By.className("product-info-wrapper-scrollable"))) {
+							addFromProductSheet(currentItem.getNombre());
+						}
+						else {
+							log("Se ha añadido el producto " +  currentItem.getNombre() + " con exíto.");
+						}
+						//							
 						
 					}
 					
@@ -170,8 +175,6 @@ public class AddCarrito extends TestBase {
 						espera(1000);
 						if (isElementPresent(By.tagName("app-menu-dialog"))) { // ES UN MENÚ
 							//EL OBJETIVO ES CLICAR LAS PRIMERAS OPCIONES DE TODOS LOS ORDENES.
-							//List<WebElement> arrayPlatosMenu = driver.findElements(By.xpath("//app-menu-dialog//div[contains(@class,'dish-menu-item')]"));
-							//List<Integer> platosToSelect = stringArrayToInteger(opcionesMenu);
 							arrayPlatosMenu = driver.findElements(By.xpath("//app-menu-dialog//div[contains(@class,'dish-menu-item')]"));
 							platosToSelect = stringArrayToInteger(opcionesMenu);
 							espera(1000);
@@ -186,13 +189,9 @@ public class AddCarrito extends TestBase {
 							
 							//El menú tiene como cantidadProducto = "1"
 							cantidadProducto = "1";
-							//platosToSelect = null;
-							//opcionesMenu = null;
-							//arrayPlatosMenu = null;
 
 						}
-
-						else if(isElementPresent(By.xpath("//div[contains(@class,'format-element-wrapper')]"))) { // SON FORMATOS
+						else if(isElementPresent(By.xpath("//div[contains(@class,'format-element-wrapper')]"))) { // SON FORMATOS(Simples o combinados con modificadores)
 							List<WebElement> arrayFormatos = driver.findElements(By.xpath("//div[contains(@class,'format-element-wrapper')]"));
 							if(arrayFormatos.size()>0) {
 								//Añadir los formatos(Nombre y precio) en el producto
@@ -200,18 +199,152 @@ public class AddCarrito extends TestBase {
 								
 								espera(1500);
 								Formatos formts = new PortalRestOrderElements.Formatos();
-								
+																
 								articleformats = formts.getFormatList();
 								
-								articleformats.get(0).setSelected(true); // el formato seleccionado
+								//Validar la lista de formatos encontrados si son los esperados.
+								//Validar los formatos
+								//Validar los formatos esperados del artículo
+								log("Validar los formatos esperados del artículo " + currentItem.getNombre());
+								WebElement formatoSelectedByWebElement;
+								articuloConFormatoEsperadoList.stream().forEach(p -> {
+									if(p.getNombre().equals(currentItem.getNombre())) {
+										formts.validarFormatosEsperados(p);
+									}
+								});
+																
+								/*
+								 * Seleccionar el formato esperado en la lista si ya está definido sino elegir el primer de la lista
+								 */
+								WebElement formatoElementSelected = null;
+								Formato formatoSelected = new Formato();
 								
+								for(Product product: articuloConFormatoEsperadoList) {
+									if(!isFormatoSelectdDefined)
+										break;
+									
+									if(product.getNombre().equals(currentItem.getNombre())) {
+										
+										Formato formatoSelectdDelProducto = product.getFormatos().stream() //Obterner el formato definido a seleccionar
+										.filter(formato -> formato.isSelected())
+										.findFirst()
+										.get();
+										
+										//Buscar el formato a seleccionar 
+										formatoElementSelected = formts.getFormatoElementByNameAndPrice(formatoSelectdDelProducto.getNombre(), formatoSelectdDelProducto.getPrecio());
+										formatoSelected = formts.getFormatoByNameAndPrice(formatoSelectdDelProducto.getNombre(), formatoSelectdDelProducto.getPrecio());
+										break;
+									}
+									
+								}
+								
+								if(Objects.isNull(formatoElementSelected) && isFormatoSelectdDefined) {
+									log("Error: No se ha encontro el formato a seleccionar");									
+									Assert.assertTrue(false);
+								}
+								else {
+									int z = 0;
+									boolean formatoSelectedFind = false;
+									
+									if(!isFormatoSelectdDefined && articuloConFormatoEsperadoList.size() >= 1) {
+										for(Product currentProduct: articuloConFormatoEsperadoList) {
+											if(currentProduct.getNombre().equals(currentItem.getNombre())) {
+												currentProduct.setformatoSelectPorDefecto();//Seleccionar el formato 0 de la lista de formatos
+												
+												formatoSelected = currentProduct.getProductFormatSelected();
+												formatoElementSelected = formts.getFormatoElementByNameAndPrice(formatoSelected.getNombre(), formatoSelected.getPrecio());
+												formatoSelectedFind = true;
+												break;
+											}
+										}
+									}									
+									else if(!isFormatoSelectdDefined && articuloConFormatoEsperadoList.size() == 0) {
+										articleformats.get(0).setSelected(true);
+										formatoSelected = articleformats.get(0);
+										formatoElementSelected = formts.getFormatoElementByNameAndPrice(formatoSelected.getNombre(), formatoSelected.getPrecio());
+										formatoSelectedFind = true;
+									}
+									
+									if(Objects.isNull(formatoSelected) && Objects.isNull(formatoElementSelected)) {
+										log("Error: No hemos podido encontrar el formato a seleccionar en la busqueda");
+										Assert.assertTrue(false);
+									}
+
+								}
+								/*
+								 * Fin Seleccionar el formato esperado en la lista si ya está definido sino elegir el primer de la lista
+								 */
+								
+																								
+								//Formato combinado con modificador
+								//Compruebe que el formato consta de modificador.
+								Formato formatoCombinado = new Formato();
+								Modificador modificadorSelected = new Modificador();
+								
+								if(formatoCombinadoList.size() > 0) {//Formatos combinados
+									log("Tenemos formatos combinados: " + formatoCombinadoList.size());
+									//Formato formatoCombinado;
+									
+									for(Formato frm: formatoCombinadoList) {
+										log("Nombre del formato 1 -> " + frm.getNombre());
+										
+										log("Nombre del formato 2 -> " + articleformats.get(0).getNombre());
+										
+										if(frm.getNombre().contains(articleformats.get(0).getNombre())) {
+											log("Nombre del formato -> Compruebe que el formato consta de modificador " + articleformats.get(0).getNombre());
+											formatoCombinado = frm;
+											formatoCombinado.setSelected(true);
+											break;
+											
+										}
+										else {
+											log("Error: No se ha encontrada el formato combinado " + articleformats.get(0).getNombre());
+											Assert.assertTrue(false);
+										}
+										//Seleccionar el formato combinado
+										clicJS(formatoElementSelected);//CLIC EN PRIMER FORMATO / MODIFICADOR
+										
+										espera(500);
+									}
+									
+									if(Objects.nonNull(formatoCombinado)) {
+										//Modificador modificadorSelected
+										for(Modificador mdf: formatoCombinado.getModificadorList()) {
+											if(mdf.isSelected()) {
+												modificadorSelected = mdf;
+												log("Tenemos el modificador a seleccionar");
+												break;
+											}
+										}
+										
+										Assert.assertTrue(Objects.nonNull(modificadorSelected), "Error: no hemos podido encontrar el modificador combinado al formato del artículo");
+										
+										//Validar el modificar a seleccionar en el formato combinado
+										testAddDeleteModificadorCombinadoAlFormato(formts,  formatoCombinado, modificadorSelected);
+										
+										//Añadir el modificador del formato
+										addtModificadorCombinadoAlFormato(formts,  formatoCombinado, modificadorSelected);
+										
+
+									}
+									else {
+										log("Error: No Se ha encontrado modificador combinado al formato del artículo para seleccionarlo");
+										Assert.assertTrue(false);
+									}
+								}
+								else {
+									log("No hay formatos combinados");
+									//log("Testear que se puede seleccionar los formatos")
+									
+									clicJS(formatoElementSelected);//CLIC EN PRIMER FORMATO / MODIFICADOR
+								}
+								//Fin formato con modificador
+																
 								//Set precio por currentItem
 									String precioDesde = driver.findElement(By.xpath("(//span[contains(concat(' ', normalize-space(@class), ' '), ' dish-price ')])["+i+"]")).getAttribute("innerText");
 									log("el precio desde del producto con formatos: " + precioDesde);
 									currentItem.setPrecio(precioDesde);
-								//
-								
-								clicJS(arrayFormatos.get(0));//CLIC EN PRIMER FORMATO / MODIFICADOR
+								 
 								clicJS(driver.findElements(By.xpath("//button[contains(@class,'basket-button')]")).get(1)); //CLIC EN AÑADIR A CARRITO
 
 							}
@@ -233,8 +366,7 @@ public class AddCarrito extends TestBase {
 					}
 					
 					espera(2000);
-					//String priceXpath ="//div[contains(@class,'dishItem')]//child::div[contains(@class, 'first-row')]//span[contains(@class, 'dish-price')]";
-					// se puede usar //span[contains-token(@class, 'dish-price')] ???
+
 					String priceXpath = "//span[contains(concat(' ', normalize-space(@class), ' '), ' dish-price ')]"; // seleccionamos la classe que corresponde con el nombre dado.
 					
 					//Set precio del producto
@@ -290,13 +422,15 @@ public class AddCarrito extends TestBase {
 					//Añadir y validar los formatos del producto
 					if(!articleformats.isEmpty() && articleformats.size() > 0 ) {
 						order.setFormatos(articleformats);
+						order.setProductFormatSelected();
 						//Actualizar  el precio del artículo por el precio del formato
 						order.updatePriceProductByPriceFormat(articleformats);
-						log("el formato seleccionado:" + order.getProductFormatSelected().getNombre() + " precio " + order.getProductFormatSelected().getPrecio());
+						log("el formato seleccionado: " + order.getProductFormatSelected().getNombre() + " precio " + order.getProductFormatSelected().getPrecio());
 						
 						//Validar los formatos: Nombre y precio
 						if(!Utils.isNullOrEmpty(formatos)) {
-							String[] listFormatosAValidar = formatos.split(",")[1].split(";"); //Ejemplo de articulo con formatos: "Sake Kuramoto,JARRA 1/2 LITRO:2€;JARRA 1 LITRO:3€"
+							String[] listFormatosAValidar = formatos.split("\\*")[1].split(";");
+							
 							for(int x = 0; x < listFormatosAValidar.length; x++) {
 								if(!order.validateProductFormatName(listFormatosAValidar[x].split(":")[0])) {
 									log("Bug: El nombre del formato " + listFormatosAValidar[x].split(":")[0] + " no es valido");
@@ -304,9 +438,10 @@ public class AddCarrito extends TestBase {
 									//getExtent().flush();									
 								}
 							}
+														
 						}
 						
-						articleformats.clear();
+						articleformats.clear();//limpiar los formatos del artículo
 						
 					} else {
 						log("***El producto " + order.getNombre() +" no tiene formatos ");
@@ -398,7 +533,6 @@ public class AddCarrito extends TestBase {
 		log("Validaciones de botón flotante de carrito");
 
 		//VALIDAMOS UNIDADES TOTALES AÑADIDAS AL CARRITO Y VISIBLES EN EL BOTÓN FLOTANTE..
-		//if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-units')]")).getAttribute("innerText").equalsIgnoreCase(String.valueOf(productosEncontrados))) {
 		if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-units')]")).getText().equalsIgnoreCase(productosEncontrados)) {
 			log("- "+productosEncontrados + " productos añadidos");
 		}else {
@@ -407,7 +541,6 @@ public class AddCarrito extends TestBase {
 		}
 
 		//VALIDAMOS IMPORTE TOTAL VISIBLE DESDE EL BOTÓN DEL CARRITO FLOTANTE
-		//if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-amount')]")).getAttribute("innerText").equalsIgnoreCase(String.valueOf(totalEsperado))) {
 		if(driver.findElement(By.xpath("//div[contains(@class,'basket-button-amount')]")).getText().equalsIgnoreCase(totalEsperado)) {
 			log("- "+totalEsperado + " total validado");
 		}else {
@@ -415,7 +548,6 @@ public class AddCarrito extends TestBase {
 			return(false);
 		}
 
-		//if(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")).getAttribute("innerText").equalsIgnoreCase("")) {
 		if(driver.findElement(By.xpath("//button[contains(@class,'basket-button')]")).getText().equalsIgnoreCase("")) {
 			log("- Error en validación del string del botón flotante del carrito, está vacio (debería aparecer algo como Ver pedido)" );
 			return(false);
@@ -424,11 +556,9 @@ public class AddCarrito extends TestBase {
 		return true;
 	}
 
-
 	public boolean contieneNombre(String[] arrayNombres, String nombre ) {
 
 		for(int i = 0; i < arrayNombres.length; i++) {
-			//if (arrayNombres[i].equalsIgnoreCase(nombre))
 			if (arrayNombres[i].equals(nombre)) {
 				log("arrayNombres[i].equals(nombre) ---> " + nombre);
 				return true;
@@ -437,7 +567,6 @@ public class AddCarrito extends TestBase {
 		return false;
 	}
 	
-	//Update: 09/05/2023, para la factorizacion del codigo
 	public boolean contieneNombre(ArrayList<Product> arrayNombres, String nombre ) {
 		for(int i = 0; i < arrayNombres.size(); i++) {
 			if(arrayNombres.get(i).getNombre().equals(nombre)) {
@@ -492,6 +621,8 @@ public class AddCarrito extends TestBase {
 		log("Producto" + productName + " añadido desde la ficha");
 	}
 	
+	//Añadir artículo desde de la ficha del producto
+	//** Abrir ficha producto
 	public void addFromProductSheet(String productName) {
 				
 		String sProductInfoWrapper = "//div[contains(@class, 'product-info-wrapper-scrollable')]";
@@ -527,6 +658,202 @@ public class AddCarrito extends TestBase {
 		}
 		
 	}
+
 	
+	public void addFormato () {
+		
+	}
 	
+	public void deleteFormato () {
+		
+	}
+	
+	public void selectFormatoCombinadoAlProducto () {
+		
+	}
+	
+	//Testear que se puede añadir y eliminar los modificadores de formatos combinados
+	public void testAddDeleteModificadorCombinadoAlFormato (Formatos formato, Formato formatoCombinado, Modificador modificadorSelected) {
+		addtModificadorCombinadoAlFormato(formato, formatoCombinado, modificadorSelected);
+		deleteModificadorCombinadoAlFormato(formato, formatoCombinado, modificadorSelected);
+	}
+	
+	//Añadir formato combinado
+	public void addtModificadorCombinadoAlFormato (Formatos formato, Formato formatoCombinado, Modificador modificadorSelected) {
+		Assert.assertTrue(Objects.nonNull(modificadorSelected), "Error: no hemos podido encontrar el modificador combinado al formato del artículo");
+		
+		//Validar el modificar a seleccionar en el formato combinado
+		String xpathElementAddModificadorSelected = formato.getXpathAddFormatoCombinado(modificadorSelected.getNombre());
+		Assert.assertTrue(isElementPresent(By.xpath(xpathElementAddModificadorSelected)), "Error: El modificador "+ formatoCombinado.getNombre() + " del formato combinado no existe(No aparece) en el listado mofificadores");
+		
+		WebElement modificadorSelectedElement = getElementByFluentWait(By.xpath(xpathElementAddModificadorSelected), 30, 5);	
+		
+		clicJS(modificadorSelectedElement);
+		
+		espera(500);
+		
+		//Verrificar que el botón añadir no está 
+		Assert.assertTrue(!modificadorSelectedElement.getAttribute("innerText").equalsIgnoreCase("+\n1"), "Error: El botón añadir(+) del formato combinado "+ formatoCombinado.getNombre() + " no deberia aparecer!!!");
+
+	}
+	
+	//Suprimir formato combinado
+	public void deleteModificadorCombinadoAlFormato (Formatos formato, Formato formatoCombinado, Modificador modificadorSelected ) {
+		Assert.assertTrue(Objects.nonNull(modificadorSelected), "Error: no hemos podido encontrar el modificador combinado al formato del artículo");
+		
+		//Validar el modificar a seleccionar en el formato combinado
+		String xpathElementDeleteModificadorSelected = formato.getXpathDeleteFormatoCopmbinado(modificadorSelected.getNombre());
+		
+		Assert.assertTrue(isElementPresent(By.xpath(xpathElementDeleteModificadorSelected)), "Error: El modificador "+ formatoCombinado.getNombre() + " del formato combinado no existe(No aparece) en el listado mofificadores");
+		
+		WebElement deleteModificadorSelectedElement = getElementByFluentWait(By.xpath(xpathElementDeleteModificadorSelected), 30, 5);										
+
+		clicJS(deleteModificadorSelectedElement);
+		espera(500);	
+		
+		//Verificar que el botón eliminar ha desaparecido dejando el botón añadir
+		String xpathElementAddModificadorSelected = formato.getXpathAddFormatoCombinado(modificadorSelected.getNombre());
+		Assert.assertTrue(isElementPresent(By.xpath(xpathElementAddModificadorSelected)), "Error: El modificador "+ formatoCombinado.getNombre() + " del formato combinado no existe(No aparece) en el listado mofificadores");
+		
+	}
+	
+	//Agregación de artículo con formato simple o combinado con modificadores
+	@BeforeTest
+	@Parameters({"formatoCombinado", "modificadorSelected", "formatoSelected", "formatos"})
+	public void definirFormato(@Optional("") String formatoCombinado, @Optional("") String modificadorSelected, @Optional("") String formatoSelected, String formatos) {
+		
+		this.isFormatoSelectdDefined = StringUtils.isAllEmpty(formatoSelected) ? false : true;
+		
+		List<Product> articuloConFormatoList = new ArrayList<Product>();
+		List<Formato> formatoList = new ArrayList<Formato>();
+		Product producto;
+		Formato formato;
+				
+		if(!Utils.isNullOrEmpty(formatos)) {
+			
+			log("Tenemos " + StringUtils.split(formatos, "\\").length + "  producto(s)");
+			
+			log("Tenemos " + StringUtils.split(formatos, "*").length + " formato(s)");
+
+			if(StringUtils.split(formatos, "\\").length >= 1) {
+				String[] productoListString = StringUtils.split(formatos, "\\");
+				
+				for(int i= 0; i < StringUtils.split(formatos, "\\").length; i++) {
+					log("El producto " + StringUtils.split(productoListString[i], "*")[0] + " tiene formatos");
+					producto = new Product( StringUtils.split(productoListString[i], "*")[0]);
+					
+					String[] formatoListString = StringUtils.split(StringUtils.split(productoListString[i], "*")[1], ";");
+					for(int x=0; x < formatoListString.length; x++) {
+						String formatoName = formatoListString[x].split(":")[0];
+						String formatoPrice = formatoListString[x].split(":")[1];
+						
+						log("Formato + nombre y precio " + formatoName + formatoPrice);
+						
+						formato = new Formato(formatoName, formatoPrice);
+						
+						if(formato.getNombre().equals(formatoSelected)) {
+							formato.setSelected(true);
+							Assert.assertTrue(formato.isSelected(), "Error: El formato no se ha podido elegir como formato a seleccionar!!!");
+						}
+						else {
+							formato.setSelected(false);
+						}
+						
+						formatoList.add(formato);
+					}
+					
+					if(formatoList.size() > 0) { //Añadir los formatos al producto
+						//Definir el primero formato como formato a seleccionar si el parametro formatoSelected es null
+						if(StringUtils.isAllEmpty(productoListString)) {
+							formatoList.get(0).setSelected(false);
+							Assert.assertTrue(formatoList.get(0).isSelected(), "Error: El formato no se ha podido elegir como formato a seleccionar!!!");
+						}
+						
+						if(!isFormatoSelectdDefined && !Utils.isNullOrEmpty(formatos)) {
+							formatoList.get(0).setSelected(true);
+						}
+						
+						producto.setFormatos(formatoList);
+
+					}
+					
+					producto.setProductFormatSelected();
+					if(producto.getFormatos().size() > 0) {
+						log("Formatos " + producto.getFormatos().size());
+						log(" formato Selected");
+					}
+					
+					articuloConFormatoList.add(producto); //Lista de artículo con formatos
+					
+					articuloConFormatoEsperadoList = articuloConFormatoList;
+				}
+			}
+			else {
+				log("No hay formato definido en parametro del test");
+			}
+			
+			if(!Utils.isNullOrEmpty(formatoCombinado))//Artículo en Formato combinado con modificadore
+				addProductEnFormatoCombinado(formatoCombinado, modificadorSelected);
+			else {
+				log("No hay artículo con formato combinado en los parametros del Test");
+			}
+						
+		}
+
+	}
+	
+	//Verificar si  en el test hay producto con formato que tiene modificadores combinados
+	public void addProductEnFormatoCombinado(@Optional("") String formatoCombinado, @Optional("") String modificadorSelected) {
+
+		if(Utils.isNullOrEmpty(formatoCombinado)) { //Veriricar que hay formato combinado en el artículo
+			return;
+		}
+		
+		Assert.assertTrue(!Utils.isNullOrEmpty(modificadorSelected), "Se solicita definir el paramaetro del modificador del formato de artículo a seleccionar ");
+		
+		if(formatoCombinado.split(";").length < 2) { //Verificar que hay solo un formato combinado definido en el test
+			definirFormatoCombinado(formatoCombinado, modificadorSelected);
+		}
+		else if(formatoCombinado.split(";").length >= 2) {//Hay varios formatos combinados con modificadores en el test
+			definirmultipleFormatoCombinado(formatoCombinado, modificadorSelected);
+		}
+		
+	}
+	
+	//Definir un formato combinado con modificador
+	public void definirFormatoCombinado(@Optional("") String formatoCombinado, @Optional("") String modificadorSelected) {
+		Formato objectFormato;
+		Modificador modificador;
+		
+		Assert.assertTrue(formatoCombinado.split("\\{").length > 1,"No hay modificadores cambinados al formato definido en parametro! Se solicita definir bien el formato combinado en el parametro del test ");
+		
+		String nuevoFormato = formatoCombinado.split("\\{")[0];
+		objectFormato = new Formato(nuevoFormato);
+		
+		String[] modificadorList =  formatoCombinado.split("\\{")[1].split("\\}")[0].split(",");
+		
+		for(int i=0; i < modificadorList.length; i++) {
+			
+			modificador = new Modificador(modificadorList[i]);
+			
+			if(modificador.getNombre().equals(modificadorSelected)) {
+				modificador.setSelected(true);
+			}
+			else {
+				modificador.setSelected(false);
+			}
+			
+			objectFormato.setModificadorList(modificador);
+		}
+		
+		formatoCombinadoList.add(objectFormato);//Listado de formatos que son combinados con modificadore(s) definido desde el parametro del test
+
+	}
+	
+	//Tenemos article con varios formatos combidados con modificadores
+	public void definirmultipleFormatoCombinado(@Optional("") String formatoCombinado, @Optional("") String modificadorSelected) {
+		//TODO: implementar cuando tenemso que seleccionar multiple formatos combinados para un artículo 
+		Assert.assertTrue(false, "Error: no se puede tratar la selección de multiple formatos combinados");
+	}
+		
 }

@@ -1171,6 +1171,7 @@
 		<parameter name="email" value="" />
 		<parameter name="nuevaTarjeta" value="true" />
 		
+		<parameter name="familiasEsperadas" value="5" /> 
 		<parameter name="totalEsperado" value="10,45€" />
 				
 		<classes>
@@ -1194,6 +1195,7 @@
 		
 		<parameter name="loginCheckout" value="true"/>
 		
+		<parameter name="familiasEsperadas" value="5" /> 
 		<parameter name="totalEsperado" value="10,45€" />
 
 		<classes>
@@ -1210,6 +1212,7 @@
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCO1EzM4ITP0NXZSRWa" />
 		<parameter name="shop" value="66920" />
 		<parameter name="formaPago" value="Pagar a la entrega" />
+		<parameter name="familiasEsperadas" value="5" /> 
 		<parameter name="totalEsperado" value="10,45€" />
 		
 		<classes>
@@ -1232,6 +1235,7 @@
 		<parameter name="nuevaTarjeta" value="true" />
 		-->
 		
+		<parameter name="familiasEsperadas" value="5" /> 
 		<parameter name="totalEsperado" value="10,45€" />
 		
 		<classes>
@@ -1294,7 +1298,7 @@
 		
 		<parameter name="totalEsperado" value="29,10€" />
 		
-		<parameter name="formatos" value="Sake Kuramoto,JARRA 1/2 LITRO:2€;JARRA 1 LITRO:3€" /><!-- Artículo con formatos: Nombre del artículo, formato x:precio;formato y:precio -->
+		<parameter name="formatos" value="Sake Kuramoto*JARRA 1/2 LITRO:2,00€;JARRA 1 LITRO:3,00€" /><!-- Artículo con formatos: Nombre del artículo, formato x:precio;formato y:precio -->
 		<parameter name="email" value="clienteprt@yopmail.com" />
 		
 		<groups>
@@ -1339,7 +1343,7 @@
 		
 		<parameter name="totalEsperado" value="21,66€" />
 				
-		<parameter name="formatos" value="Bissap Bi,35 CL Barrel:1,86 €;60 CL Copa:2,15 €;1 L Botella:3,41 €" /><!-- Artículo con formatos: Nombre del artículo, formato x:precio;formato y:precio -->
+		<parameter name="formatos" value="Bissap Bi*35 CL Barrel:1,86 €;60 CL Copa:2,15 €;1 L Botella:3,41 €" /><!-- Artículo con formatos: Nombre del artículo, formato x:precio;formato y:precio -->
 		<parameter name="email" value="clienteprthpc@yopmail.com" />
 		
 		<groups>
@@ -1374,8 +1378,125 @@
 		</classes>
 	</test>
 
+	<!-- 
+		Pedido con artículos combinados.
+		Automatizar testeo que contemple los casos de la tarea #41912 
+ 		Hacer un pedido de varios artículos donde uno de ellos en su formato combinable lanza la selección de otra familia de artículos definida en el formato.
+		
+		***************
+		Artículo con formatos: Nombre del artículo, formato1 x:precio;formato2 y:precio 
+		ejemplo:
+			ABSOLUT,CUBATA NORMAL:8,00€;CUBATA ESPECIAL:10,00€
+			<parameter name="formatoCombinado" value="CUBATA NORMAL{FANTA LIMON,FANTA NARANJA,COCA COLA,COCA COLA ZERO}" />
 
-	
+	-->
+	<test name="Venta de varios artículos donde uno de ellos en su formato combinable lanza la selección de otra familia de artículos definida en el formato" enabled="true" preserve-order="true" group-by-instances="true">
+		
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCN5MzM4ITP0NXZSRWa" />
+		<parameter name="shop" value="66998" />
+		
+		<parameter name="productos" value="TERNASCO,PAELLA,SORBETE DE LIMON,AGUA 1 LITRO,ABSOLUT" />
+		
+		<parameter name="formatos" value="ABSOLUT*CUBATA NORMAL:8,00€;CUBATA ESPECIAL:10,00€" />
+		
+		<parameter name="formatoCombinado" value="CUBATA NORMAL{FANTA LIMON,FANTA NARANJA,COCA COLA,COCA COLA ZERO}" />
+		
+		<parameter name="formatoSelected" value="CUBATA NORMAL" />
+		
+		<parameter name="modificadorSelected" value="FANTA LIMON" />
+		
+		<parameter name="familiasEsperadas" value="9" />
+		<parameter name="totalEsperado" value="55,00€" />
+					
+		<groups>
+			<dependencies>
+			
+				<group name="cookies" depends-on="openbrowser" />
+				
+				<group name="familiasRestaurante" depends-on="cookies" />
+				
+				<group name="paginaLogin" depends-on="familiasRestaurante" />
+				
+				<group name="loginCliente" depends-on="paginaLogin" />
+				
+				<group name="carrito" depends-on="loginCliente" />
+				
+				<group name="checkOut" depends-on="carrito" />
+				
+				<group name="checkPedidoDB" depends-on="checkOut" />
+				
+			</dependencies>
+		</groups>
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+		</classes>
+	</test>		
+	<!-- Fin Pedido con artículos combinados. -->
+
+	<!--
+		#42486 ->  Hacer pedido en PortalRest sin carta y con pedidos online contratados.
+		Pedidos en PordtalRest sin carta con pedidos online 
+		Desde CloudLicense se configura la tienda sin contratar la carta usando pedidos online usando la opcion visible en PortalRest
+	-->
+	<test name="Venta de varios artículos en PortalRest sin carta contrada en CL que tenga tenga únicamente los checks marcados de visible en Portalrest y Pedidos online" enabled="true" preserve-order="true" group-by-instances="true">
+		
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOxcDN4ITP0NXZSRWa" />
+		<parameter name="shop" value="67282" />
+		
+		<parameter name="productos" value="TERNASCO,PAELLA,SORBETE DE LIMON,AGUA 1 LITRO,ABSOLUT" />
+		
+		<parameter name="formatos" value="ABSOLUT*CUBATA NORMAL:8,00€;CUBATA ESPECIAL:10,00€" />
+		
+		<parameter name="formatoCombinado" value="CUBATA NORMAL{FANTA LIMON,FANTA NARANJA,COCA COLA,COCA COLA ZERO}" />
+		
+		<parameter name="formatoSelected" value="CUBATA NORMAL" />
+		
+		<parameter name="modificadorSelected" value="FANTA LIMON" />
+		
+		<parameter name="familiasEsperadas" value="9" />
+		<parameter name="totalEsperado" value="55,00€" />
+					
+		<groups>
+			<dependencies>
+			
+				<group name="cookies" depends-on="openbrowser" />
+				
+				<group name="familiasRestaurante" depends-on="cookies" />
+				
+				<group name="paginaLogin" depends-on="familiasRestaurante" />
+				
+				<group name="loginCliente" depends-on="paginaLogin" />
+				
+				<group name="carrito" depends-on="loginCliente" />
+				
+				<group name="checkOut" depends-on="carrito" />
+				
+				<group name="checkPedidoDB" depends-on="checkOut" />
+				
+			</dependencies>
+		</groups>
+		
+		<classes>
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Verificaciones.VerificarFamiliasRestaurante" />
+			<class name="Clientes.AbrirPaginaLogin" />
+			<class name="Clientes.LoginCliente" />
+			<class name="Ventas.AddCarrito" />
+			<class name="Ventas.CheckOut" />
+			<class name="Ventas.ValidacionPedidos" />
+		</classes>
+	</test>	
+	<!-- Fin #42486 ->  Hacer pedido en PortalRest sin carta y con pedidos online contratados. -->
+
 
  	<!-- Añadir el producto con modificador Oyako Don sin Rebozar = 15,50  -->
  	<test name="Prueba de venta simple EN EL LOCAL de 3 artículos normales y un producto con modificador " enabled="true" preserve-order="true">
