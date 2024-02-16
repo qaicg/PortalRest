@@ -35,37 +35,24 @@ public class DatabaseConnection {
 		DatabaseConnection.statement = statement;
 	}
 
-	//EN EL CASO DE TENER MAS DE UN ENTORNO DEFINIMOS LOS TIPOS AQUÍ
-	public static int ENTORNOPRODUCION = 1;
-	public static int ENTORNOTEST = 2;
-	public int ENTORNODEFINIDO=0;
+	
 	
 	public void defineEntorno(int entorno, String database) {
 		
-		if (entorno != ENTORNOTEST && entorno != ENTORNOPRODUCION) {
-			System.out.println("NO HAY UN ENTORNO DEFINIDO VÁLIDO");
-			Assert.assertTrue(entorno != ENTORNOTEST && entorno != ENTORNOPRODUCION, "NO HAY UN ENTORNO DEFINIDO VÁLIDO");
-		}
-
+		
 		setConfigBBDD(database);
 	}
 	
 	public void defineEntorno(String database) {
 		
-		if (ENTORNODEFINIDO != ENTORNOTEST && ENTORNODEFINIDO != ENTORNOPRODUCION) {
-			System.out.println("NO HAY UN ENTORNO DEFINIDO VÁLIDO");
-			Assert.assertTrue(ENTORNODEFINIDO != ENTORNOTEST && ENTORNODEFINIDO != ENTORNOPRODUCION, "NO HAY UN ENTORNO DEFINIDO VÁLIDO");
-		}
+		
 		
 		setConfigBBDD(database);
 	}
 	
 	public void defineEntorno(EnumServidor servidor, String database) {
 		
-		if (servidor != EnumServidor.QUALITY03 && servidor != EnumServidor.QUALITY04) {
-			System.out.println("NO HAY UN ENTORNO DEFINIDO VÁLIDO");
-			Assert.assertTrue(servidor != EnumServidor.QUALITY03 && servidor != EnumServidor.QUALITY04, "NO HAY UN ENTORNO DEFINIDO VÁLIDO");
-		}
+		
 		
 		setConfigBBDD(database);
 	}	

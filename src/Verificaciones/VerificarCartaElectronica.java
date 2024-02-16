@@ -8,6 +8,7 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -18,6 +19,7 @@ import utils.TestBase;
 public class VerificarCartaElectronica extends TestBase {
 	private String fileName;
 	private int actualizar;
+	private String textFromDocPdf; // permite verificar si se ha cargado el doc pdf
 	
 	
 	//Verificar que se muestre la carta en pdf a la hora de abre portalrest en modo consulta
@@ -80,27 +82,17 @@ public class VerificarCartaElectronica extends TestBase {
 	
 	//Verificar que se muestre las carta en PDF a la hora de abrir portalrest en modo consulta
 	public void verificarCartaEnPDF (String docName, String docType) {
-		String elementIframeXpath = "//app-iframe/iframe[contains(@src, '.pdf')]";
-		String elementBotonAmpliarCarta = "//body/div[2]/div[4]/div/div[2]/div/div";
+		String elementIframeXpath = "//app-pdf-viewer/div/pdf-viewer[contains(@class, 'pdf-viewer')]//div[contains(@class, 'page')]";
+		
+		String textToExpectFromPDFXpath = "//div[contains(@class, 'page')]/div[contains(@class, 'textLayer')]/span[text()='" + this.textFromDocPdf +"']"; 
+		
+		String elementBotonAmpliarCarta = "//app-floating-button/div/button/span/mat-icon";
 		
 		Assert.assertTrue(isElementPresent(By.xpath(elementIframeXpath)), "Error: No se carga la carta " + docName+docType + " en consulta");
-		
-		WebElement elemetFrameCarta = getElementByFluentWait(By.xpath(elementIframeXpath), 30, 5);
-		
-		driver.switchTo().frame(elemetFrameCarta);
-		
+
 		String cartaEnForma = DocumentType.PDF.getExtension().equals(docType) ? " carta en PDF " : " carta en imagen ";
-		
-		Assert.assertTrue(isElementPresent(By.xpath("//html/head/title")), "Error:" +cartaEnForma + "no es visible al abrir portalrest en modo consulta");
-		
-		Assert.assertTrue(isElementPresent(By.xpath("//html/head/title")), "Error: la carta en forma no es visible a la abrir portalrest en modo consulta");
-		
-		String htmlHeadTitle = driver.findElement(By.xpath("//html/head/title")).getAttribute("innerText");
-		Assert.assertTrue(htmlHeadTitle.contains(fileName), "Error: no es valido el titulo del fichero en elemento title");
-		
-		String docElementXpath = "//html/body/div[2]/div[3]/div[4]/div[3]/div[1]/div/div/div[1]";
-		
-		Assert.assertTrue(isElementPresent(By.xpath(docElementXpath)), "Error: no se ve la carta al abrir la página del restaurante!!!");
+				
+		Assert.assertTrue(isElementPresent(By.xpath(textToExpectFromPDFXpath)), "Error: no se ve la carta al abrir la página del restaurante!!!");
 		
 		Assert.assertTrue(isElementPresent(By.xpath(elementBotonAmpliarCarta)), "Error: No se encontra el botón pulsar para abrir la carta en ventana externa Google "); //Ventana externa
 		
@@ -120,7 +112,6 @@ public class VerificarCartaElectronica extends TestBase {
 			driver.navigate().refresh();
 			espera(1000);
 			log("Actualización " + i);
-			//actualizar--;
 		}
 	}
 	
@@ -130,6 +121,13 @@ public class VerificarCartaElectronica extends TestBase {
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		System.out.println("Current absolute path is: " + s);
+	}
+	
+	@BeforeMethod
+	@Parameters({"textFromDocPdf"}) 
+	public void sendTextOFDocPDF(@Optional("") String textFromDocPdf)
+	{
+		this.textFromDocPdf = textFromDocPdf;
 	}
 
 }

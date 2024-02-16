@@ -64,7 +64,7 @@ public class RepeatAddCarrito extends TestBase {
 		repeatPedido.addCart(repeatProductos, repeatProductosTotalPrice, opcionesMenu, unidades, goBack, firstOrderProducts, goBackByAddOrderButton, abrirFichaProducto, formatos);
 	}
 	
-	@Test(description="Este test permite el checkout del pedido repetido manualmente" , priority=1, groups = {"repeatOrderCheckOut"})
+	@Test(description="Este test permite el checkout del pedido repetido manualmente" , priority=2, groups = {"repeatOrderCheckOut"})
 	@Parameters({"repeatProductos","repeatProductosTotalPrice","formaPago","nuevaTarjeta","testCardNumber",
 		"cad1","cad2","cvv","pedidoConfirmadoString" , "shop", "email", "miMonederoString",
 		"formaPago2", "tipoServicio","unidades","mesa", "totalEsperadoMasCargos", "repartoPermitido", "goBack", "productos", 
@@ -99,7 +99,7 @@ public class RepeatAddCarrito extends TestBase {
 	}
 	
 	
-	@Test(description="Este test permite validar en la BDD el pedido repetido manualmente" , priority=1, groups = {"repeatVerifyOrder"})
+	@Test(description="Este test permite validar en la BDD el pedido repetido manualmente" , priority=3, groups = {"repeatVerifyOrder"})
 	@Parameters({"shop","email","totalEsperado", "tipoServicio", "mesa", "totalEsperadoMasCargos", "repartoPermitido"})
 	public void validarPedido(String shop, String customerMail, String netAmount, int tipoServicio, @Optional ("") String mesa,
 			@Optional ("") String totalEsperadoMasCargos, @Optional ("") String repartoPermitido)  {

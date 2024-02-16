@@ -81,7 +81,7 @@ public class Payment extends TestBase {
 			//Ne debe aparecer una forma de pago pendiente
 			if(isElementPresent(By.xpath("//div[contains(@class, 'payment-name line-clamp-2') and contains(text(), 'Pagar a la entrega')]"))) {
 				log("No debe aparecer una forma de pago pendiente!!!");
-				Assert.assertTrue(false);
+				Assert.assertTrue(false,"Payment.java 84");
 			}
 			
 			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'login-ask-wrapper')]/child::button[2]")));
@@ -113,7 +113,7 @@ public class Payment extends TestBase {
 		if(customerMail.equalsIgnoreCase("comoInvitado") || (customerMail.equalsIgnoreCase("") || customerMail.equalsIgnoreCase("invitado@portalrest.com")) && formaPago.equalsIgnoreCase("Redsys Test"))nuevaTarjeta="true"; //SI NO TENEMOS CLIENTE SIGNIFICA QUE ES NUEVO Y NECESITAREMOS TARJETA NUEVA
 		
 		espera(1000);
-		if(!(ValidarPayment.validaPantalla(arrayNombres,totalEsperado,unidades,totalEsperadoMasCargos,repartoPermitido, tipoServicio))) Assert.assertTrue(false);
+		if(!(ValidarPayment.validaPantalla(arrayNombres,totalEsperado,unidades,totalEsperadoMasCargos,repartoPermitido, tipoServicio))) Assert.assertTrue(false,"Payment.java 116");
 		
 		// Usar back para añadir mas productos al final del proceso de la venta.
 		if(goBack.equalsIgnoreCase("true")) {
@@ -125,7 +125,7 @@ public class Payment extends TestBase {
 			} else {	
 				driver.navigate().back();
 			}
-			Assert.assertTrue(true);
+			Assert.assertTrue(true,"Payment.java 128");
 		} 
 		else {
 			espera(1000);
@@ -144,7 +144,7 @@ public class Payment extends TestBase {
 				loyaltyCard.pagarPedidoSaldo(formaPago, formaPago2, pedidoConfirmadoString, totalEsperado, miMonederoString, validarImporteMinimo, nuevaTarjeta, testCardNumber, cad1, cad2, cvv);
 			}
 			
-			Assert.assertTrue(true);
+			Assert.assertTrue(true,"Payment.java 147");
 			
 		}
 	}	

@@ -39,18 +39,14 @@
   	<dependency>
 		<groupId>org.testng</groupId>
 		<artifactId>testng</artifactId>
-		<version>7.8.0</version>
+		<version>7.9.0</version>
 		<scope>test</scope>
 	</dependency>
 	
 
 
   	
-  	<dependency>
-  		<groupId>io.qameta.allure</groupId>
-  		<artifactId>allure-testng</artifactId>
-  		<version>2.18.1</version>
-  	</dependency>
+  
   	
   	<dependency>
 	    <groupId>com.aventstack</groupId>
@@ -70,13 +66,7 @@
 	    <version>2.6</version>
 	</dependency>
 
-	<!-- 
-	<dependency>
-	  <groupId>com.github.adiralashiva8</groupId>
-	  <artifactId>testng-metrics</artifactId>
-	  <version>1.6</version>
-	</dependency>
-	-->
+	
 
 	<dependency>
 	  <groupId>com.vimalselvam</groupId>
@@ -90,12 +80,7 @@
   		<version>1.15.3</version>
   	</dependency>
   	
-  	<!-- https://mvnrepository.com/artifact/javax.mail/mail 
-	<dependency>
-	    <groupId>javax.mail</groupId>
-	    <artifactId>mail</artifactId>
-	    <version>1.4.7</version>
-	</dependency> -->
+  	
 	
 	<dependency>
 	  	<groupId>com.sun.mail</groupId>

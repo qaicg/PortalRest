@@ -35,7 +35,7 @@ public class BorraDireccion  extends TestBase{
 	        			espera(500);
 	        			clicJS(driver.findElement(By.xpath("//div[@class='msg-dialog-buttons']//button[2]"))); //CONFIRMO QUE QUIERO BORRAR
 	        			log("Dirección "+addressLine+" borrada");
-	        			espera(500);
+	        			espera(2500);
 	        			break;
 	        		}
 	        	}		
@@ -45,7 +45,7 @@ public class BorraDireccion  extends TestBase{
 	    	atras();
 	    	espera(500);
 	    	abrirMisDirecciones(miPefil,misDireccoines);
-	    	espera(500);
+	    	espera(2500);
 
 	    	if (!isElementPresent(By.xpath("//div[contains(@class,'user-address-container')]"))) {   		
 	    		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));

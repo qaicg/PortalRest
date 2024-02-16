@@ -71,6 +71,7 @@ public class Product extends ProductItem {
 				//getExtentTest().error("Warning. No hemos encontrado la unidad del producto: " + getNombre());
 			}
 			this.precioPorUnidad = "0.00" + " €";
+			
 			Assert.assertTrue(true);
 			return;
 		}

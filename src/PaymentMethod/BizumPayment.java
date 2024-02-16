@@ -116,12 +116,13 @@ public class BizumPayment extends TestBase{
 			WebElement inputPhone = driver.findElement(By.xpath(PaymentResource.Bizum.inputTelefoneXpath));
 			
 			if(this.fakePhone)  inputPhone.sendKeys(bizumPayment.getPayment().getFakePhone()); else  inputPhone.sendKeys(bizumPayment.getPayment().getTelephone());
-			
+			espera(2000);
 			//validar que el boton continuar está habilitado
 			Assert.assertTrue(isElementPresent(By.xpath(PaymentResource.Bizum.getBotonContunarXpath(false))), "Error: El botón Continuar debería estar habilitado al insertar el telefono !!!");
 			
 			//pulsar continuar
 			if (!this.cancelarPago) {
+				espera(2000);
 				clicJS(driver.findElement(By.xpath(PaymentResource.Bizum.getBotonContunarXpath(false))));
 				
 				//Al tener un usuario no activo para compra Bizum, comprobar que el banco no lo permite pagar el pedido
@@ -171,6 +172,7 @@ public class BizumPayment extends TestBase{
 	}
 
 	public void pagoAceptado () { //Verirficar que el pago ha sido aceptado
+		espera(4000);
 		Assert.assertFalse(isElementPresent(By.xpath(PaymentResource.Bizum.resultPagoCodeError)),
 				"Error en el proceso de pago con Bizum. Desde la plantaforma del banco no se acepta el pago del importe " + this.importe);
 		espera(500);
@@ -181,8 +183,7 @@ public class BizumPayment extends TestBase{
 		Assert.assertTrue(driver.findElement(By.xpath(PaymentResource.Bizum.botonContinuarPagoXpath)).isDisplayed(),
 				"Error no tenemos el botón continuar !!!");
 		
-		clicJS(driver.findElement(By.xpath(PaymentResource.Bizum.botonContinuarPagoXpath)));
-		
+		clicJS(driver.findElement(By.xpath(PaymentResource.Bizum.botonContinuarPagoXpath)));	
 	}
 	
 	@Test(description = "Prueba de denegacion del pago por el banco.", priority = 2)

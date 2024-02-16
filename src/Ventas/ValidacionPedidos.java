@@ -16,7 +16,7 @@ public class ValidacionPedidos extends TestBase {
   @Parameters({"shop","email","totalEsperado", "tipoServicio", "mesa", "totalEsperadoMasCargos", "repartoPermitido"})
   public void validarPedidoSimpleBD(String shop, String customerMail, String netAmount, int tipoServicio, @Optional ("") String mesa,
 		  @Optional ("") String totalEsperadoMasCargos, @Optional ("") String repartoPermitido) {
-	espera(1000);
+	espera(5000); //#OSCAR -> Esperamos 5 segundos porque a veces tarda más en llegar el pedido. Evitamos falsos errores.
 	if(customerMail.equalsIgnoreCase(""))customerMail=Data.getInstance().getNewUserMail();
   	System.out.println("Pedido a validar en BBDD"); //lastDocDocId
   	if(!totalEsperadoMasCargos.equalsIgnoreCase(""))netAmount=totalEsperadoMasCargos; //SI TIENE CARGOS USAMOS EL IMPORTE CON LOS CARGOS SUMADOS
@@ -34,9 +34,9 @@ public class ValidacionPedidos extends TestBase {
   	 if (rs!=null) {
   		 try {		
   			if (rs.first()) {
-  				log("Pedido encontrado y validado en BBDD -> DocId: " + Data.getInstance().getUltimoDocIdPlus() + " de "+ customerMail);
+  				log("Pedido encontrado y validado en BBDD -> DocId: " + Data.getInstance().getUltimoDocIdPlus() + " de "+ customerMail + " en " + "DB"+shop);
   			}else {
-  				log("Error. No tenemos resultados para el pedido -> DocId: " + Data.getInstance().getUltimoDocIdPlus() + " de " + customerMail);
+  				log("Error. No tenemos resultados para el pedido -> DocId: " + Data.getInstance().getUltimoDocIdPlus() + " de " + customerMail + " en " + "DB"+shop);
   				log(SQL);
   				Assert.assertTrue(false);
   			}
@@ -44,11 +44,13 @@ public class ValidacionPedidos extends TestBase {
   		} catch (Exception e) {
   			// TODO Auto-generated catch block
   			e.printStackTrace();
+  			log("Error validación pedidos 47");
   			Assert.assertTrue(false);
   		}finally {
   			databaseConnection.desconectar();
   		}
   	 }else {
+  		log("Error validación pedidos 53");
   		 Assert.assertTrue(false);
   	 }
   }

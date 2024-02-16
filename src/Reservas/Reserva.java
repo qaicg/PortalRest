@@ -56,7 +56,7 @@ public class Reserva extends TestBase {
 		//
 		if(isElementPresent(By.xpath("//div[contains(@class, 'title-header')]")) &&!driver.findElement(By.xpath("//div[contains(@class, 'title-header')]")).getText().equalsIgnoreCase(titleHeader)) {
 			log("Error: no se ha encuentrado el titulo: " + titleHeader +"en pantalla Reserva");
-			extentTest.warning("Error: no se ha encuentrado el titulo: " + titleHeader +"en pantalla Reserva");
+			Data.getInstance().getExtentTest().warning("Error: no se ha encuentrado el titulo: " + titleHeader +"en pantalla Reserva");
 			//Assert.assertTrue(false);
 		}
 		
@@ -113,7 +113,7 @@ public class Reserva extends TestBase {
 					driver.findElement(By.xpath("//app-message//div//div[contains(@class, 'error-message-content-button')]//button[contains(@class, 'button primary-color')]")).getText().equalsIgnoreCase("Aceptar")
 					) {
 				log("Atención: No hay disponibilidad de momento, Intentar mas tarde.");
-				extentTest.warning("Atención: No hay disponibilidad de momento, Intentar mas tarde.");
+				Data.getInstance().getExtentTest().warning("Atención: No hay disponibilidad de momento, Intentar mas tarde.");
 				clicJS(driver.findElement(By.xpath("//app-message//div//div[contains(@class, 'error-message-content-button')]//button[contains(@class, 'button primary-color')]")));
 				
 				disponibilidad = false;

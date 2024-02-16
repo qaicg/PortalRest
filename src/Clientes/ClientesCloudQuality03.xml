@@ -9,8 +9,7 @@
 	</listeners>
 
 	<parameter name="login" value="Registrarme" />
-	<parameter name="report.config" value="C:\Users\QA\portalrestproject\test-output\extent-config.xml" />
-
+	<parameter name="suiteName" value="Clientes CloudQuality03" /> <!--Titulo de la página -->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 

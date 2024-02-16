@@ -81,11 +81,13 @@ import org.xml.sax.InputSource;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 //import com.aventstack.extentreports.Status;
 //import com.aventstack.extentreports.reporter.ExtentAventReporter;
 //import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.github.javafaker.Faker;
+import com.mongodb.DB;
 //import com.google.gson.annotations.Until;
 //import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
@@ -120,15 +122,11 @@ public class TestBase extends StringUtils {
 
 	TrayIconDemo td = new TrayIconDemo();
 	protected static HashMap<String, String> biblioteca;
-	ExtentReports extent;
-
-	ExtentSparkReporter spark;
 	protected static WebDriverWait w, w2;
 	Actions actions;
 	String pathprofile;
 	ChromeOptions options;
 	
-	public ExtentTest extentTest;
 	
 	Faker fakePedio = new Faker();
 	
@@ -157,16 +155,14 @@ public class TestBase extends StringUtils {
 			Data.getInstance().setServerCloudQuality04(true);
 		}
 		else {
+			System.out.println("No tenemos entorno definido, asumiremos que el entorno es Quality03");
+			Data.getInstance().setServerCloudQuality03(true);
 			Assert.assertTrue(false, "Error de configuración: No se ha encontrado el servidor definido en el testsuite: " + servidor);
 		}
 
 		boolean test = myServerTesting.isTest();
 		
-		if(test) {
-			databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOTEST;
-		} else {
-			databaseConnection.ENTORNODEFINIDO = DatabaseConnection.ENTORNOPRODUCION;
-		}
+		
 		
 		if(serverList.stream().filter(srv -> srv.getName().contains(servidor)).findAny().get().getName().contains(servidor)) {
 			Data.getInstance().setEntornoTest(test);
@@ -176,7 +172,16 @@ public class TestBase extends StringUtils {
 	}
 
 	@BeforeSuite
-	public void initialize() {
+	@Parameters({"suiteName"})
+	public void initialize(String suiteName) {
+		
+		    Data.getInstance().initializeExtentReport();
+			Data.getInstance().setSparkReporter(new ExtentSparkReporter("target/Spark/Spark.html"));
+			Data.getInstance().getSparkReporter().config().setEncoding("ANSI");
+			Data.getInstance().getExtentReport().attachReporter(Data.getInstance().getSparkReporter());	
+			Data.getInstance().setExtentTestSuite(Data.getInstance().getExtentReport().createTest(suiteName));
+			
+		
 		String screenShotDirectory = new File(System.getProperty("user.dir")).getAbsolutePath()
 				+ "/test-output/failure_screenshots/";
 		File filePath = new File(screenShotDirectory);
@@ -187,13 +192,15 @@ public class TestBase extends StringUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// https://www.extentreports.com/docs/versions/5/java/index.html*/
+		
+		
 	}
 
 	@BeforeTest
 	@Parameters({"modoSinVentana", "cloudLicenceBeta", "servidor"})
 	public void beforeTest(final ITestContext testContext, @Optional("false") boolean modoSinVentana, @Optional("false") boolean cloudLicenceBeta, String servidor) {
+		
+		
 		
 		if(!isNullOrEmpty(Data.getInstance().getNewUserMail())){
 			Data.getInstance().setNewUserMail(null);
@@ -207,11 +214,11 @@ public class TestBase extends StringUtils {
 		System.setProperty("webdriver.chrome.driver", "C:\\driver\\ChromeDriver-104.0.5112.79\\chromedriver.exe");
 		
 		options = new ChromeOptions();
-		pathprofile = "C:\\Users\\"+TestBase.getCurrentUser()+"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
-		options.addArguments("user-data-dir=" + pathprofile);
+		//pathprofile = "C:\\Users\\"+TestBase.getCurrentUser()+"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
+		//options.addArguments("user-data-dir=" + pathprofile);
 		options.addArguments("chrome.switches", "--disable-extensions");
 		options.addArguments("--start-maximized");
-		options.addArguments("profile-directory=Default");
+		//options.addArguments("profile-directory=Default");
 		options.addArguments("--disable-geolocation");
 		
 		//Clean cookies
@@ -236,23 +243,14 @@ public class TestBase extends StringUtils {
 		w2 = new WebDriverWait(TestBase.driver, Duration.ofSeconds(90));
 		actions = new Actions(driver);
 
-		extent = new ExtentReports();
-		spark = new ExtentSparkReporter("target/Spark.html");
-		extent.attachReporter(spark);
+		
 
 		try {
 			//Clean cookies
 			driver.manage().deleteAllCookies();
-			//clear cookies and cache
-			//if(clearCache)
-			
-			//clear_cache();
-			
+			Data.getInstance().setExtentTest(Data.getInstance().getExtentTestSuite().createNode(testContext.getName()));
 			td.displayTray("Iniciando test " + testContext.getName());
 			log("Iniciando " + testContext.getName());
-			extent.createTest(testContext.getName());
-			
-			setExtentTest(extent.createTest(testContext.getName()));
 
 		} catch (AWTException e) {
 			// TODO Auto-generated catch block
@@ -278,12 +276,17 @@ public class TestBase extends StringUtils {
 				File destFile = new File((String) reportDirectory + "/failure_screenshots/" + methodName + "_"
 						+ formater.format(calendar.getTime()) + ".jpg");
 				FileUtils.copyFile(scrFile, destFile);
-				Reporter.log("<a href='" + destFile.getAbsolutePath() + "'> <img src='" + destFile.getAbsolutePath()
-						+ "' height='100' width='100'/> </a>");
+				//Reporter.log("<a href='" + destFile.getAbsolutePath() + "'> <img src='" + destFile.getAbsolutePath()
+				//		+ "' height='100' width='100'/> </a>");
+			
+				Data.getInstance().getExtentTest().fail("details", MediaEntityBuilder.createScreenCaptureFromPath(destFile.getAbsolutePath()).build());
+				
 			} catch (IOException e) {
+				System.out.println("Failed in getResult function.");
 				e.printStackTrace();
 			}
-
+			
+			throw new Exception("was bound to fail!!!");
 		}
 
 	}
@@ -300,7 +303,7 @@ public class TestBase extends StringUtils {
 		}
 		
 		//31
-		getExtentTest().pass("Test finished --> " + testContext.getName());
+		Data.getInstance().getExtentTest().info("Test finished --> " + testContext.getName());
 		
 		
 		//suprimir las cookies
@@ -308,8 +311,9 @@ public class TestBase extends StringUtils {
 		
 
 		espera(500);
-		log("Test finalizado: " + testContext.getName());
-		extent.flush();
+		
+		Data.getInstance().getExtentReport().flush();
+		espera(500);
 		driver.manage().deleteAllCookies();
 		driver.quit();
 
@@ -320,6 +324,8 @@ public class TestBase extends StringUtils {
 		try {
 			log("Ejecución de pruebas finalizada");
 			td.displayTray("Ejecución de pruebas finalizada");
+			Data.getInstance().getExtentTestSuite().createNode("Test Finalizado");
+			Data.getInstance().getExtentReport().flush();
 			
 			//driver.manage().deleteAllCookies();
 			
@@ -375,12 +381,22 @@ public class TestBase extends StringUtils {
 
 	public void log(String s) {
 		System.out.println(s);
-		Reporter.log(s + "<br>");
+		try {
+			Data.getInstance().getExtentTest().info(s);
+		}catch(Exception e) {
+			
+		}
+
 	}
 	
 	public static void logStatic(String s) {
 		System.out.println(s);
 		Reporter.log(s + "<br>");
+		try {
+			Data.getInstance().getExtentTest().info(s);
+		}catch(Exception e) {
+			
+		}
 	}
 
 	public static void clicJS(WebElement element) {
@@ -404,6 +420,50 @@ public class TestBase extends StringUtils {
 			log("Error: No se ha podido localizar el log del establecimiento ");
 			Assert.assertTrue(false);
 		}
+	}
+	
+	public void clicLogoEstablecimientoDespuesDeCarga( By elementPantallaPrincipal) {
+		clicLogoEstablecimiento();
+		espera(5000);
+		if(!isElementPresent(elementPantallaPrincipal)) {
+			log("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
+			Data.getInstance().getExtentTest().error("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
+			Assert.assertTrue(false);
+		}
+		
+	}
+	
+	public void clicLogoEstablecimiento(WebElement elementForControlAlwaysPresent, By elementPantallaPrincipal) {//Controlar si se ha podido combiar de página tras pulsar en el botón del logo
+		//Pulsar el logo tipo del establecimiento para volver al inicio(la pantalla principal de la tienda)
+		boolean isElementForControlAlwaysPresent = false;
+		clicLogoEstablecimiento();
+		
+		if(Objects.isNull(elementForControlAlwaysPresent))
+			return;
+		
+		if(isElementPresent(elementForControlAlwaysPresent)) {
+			
+			log("Error: No se ha podido volver a la página inicial debido al fallo del botón logo");
+			//extentTest.error("Error: No se ha podido volver a la página inicial debido al fallo del botón logo");
+			Assert.assertTrue(true, "Error: No se ha podido volver a la página inicial debido al fallo del botón logo");
+			isElementForControlAlwaysPresent = true;
+			
+			if(isElementForControlAlwaysPresent && !Objects.isNull(elementPantallaPrincipal)) {
+				log("Actualizamos la aplicación con F5 y verirficamos que no se muestre una página en blanca en vez de la pantalla inicial de la tienda");
+				driver.navigate().refresh();
+				driver.navigate().refresh();
+				espera(1500);
+				
+				if(!isElementPresent(elementPantallaPrincipal)) {
+					log("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
+					Data.getInstance().getExtentTest().error("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
+					
+					Assert.assertTrue(false);
+				}
+			}
+			
+		}
+		
 	}
 	
 	
@@ -704,8 +764,9 @@ public class TestBase extends StringUtils {
     			element = w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathCssSelector)));
     	} catch (TimeoutException e) {
     		e.printStackTrace();
-    		System.out.println("Failed unable to find: "+ xpathCssSelector );
+    		System.out.println("Failed -> unable to find: "+ xpathCssSelector );
     		if (failIfNotPresent) {
+    			System.out.println("System exit becaouse is not present");
     			Assert.assertTrue(false);
     			System.exit(0);
     		}
@@ -840,21 +901,7 @@ public class TestBase extends StringUtils {
 	
 	 //******** Getters y setters*************************
 	 //***************************************************
-	public ExtentReports getExtent() {
-		return extent;
-	}
 
-	public void setExtent(ExtentReports extent) {
-		this.extent = extent;
-	}
-	
-	public ExtentTest getExtentTest() {
-		return extentTest;
-	}
-
-	public void setExtentTest(ExtentTest extentTest) {
-		this.extentTest = extentTest;
-	}
 	
 	
 	public void cerrarSesion(String login) {
@@ -908,7 +955,7 @@ public class TestBase extends StringUtils {
 	}
 		
 	public void initServerTestCloudQuality(String servidor) {
-		log("\rDeterminamos el servidor donde se executa el test: \n" + getServerTestList() + "\r");
+		//log("\rDeterminamos el servidor donde se executa el test: \n" + getServerTestList() + "\r");
 		
 		if(!org.apache.commons.lang3.StringUtils.isBlank(servidor)  ) {
 			log("El parametro del servido de test está definido en el fichero testsuite");

@@ -12,7 +12,6 @@ import org.testng.TestNG;
 import org.testng.annotations.BeforeSuite;
 
 import configuration.ConfigServer;
-import configuration.ConfigServerPanel;
 //import configuration.ConfigServerPanel;
 import configuration.EnumServidor;
 import configuration.Server;

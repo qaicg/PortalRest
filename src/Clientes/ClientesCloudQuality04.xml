@@ -5,12 +5,12 @@
 <suite name="*Test* Pruebas de Clientes en PortalRest -> Login,Registro y validación (**Servidor MASTER QA10 -> https://cloudquality04.hiopos.com/portalrest**)" verbose="1" preserve-order="true">
 
 	<listeners>
-		<listener class-name="com.vimalselvam.testng.listener.ExtentTestNgFormatter" />
+		<listener class-name="com.vimalselvam.testng.listener.ExtentTestNgFormatter" /> 
+		
 	</listeners>
 
 	<parameter name="login" value="Registrarme" />
-	<parameter name="report.config" value="C:\Users\QA\portalrestproject\test-output\extent-config.xml" />
-
+	<parameter name="suiteName" value="Clientes CloudQuality04" /> <!--Titulo de la página -->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 
@@ -141,13 +141,15 @@
 
 		</classes>
 	</test> <!-- CreaCliente -->
+	
+	<!--
 
 	<test thread-count="5" name="Loguea un cliente con éxito con Google" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSOzYDMwITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
-		<!--parameter name="email" value="dptocalidadicg@gmail.com" /-->
+
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
@@ -156,7 +158,8 @@
 			<class name="Clientes.LoginGoogle" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
 		</classes>
-	</test> <!-- CreaCliente -->
+	</test> 
+	-->
 
 	<test thread-count="5" name="Loguea un cliente con éxito con ICGCloud" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />

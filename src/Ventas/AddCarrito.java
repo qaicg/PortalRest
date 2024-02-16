@@ -151,8 +151,9 @@ public class AddCarrito extends TestBase {
 					if(abrirFichaArticulo) {
 						addFromProductSheet(currentItem.getImagenElement(), currentItem.getNombre());
 					} else {
+						espera(1000);
 						clicJS(currentItem.getBoton());
-						espera(100);
+						espera(1000);
 						
 						//Test si se habre la fiche del artículo: 16/10/2023
 						String articleInfosXpath = "//div[contains(@class, 'product-info-wrapper-scrollable')]";
@@ -218,7 +219,7 @@ public class AddCarrito extends TestBase {
 								 */
 								WebElement formatoElementSelected = null;
 								Formato formatoSelected = new Formato();
-								
+								espera(1000);
 								for(Product product: articuloConFormatoEsperadoList) {
 									if(!isFormatoSelectdDefined)
 										break;
@@ -233,6 +234,8 @@ public class AddCarrito extends TestBase {
 										//Buscar el formato a seleccionar 
 										formatoElementSelected = formts.getFormatoElementByNameAndPrice(formatoSelectdDelProducto.getNombre(), formatoSelectdDelProducto.getPrecio());
 										formatoSelected = formts.getFormatoByNameAndPrice(formatoSelectdDelProducto.getNombre(), formatoSelectdDelProducto.getPrecio());
+										driver.findElement(By.xpath("//div[contains(@class,'format-element-name') and text()='"+formatoSelected.getNombre()+"']")).click();//#Oscar
+										//Añadimos un clic al formato porque a veces no queda seleccionado por defecto.
 										break;
 									}
 									
@@ -302,6 +305,7 @@ public class AddCarrito extends TestBase {
 											Assert.assertTrue(false);
 										}
 										//Seleccionar el formato combinado
+										espera(500);
 										clicJS(formatoElementSelected);//CLIC EN PRIMER FORMATO / MODIFICADOR
 										
 										espera(500);
@@ -344,6 +348,7 @@ public class AddCarrito extends TestBase {
 									String precioDesde = driver.findElement(By.xpath("(//span[contains(concat(' ', normalize-space(@class), ' '), ' dish-price ')])["+i+"]")).getAttribute("innerText");
 									log("el precio desde del producto con formatos: " + precioDesde);
 									currentItem.setPrecio(precioDesde);
+									espera(1000);
 								 
 								clicJS(driver.findElements(By.xpath("//button[contains(@class,'basket-button')]")).get(1)); //CLIC EN AÑADIR A CARRITO
 
@@ -397,14 +402,14 @@ public class AddCarrito extends TestBase {
 							cantidadProducto = productUnit.get(productUnit.size() -1).getAttribute("innerText");
 						} else {
 							log("Error cantidad 1 : No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
-							extentTest.warning("Error cantidad 1 : No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
+							Data.getInstance().getExtentTest().warning("Error cantidad 1 : No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
 							//Assert.assertTrue(false);
 						}
 					}
 					else {
 						if (Utils.isNullOrEmpty(cantidadProducto)) {
 							log("Error cantidad 2: No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
-							extentTest.fail("Error cantidad 2: No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
+							Data.getInstance().getExtentTest().fail("Error cantidad 2: No hemos podido añadir la cantidad de producto para:" + currentItem.getNombre());
 						}
 					}
 					
@@ -434,7 +439,7 @@ public class AddCarrito extends TestBase {
 							for(int x = 0; x < listFormatosAValidar.length; x++) {
 								if(!order.validateProductFormatName(listFormatosAValidar[x].split(":")[0])) {
 									log("Bug: El nombre del formato " + listFormatosAValidar[x].split(":")[0] + " no es valido");
-									extentTest.fail("Bug: El nombre del formato " + listFormatosAValidar[x].split(":")[0] + " no es valido");
+									Data.getInstance().getExtentTest().fail("Bug: El nombre del formato " + listFormatosAValidar[x].split(":")[0] + " no es valido");
 									//getExtent().flush();									
 								}
 							}
@@ -523,7 +528,7 @@ public class AddCarrito extends TestBase {
 				productosEncontrados += fOrderProducts.length;
 			} 
 			
-			Assert.assertTrue(validaCarritoFlotante((Integer.toString(productosEncontrados)),totalEsperado)); 
+			Assert.assertTrue(validaCarritoFlotante((Integer.toString(productosEncontrados)),totalEsperado),"Error validando total del carrito flotante."); 
 		}
 		
 	}
@@ -560,7 +565,7 @@ public class AddCarrito extends TestBase {
 
 		for(int i = 0; i < arrayNombres.length; i++) {
 			if (arrayNombres[i].equals(nombre)) {
-				log("arrayNombres[i].equals(nombre) ---> " + nombre);
+				//log("arrayNombres[i].equals(nombre) ---> " + nombre);
 				return true;
 			}
 		}	

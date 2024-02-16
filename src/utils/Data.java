@@ -1,5 +1,9 @@
 package utils;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+
 import Objects.Customer;
 import Objects.LoyaltyCard;
 import Reservas.BookingInformation;
@@ -19,9 +23,11 @@ public class Data {
     private boolean runAllTests=true;
     private boolean runTestsFailed = true;
     private boolean runTestOnCloudLicenseBeta = false;
-    
+	private static ExtentReports extentReport;
+	private ExtentTest extentTestSuite;
+	private ExtentTest extentTestNode;
     private boolean serverCloudQuality04 = false;
-    
+    private ExtentSparkReporter sparkReporter;
 	private boolean serverCloudQuality03 = false;
     
 	private Customer user;
@@ -37,10 +43,66 @@ public class Data {
 //	}
     public Server getConfigServer() {
 		return configServer;
-	}    
-   
+	}   
+    
 
-//	public void setConfigServer(ConfigServer configServer) {
+	public ExtentTest getExtentTest() {
+		return extentTestNode;
+	}
+
+
+
+	public void setExtentTest(ExtentTest extentTest) {
+		this.extentTestNode = extentTest;
+	}
+
+   
+    
+
+
+
+
+
+
+public ExtentTest getExtentTestSuite() {
+		return extentTestSuite;
+	}
+
+
+	public void setExtentTestSuite(ExtentTest extentTestSuite) {
+		this.extentTestSuite = extentTestSuite;
+	}
+
+
+public ExtentReports getExtentReport() {
+		return extentReport;
+	}
+
+
+
+	public  void setExtentReport(ExtentReports extentReport) {
+		Data.extentReport = extentReport;
+	}
+
+	
+	
+
+
+
+
+	public ExtentSparkReporter getSparkReporter() {
+		return sparkReporter;
+	}
+
+
+
+	public void setSparkReporter(ExtentSparkReporter sparkReporter) {
+		this.sparkReporter = sparkReporter;
+	}
+
+
+
+	//	public void setConfigServer(ConfigServer configServer) {
 //		this.configServer = configServer;
 //	}
 	public void setConfigServer(Server configServer) {
@@ -53,6 +115,12 @@ public class Data {
 
 	public void setServerCloudQuality04(boolean serverCloudQuality04) {
 		this.serverCloudQuality04 = serverCloudQuality04;
+	}
+	
+	public void initializeExtentReport() {
+		if (extentReport == null) {
+			extentReport = new ExtentReports();
+		}
 	}
 	
     public boolean isServerCloudQuality03() {

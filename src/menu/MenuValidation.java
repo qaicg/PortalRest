@@ -18,6 +18,7 @@ import PaymentMethod.PaymentCard;
 import enums.PaymentGateways;
 import graphql.Assert;
 import utils.CookiesPortalRest;
+import utils.Data;
 import utils.TestBase;
 import utils.cookie;
 
@@ -39,7 +40,7 @@ public class MenuValidation extends TestBase{
 		//validar que se muestre el submenu en mesa con el numero
 		if(!isElementPresent(By.xpath(AbrirMenu.menuEnMesa))) {
 			log("Error: no homos encontrado el submenu en mesa");
-			extentTest.fail("Error: no homos encontrado el submenu en mesa");
+			Data.getInstance().getExtentTest().fail("Error: no homos encontrado el submenu en mesa");
 			Assert.assertTrue(false);
 		}
 		
@@ -48,7 +49,7 @@ public class MenuValidation extends TestBase{
 		//Validar el literal del submenu en mesa
 		if(!menuEnMesa.getAttribute("innerText").equalsIgnoreCase(AbrirMenu.literalMenuEnMesa + numeroMesa)) {
 			log("Error en la validación del literal y del numero de mesa, encontrado ");
-			extentTest.fail("Error en la validación del literal y del numero de mesa, encontrado ");
+			Data.getInstance().getExtentTest().fail("Error en la validación del literal y del numero de mesa, encontrado ");
 			Assert.assertTrue(false);
 		}
 		
@@ -58,7 +59,7 @@ public class MenuValidation extends TestBase{
 		
 		if(!valueBorderBottom.equalsIgnoreCase(AbrirMenu.lineaGrisFlojito)) {
 			log("Error en la validación de la linea gris flojito seguido del submenu en Mesa ");
-			extentTest.fail("Error en la validación de la linea gris flojito seguido del submenu en Mesa ");
+			Data.getInstance().getExtentTest().fail("Error en la validación de la linea gris flojito seguido del submenu en Mesa ");
 			Assert.assertTrue(false);
 		}
 		
@@ -82,7 +83,7 @@ public class MenuValidation extends TestBase{
 				
 				if(vueltas == decCookies.length && !checkMesa ) {
 					log("Error: No hemos encontrado la mesa en los parametros del link");
-					extentTest.fail("Error: No hemos encontrado la mesa en los parametros del link");
+					Data.getInstance().getExtentTest().fail("Error: No hemos encontrado la mesa en los parametros del link");
 					org.testng.Assert.assertTrue(false, "Error: No hemos encontrado la mesa en los parametros del link");
 				}
 				vueltas ++;
@@ -90,7 +91,7 @@ public class MenuValidation extends TestBase{
 						
 		} catch (Exception e) {
 			log("error e => " +e.getMessage());
-			extentTest.fail("error e => " +e.getMessage());
+			Data.getInstance().getExtentTest().fail("error e => " +e.getMessage());
 			org.testng.Assert.assertTrue(false, "error e => " +e.getMessage());
 		}
 		

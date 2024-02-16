@@ -81,7 +81,7 @@ public class LoginCliente extends TestBase {
 			  
 		  }else { 
 			  Assert.assertTrue(cookieResult.equalsIgnoreCase("False"));
-			  log("No se ha guardado el usuario en la cookie");
+			  log("No se ha guardado el usuario en la cookie porque no era necesario.");
 		  }
 		  
 		  if(realizarPedido) {

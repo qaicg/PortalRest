@@ -9,15 +9,12 @@
 		<!-- Repetir los tests que fallan x  veces -->
 		<listener class-name="retryFailedTest.AnnotationTransformer" />
 		
-		<!-- Repetir los tests que fallan   
-		<listener class-name="retryFailedTest.ReTryAllTests" /> -->
-		<!-- -->
+		
 	</listeners>	
-	
-	<parameter name="report.config" value="C:\Users\QA\portalrestproject\test-output\extent-config.xml" />
+	<parameter name="suiteName" value="Ventas cloudQuality03" /> <!--Titulo de la página -->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
-	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
-	<parameter name="formaPago" value="Redsys Test" /> <!--Nombre de la forma de pago con la que se finalizara por defecto una venta -->
+	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia !-->
+	<parameter name="formaPago" value="Redsys Test" /> <!--Nombre de la forma de pago con la que se finalizara por defecto una venta !-->
 	<parameter name="email" value="portaltest88@yopmail.com" /> <!--Email que se usa para hacer login en la venta en caso de ser necesario -->
 	<parameter name="password" value=".1234abcd" /> <!-- Password del del cliente utilizado para hacer login -->
 	<parameter name="nuevaTarjeta" value="false" /> <!--Parametro que determina si vamos a crear nueva tarjeta  -->
@@ -116,7 +113,7 @@
 	 
 	 
 	<!-- Eliminar las cookies y volver a cargar la página: Comporbar que se muestre la página de error del motero-->
-	<!-- #37519 Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest -->
+	<!-- #37519 Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest
 	<test name="Prueba Mostrar la pantalla error del 'motero' tras eliminar las cookies en portalrest" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
@@ -132,26 +129,27 @@
 			<class name="utils.cookie" />
 		</classes>
 	</test>	
-	
-	<!-- Fin eliminar cookies-->
+	 -->
+	<!-- Fin eliminar cookies!-->
 
 	<!-- 
 		#42131 > No se muestra la carta en PDF a la hora de abrir portalrest en modo consulta
 		Mostra carta en formato imagen o pdf a la hora de abrir portalrest en modo consulta 
-	-->
+
 	<test name="Mostrar carta en formato pdf a la hora de abrir portalrest en modo consulta" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZSOyUjM4ITP0NXZSRWa" />
 		<parameter name="shop" value="57067	" />
 		
 		<parameter name="documentName" value="cartaTonni" />
 		<parameter name="documentType" value=".pdf" />
-		<parameter name="refrecaPaginaSinoFallaElTest" value="3"/> <!-- si no falla el test a la primera vez, refrescar la página x veces y volver a testear -->
+		<parameter name="refrecaPaginaSinoFallaElTest" value="3"/> 
 		
 		<classes>
 			<class name="AbrePortalRest.AbrirUrl" />
 			<class name="Verificaciones.VerificarCookies" />
 
 			<class name="Verificaciones.VerificarCartaElectronica">
+				<parameter name="textFromDocPdf" value="Huevos rotos con jamón15,00" />
 				<methods>
 					<include name="verifcarCartaEnModoConsulta" />
 				</methods>
@@ -160,7 +158,7 @@
 		</classes>
 		
 	</test>
-	
+		!-->
 	<test name="Mostrar carta en forma Imagen a la hora de abrir portalrest en modo consulta" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmYTPtZCOyUjM4ITP0NXZSRWa" />
 		<parameter name="shop" value="57067" />
@@ -553,7 +551,7 @@
 		</classes>
 	</test> <!--Prueba de venta simple y repetir el pedido dedes de la ficha principal del restaurante -->
 	
-	<test name=" Prueba de ventas consecutivas usando back al final del pedido" enabled="true" preserve-order="true">
+	<test name="Prueba de ventas consecutivas usando back al final del pedido" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Coca-Cola Zero 350ml,Fanta Taronja 30 ml" />
@@ -699,7 +697,7 @@
 		</classes>
 	</test>
 
-	<!-- INICIO PRUEBAS DELIVERY -->
+	<!-- INICIO PRUEBAS DELIVERY !-->
 
 	<test name="Prueba de venta simple DELIVERY con dirección existente con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
@@ -722,7 +720,8 @@
 		</classes>
 	</test>
 
-	<test name="Prueba de venta simple DELIVERY con nueva dirección con 4 artículos normales y al terminar la borra" enabled="true" preserve-order="true">
+
+	<test name="#44326 - Prueba de venta simple DELIVERY con nueva dirección con 4 artículos normales y al terminar la borra" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml" />
@@ -747,6 +746,7 @@
 
 		</classes>
 	</test>
+
 
 	<test name="Prueba de venta con DELIVERY en zona donde no se reparte terminada en local con 4 artículos normales." enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DMTP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
@@ -812,7 +812,6 @@
 		</classes>
 	</test>
 
-	<!-- #35711 > PortAventura / Ifema: Mostrar número de mesa en los links QR pedidos a mesa; #36826 PortalRest no abre la carta al entrar con QR de servio en mesa -->
 	<test name="Prueba de venta simple servicio EN LA MESA (6) con 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DUTP2J3cmYTPsJGdmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
@@ -832,7 +831,6 @@
 		</classes>
 	</test>
 	
-	<!-- #35711 > PortAventura / Ifema: Mostrar número de mesa en los links QR pedidos a mesa; #36826 PortalRest no abre la carta al entrar con QR de servio en mesa -->
 	<test name="Comprobar que se aparece la opción en mesa con el numero en el menu hamburgesa" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DUTP2J3cmYTPsJGdmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
@@ -901,7 +899,7 @@
 		</classes>
 	</test>
 	
-	<!-- El test no funciona -->
+	<!-- El test no funciona 
 	<test name="Prueba de venta simple con login de Google con 4 artículos normales" enabled="true" preserve-order="true" group-by-instances="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
@@ -910,7 +908,7 @@
 		<groups>
 			
 			<dependencies>
-				<!-- &dependenciaGeneral; -->
+			
 				<group name="cookies" depends-on="openbrowser" />
 				
 				<group name="familiasRestaurante" depends-on="cookies" />
@@ -940,7 +938,7 @@
 		</classes>
 	</test>
 	
-	
+	-->
 	
 	<test name="Prueba de venta simple con login de ICGCLoud y 4 artículos normales" enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
@@ -1021,7 +1019,6 @@
 	</test>
 		
 	
-	<!-- #32912 > PortalRest no permite cargar tarjeta saldo con Redsys al pagar con nueva tarjeta -->
 	<test  name="Prueba de login en PT HCP y cargar saldo con nueva tarjeta Redsýs" enabled="true" preserve-order="true" group-by-instances="true">
 		    
 		   <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCO2UTO1ITP0NXZSRWa" />
@@ -1364,7 +1361,8 @@
 		ejemplo:
 			ABSOLUT,CUBATA NORMAL:8,00€;CUBATA ESPECIAL:10,00€
 			<parameter name="formatoCombinado" value="CUBATA NORMAL{FANTA LIMON,FANTA NARANJA,COCA COLA,COCA COLA ZERO}" />
-
+			
+			Entrar tarea, a veces no se selecciona por defecto el primer formato.
 	-->
 	<test name="Venta de varios artículos donde uno de ellos en su formato combinable lanza la selección de otra familia de artículos definida en el formato" enabled="true" preserve-order="true" group-by-instances="true">
 		
@@ -1471,7 +1469,6 @@
 			<class name="Ventas.ValidacionPedidos" />
 		</classes>
 	</test>	
-	<!-- Fin #42486 ->  Hacer pedido en PortalRest sin carta y con pedidos online contratados. -->
 
  	<!-- Añadir el producto con modificador Oyako Don sin Rebozar = 15,50  -->
  	<test name="Prueba de venta simple EN EL LOCAL de 3 artículos normales y un producto con modificador" enabled="true" preserve-order="true">
@@ -1600,7 +1597,8 @@
 	    </classes>
  </test>
 
- <test  name="Prueba de venta simple con 4 artículos normales, haciendo login en ICGCLoud con forma de pago combinado saldo y Redsys" enabled="true" preserve-order="true">
+<!--#44312-->
+ <test  name=" #44312 - Prueba de venta simple con 4 artículos normales, haciendo login en ICGCLoud con forma de pago combinado saldo y Redsys" enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa"/>  
    <parameter name="shop" value="54066"/>
    <parameter name="email" value = "tarjetaqa07@yopmail.com"/>
@@ -1629,7 +1627,7 @@
  
  <!-- #32912 > PortalRest no permite cargar tarjeta saldo con Redsys al pagar con nueva tarjeta -->
  <!-- Implementar las dependencias -->
- <test  name="Prueba de venta simple con registro de nuevo usuario ICGCLoud con 4 artículos normales y pago combinado" enabled="true" preserve-order="true">
+ <test  name="#32912 - Prueba de venta simple con registro de nuevo usuario ICGCLoud con 4 artículos normales y pago combinado" enabled="true" preserve-order="true">
 	    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa"/>  
 	    <parameter name="shop" value="54066"/>
 	    <parameter name="ICGCloud" value="true"/>
@@ -1657,8 +1655,8 @@
 		</classes>
 	</test>
 	 
-<!--  #33456 > Correo recogido más tarde (avisar por email) en castellano, mientras que el idioma de la tienda en catalán -->
- <!--test  name="Prueba de venta simple servicio LOCAL y PARA MAS TARDE(Avisar por email) con 4 artículos normales" enabled="true" preserve-order="true">
+<!--  #33456 > Correo recogido más tarde (avisar por email) en castellano, mientras que el idioma de la tienda en catalán 
+  <test  name="Prueba de venta simple servicio LOCAL y PARA MAS TARDE(Avisar por email) con 4 artículos normales" enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiNyYDMzITP0NXZSRWa"/>  
    <parameter name="shop" value="52704"/>
    <parameter name="totalEsperado" value="10,45€" />
@@ -1689,12 +1687,12 @@
 
       	</class>
     </classes>
- </test -->  
+ </test>
 
-	
+-->
  
-	<!--#26743 -->
-<!-- <test  name="Prueba de venta simple servicio LOCAL y PARA MAS TARDE con 4 artículos normales" enabled="true" preserve-order="true">
+<!-- #26743 
+<test  name="Prueba de venta simple servicio LOCAL y PARA MAS TARDE con 4 artículos normales" enabled="true" preserve-order="true">
    <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DQTP2J3cmATPrNXYmITPtZSOzYDMwITP0NXZSRWa"/>  
    <parameter name="shop" value="48777"/>
    <parameter name="productos" value="Kirin TA,Inedit Damm,Oyako Don,Fanta Taronja 30 ml"/>
@@ -1710,8 +1708,8 @@
 	      	<class name="Ventas.ValidacionPedidos"/>
 	    </classes>
  </test> 
- -->
-
+ 
+-->
 
  
 </suite>

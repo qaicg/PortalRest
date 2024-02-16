@@ -209,7 +209,10 @@ public class CargarSaldoIcgCloud extends TestBase {
 		espera(2000);
 		
 		//Pulsar el logo tipo del establecimiento para volver al inicio(la pantalla principal de la tienda)
-		clicLogoEstablecimiento();
+		//clicLogoEstablecimiento();
+		log("pulsar al logo y verificar se muestre la pantalla inicial del restaurante");
+		By familiaEnPantallaPrincila = By.xpath("//li[contains(@class,'familyItem')]");
+		clicLogoEstablecimientoDespuesDeCarga(familiaEnPantallaPrincila);
 	}
 		
 	// pagar el saldo a carga en la tarjeta de fidelizacion al utilizar la tarjeta Redsys

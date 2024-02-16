@@ -278,6 +278,7 @@ public class CheckOut extends TestBase{
 		waitUntilPresence(formaPagoXpath, true, false);
 		
 		w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]"))); //ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
+		espera(2000);
 		clicJS(driver.findElement(By.xpath("//div[contains(@class,'payment-means-wrapper')]//div[contains(text(),'"+formaPago+"')]"))); //SELECCIONO FORMA DE PAGO
 
 		List<WebElement> checkBoxes = driver.findElements(By.xpath("//div[contains(@class,'mat-checkbox-inner-container')]"));
@@ -332,11 +333,7 @@ public class CheckOut extends TestBase{
 			
 			//** Test
 			
-			if(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")) != null) {
-				log("Element is finded");
-			} else {
-				log("Element not finded");
-			}
+			
 			//**
 			
 			
@@ -418,6 +415,21 @@ public class CheckOut extends TestBase{
 		log("el numero de pedido actual a comprobar:" + numPedido);
 		if(isElementPresent(By.xpath("//button[@class='main-btn basket-button']"))) {
 			driver.findElement(By.xpath("//button[@class='main-btn basket-button']")).click();//Pulsamos en volver al inicio
+			//Verificamos si siguemos siendo en la misma página o no
+			// #oscar Este metodo para verificar si tengo el botón de basket visible hace fallat el test aunque lo unico que quremos es verificar que hemos salido de la pantalla donde estavamos.
+			// lo sustituimos por otro.
+			//WebElement botonVolverAlInicio = getElementByFluentWait(By.xpath("//button[@class='main-btn basket-button']"), 40, 5); 
+			espera(5000); //#oscar
+			if (!isElementPresent(By.xpath("//button[@class='main-btn basket-button']"))){ //#oscar
+				System.out.println("Ya no me encuentro en la pantalla de finalización del pedido, sigo adelante"); //#oscar
+			}else { //#oscar
+				WebElement botonVolverAlInicio = getElementByFluentWait(By.xpath("//button[@class='main-btn basket-button']"), 40, 5);  //#oscar
+				Assert.assertFalse(isElementPresent(botonVolverAlInicio), "Error: No se ha podido volver a la página inicial debido al fallo del botón"); //#oscar
+
+			}
+			
+			
+			log("Ahora estamos a la página inicial de la tienda.");
 		}else {
 			back(); //Desde la versión del 16/09/2022 el el botón de back tiene otro comportamiento y regresa a la ultima pantalla abierta. 
 		}

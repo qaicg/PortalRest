@@ -22,39 +22,25 @@ public class Utils extends TestBase {
     	
 	public static double sGetDecimalStringAnyLocaleAsDouble (String value) {
 
-		Locale theLocale = null;
 		
 		if (Utils.isNullOrEmpty(value)) {
 			return 0.0;
 		}
 
+		NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+		Number number;
 		try {
-			theLocale = getLocale();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		NumberFormat numberFormat = DecimalFormat.getInstance(theLocale);
-		Number theNumber;
-		try {
-			theNumber = numberFormat.parse(value);
-			return theNumber.doubleValue();
+			number = format.parse(value);
+			double d = number.doubleValue();
+			return d;
 		} catch (ParseException e) {
-			// The string value might be either 99.99 or 99,99, depending on Locale.
-			// We can deal with this safely, by forcing to be a point for the decimal separator, and then using Double.valueOf ...
-			//http://stackoverflow.com/questions/4323599/best-way-to-parsedouble-with-comma-as-decimal-separator
-			String valueWithDot = value.replaceAll(",",".");
-
-			try {
-				return Double.valueOf(valueWithDot);
-			} catch (NumberFormatException e2)  {
-				// This happens if we're trying (say) to parse a string that isn't a number, as though it were a number!
-				// If this happens, it should only be due to application logic problems.
-				// In this case, the safest thing to do is return 0, having first fired-off a log warning.
-				return 0.0;
-			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
 		}
+
+		
+		
 	}
 	
 }
