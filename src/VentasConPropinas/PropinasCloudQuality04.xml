@@ -109,7 +109,7 @@
 	
 	<!--Prueba de ventas con propinas -->
 		<!-- 1: Pago a la entrega  -->
-		<test name="Prueba de venta simple EN EL LOCAL con propina pagando a la entrega " enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL con propina pagando a la entrega "  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -150,7 +150,7 @@
 		<!-- -->
 		
 		<!-- 2: Pago combinado con tarjeta de fidelización y  tarjeta Redsýs -->
-		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con forma de pago combinado entre Saldo y tarjeta Redsys" enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con forma de pago combinado entre Saldo y tarjeta Redsys"  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -198,7 +198,7 @@
 		<!-- -->
 		
 		<!-- 3: Pago combinado con tarjeta de fidelización y nueva tarjeta Redsýs-->
-		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con forma de pago combinado entre Saldo y nueva tarjta Redsys" enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con forma de pago combinado entre Saldo y nueva tarjta Redsys"  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -247,7 +247,7 @@
 		<!-- -->
 		
 		<!-- 4: Pago combinado con tarjeta de fidelización y modo pendiente a la entrega  -->
-		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con forma de pago combinado entre Saldo y a la entrega" enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con forma de pago combinado entre Saldo y a la entrega"  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -300,7 +300,7 @@
 			#38820 > Imposible completar pedido con tarjeta de fidelizacion usando propina 
 			#33925 > Falla venta con propina al pagar con tarjeta de saldo en PortalRest(ICGCLOUD/HPC).
 		-->
-		<test name="#45809 - Prueba de venta simple EN EL LOCAL con propina pagando con tarjeta de fidelizacion" enabled="true" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con tarjeta de fidelizacion"  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -347,7 +347,7 @@
 		<!-- -->	
 		
 		<!-- 6: pago con Redsýs -->
-		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con tarjeta Redsýs " enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL con propina pagando con tarjeta Redsýs "  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -385,7 +385,7 @@
 		<!-- -->
 		
 		<!-- 7: pago con Redsýs con nueva tarjeta -->
-		<test name="Prueba de venta simple EN EL LOCAL con propina usando nueva tarjeta Redsys al completar el pedido" enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL con propina usando nueva tarjeta Redsys al completar el pedido"  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -431,7 +431,7 @@
 	<!-- Prueba de ventas sin elegir propina en la pantalla de pago de HPC -->
 
 		<!-- 1: Medio de pago: Pagar a la entrega -->
-		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida usando pagar a la entrega" enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida usando pagar a la entrega"  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -472,7 +472,7 @@
 		<!-- -->	
 
 		<!-- 2: Pago con tarjeta Redsýs -->
-		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida pagando con pasarela de pago Redys " enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida pagando con pasarela de pago Redys "  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -511,7 +511,7 @@
 		<!-- -->	
 
 		<!-- 3: Pago con tarjeta de fidelización HioPos Cloud: pago con Saldo -->
-		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida pagando con saldo" enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida pagando con saldo"  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -558,7 +558,7 @@
 		</test>	
 			
 		<!-- 4: Pago con tarjeta de fidelización HioPos Cloud: modo combinado (Saldo y pagar a la entrega) -->
-		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida pagando con medio de pago combinado(Saldo y pagar a la entrega)" enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida pagando con medio de pago combinado(Saldo y pagar a la entrega)"  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	
@@ -607,7 +607,7 @@
 		<!-- -->	
 
 		<!-- 5: Pago con tarjeta de fidelización HioPos Cloud: modo combinado (Saldo y pasalerela de pago Redsys) -->
-		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida pagando con medio de pago combinado(Saldo y pasalerela de pago Redsys) " enabled="false" preserve-order="true">
+		<test name="Prueba de venta simple EN EL LOCAL sin elegir propina sugerida pagando con medio de pago combinado(Saldo y pasalerela de pago Redsys) "  enabled="true" preserve-order="true">
 			<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCOyYDMyITP0NXZSRWa" />
 			<parameter name="shop" value="52376" />
 	

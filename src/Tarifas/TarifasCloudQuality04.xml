@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite parallel="false" name="Suite">
+ 
+ <parameter name="suiteName" value="Tarifas cloudQuality04" /> <!--Titulo de la página -->
+ <parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
+  <!-- Determinar el servidor -->
+  <parameter name="servidor" value="cloudquality04" />
+
+  <test name="Valida que se carga la carta con la tarifa 1 seleccionada y que solo aparecen los artículos y precios de la tarifa 1.">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmETPsNGcmATPrNXYmMTPtZSM1ADMxMTP0NXZSRWa" />
+		<parameter name="shop" value="72729" />
+		<parameter name="tarifaSelected" value="1"></parameter>
+		<parameter name="articulosEsperados" value="A1,A2"></parameter>
+		<parameter name="articulosEsperadosPrecios" value="10,00€;5,00€"></parameter>
+		<classes>		
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Tarifas.verificarTarifasTest" />
+		</classes>  
+  </test> <!-- Test -->
+  
+    <test name="Valida que se carga la carta con la tarifa 2 seleccionada y que solo aparecen los artículos y precios de la tarifa 2.">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmITPsNGcmATPrNXYmMTPtZSM1ADMxMTP0NXZSRWa" />
+		<parameter name="shop" value="72729" />
+		<parameter name="tarifaSelected" value="1"></parameter>
+		<parameter name="articulosEsperados" value="A3,A4"></parameter>
+		<parameter name="articulosEsperadosPrecios" value="20,00€;25,00€"></parameter>
+		<classes>		
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Tarifas.verificarTarifasTest" />
+		</classes>  
+  </test> <!-- Test -->
+  
+   <test name="Valida que se carga la carta con la tarifa 3 seleccionada y que solo aparecen los artículos y precios de la tarifa 3.">
+		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmMTPsNGcmATPrNXYmMTPtZSM1ADMxMTP0NXZSRWa" />
+		<parameter name="shop" value="72729" />
+		<parameter name="tarifaSelected" value="1"></parameter>
+		<parameter name="articulosEsperados" value="A1,A2,A3,A4,A5"></parameter>
+		<parameter name="articulosEsperadosPrecios" value="2,00€;4,00€;6,00€;8,00€;100,00€"></parameter>
+		<classes>		
+			<class name="AbrePortalRest.AbrirUrl" />
+			<class name="Verificaciones.VerificarCookies" />
+			<class name="Tarifas.verificarTarifasTest" />
+		</classes>  
+  </test> <!-- Test -->
+  
+</suite> <!-- Suite -->

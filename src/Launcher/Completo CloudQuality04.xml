@@ -10,5 +10,6 @@
         <suite-file path="src/Ventas/VentasCloudQuality04.xml"></suite-file>
         <suite-file path="src/Clientes/ClientesCloudQuality04.xml"></suite-file>
         <suite-file path="src/VentasConPropinas/PropinasCloudQuality04.xml"></suite-file>
+         <suite-file path="src/VentasConPropinas/TarifasCloudQuality04.xml"></suite-file>
     </suite-files>
 </suite>

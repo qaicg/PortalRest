@@ -132,7 +132,7 @@ public class CargarSaldoIcgCloud extends TestBase {
 			}
 			
 		} else {
-			log("No se ha podio introducir el sado " + importe +"€ a cargar en la tarjete de fidelización!!!");
+			log("Error. -> No se ha podio introducir el sado " + importe +"€ a cargar en la tarjete de fidelización!!!");
 			Assert.assertTrue(false);
 		}
 		

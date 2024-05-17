@@ -43,7 +43,14 @@ public class VerificarPedidos  extends TestBase {
 	
 		if (ultimoPedido.equalsIgnoreCase("true")) {
 			String numeroPedidoActual = null;
-			w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='scrollable-content']//child::app-order[1]")));
+			try {
+				w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='scrollable-content']//child::app-order[1]")));
+			}catch (Exception e) {
+				e.printStackTrace();
+				log(e.getMessage());
+				
+			}
+			
 			WebElement pedidoInfo = driver.findElement(By.xpath("//*[@class='scrollable-content']//child::app-order[1]"));
 			pedidoInfo.click();
 			espera(2000); // Wait for order button

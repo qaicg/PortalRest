@@ -156,9 +156,9 @@ public class CrearCliente extends TestBase {
 					  log("Debemos mostrar al usuario que su email ya está en uso en la tienda ");
 					  Assert.assertTrue(false);
 				  } else {
-					  w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//mat-error[contains(@role, 'alert') and contains(@id, '" + typeIdMatError + "') and contains(@class, 'mat-error') and contains(text(), 'email')]")));
+					  w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//mat-error[contains(@role, 'alert') and contains(@class, 'mat-error') and contains(text(), 'email')]")));
 					  
-					  if(!isElementPresent(By.xpath("//mat-error[contains(@role, 'alert') and contains(@id, '" + typeIdMatError + "') and contains(@class, 'mat-error') and contains(text(), 'email')]"))) {
+					  if(!isElementPresent(By.xpath("//mat-error[contains(@role, 'alert')  and contains(@class, 'mat-error') and contains(text(), 'email')]"))) {
 						  log("Debemos mostrar al usuario que su email ya está en uso en la tienda ");
 						  Assert.assertTrue(false);
 					  }

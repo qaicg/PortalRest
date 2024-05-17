@@ -532,12 +532,21 @@ public class TestBase extends StringUtils {
 			w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'rounded-buttons-wrapper')]")));
 			
 			if(isElementPresent(By.xpath("//div[contains(@class, 'rounded-buttons-wrapper')]"))) {
-				w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[contains(@class, 'main-text')  and text()='" + misPedidos + "']//ancestor::app-circle-progress-button")));
+				
+				try {
+					w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[contains(@class, 'main-text')  and text()='" + misPedidos + "']//ancestor::app-circle-progress-button")));
+
+				}catch(Exception e) {
+					e.printStackTrace();
+					log(e.getMessage());
+				}
+				
+				
 				if(isElementPresent(By.xpath("//label[contains(@class, 'main-text')  and text()='" + misPedidos + "']//ancestor::app-circle-progress-button"))) {
 					clicJS(driver.findElement(By.xpath("//label[contains(@class, 'main-text')  and text()='" + misPedidos + "']//ancestor::app-circle-progress-button")));
 					espera(500);
 				} else {
-					log("No hay el botón Mis pedidos en la ficha principal del restaurante.");
+					log("Error. No hay el botón Mis pedidos en la ficha principal del restaurante.");
 					Assert.assertTrue(false);
 				}
 				

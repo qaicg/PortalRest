@@ -37,6 +37,7 @@ public class CheckOut extends TestBase{
 	String validarImporteMinimoPedido = null;
 	String importeMinimo = null;
 	String totalEsperado = null;
+	String mesaEsperada="";
 	
 
 	@Test(description="Se encarga de gestionar la parte de checkout una vez los productos ya están añadidos al carrito", priority=1, groups = { "checkOut" })
@@ -50,6 +51,7 @@ public class CheckOut extends TestBase{
 			@Optional ("true") String repartoPermitido, @Optional ("") String goBack, @Optional ("") String goBackByAddOrderButton, @Optional ("") String importeMinimo, @Optional ("") String validarImporteMinimo) {
 
 		String[] arrayNombres;
+		mesaEsperada = mesa;
 		this.tipoServicio=tipoServicio;
 		arrayNombres = productos.split(",");
 		this.importeMinimo = importeMinimo;
@@ -329,44 +331,6 @@ public class CheckOut extends TestBase{
 			
 			driver.findElement(By.xpath("//input[contains(@class,'btn-continue')]")).click();//CLIC EN CONTINUAR
 			espera(2000);
-			//.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
-			
-			//** Test
-			
-			
-			//**
-			
-			
-			/*
-			if(isElementPresent(By.id("orderReceiptHeader"))) {
-				log("ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO POR ID orderReceiptHeader.");
-				w2.until(ExpectedConditions.presenceOfElementLocated(By.id("orderReceiptHeader")));//ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO.
-			} else if(isElementPresent(By.xpath("//div[contains(@class, 'ticket-background')]"))) {
-				log("ESPERO HASTA QUE SALGA POR PANTALLA EL RECIBO POR class ticket-background.");
-				w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'ticket-background')]")));
-			} else {
-				espera(2000);
-				if(isElementPresent(By.xpath("//img[contains(@alt, 'Redsys')]")) || isElementPresent(By.xpath("//img[contains(@alt, 'Mantemimiento del servicio')]")) || 
-						isElementPresent(By.xpath("//h1[contains(text(), 'Estamos realizando tareas de mantenimiento, vuelva a intentarlo más tarde')]")) || 
-						isElementPresent(By.xpath("//span[contains(text(), 'Disculpen las molestias')]"))) {
-					log("Redsys ha fallado.");
-					log("Pantalla Redsys error | 500 ");
-					espera(1000);
-					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//img[contains(@alt, 'Redsys')]")));
-					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//img[contains(@alt, 'Mantemimiento del servicio')]")));
-				
-					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//h1[contains(text(), 'Estamos realizando tareas de mantenimiento, vuelva a intentarlo más tarde')]")));
-					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//h1[contains(text(), 'We are working on maintenance tasks, please try again later')]")));
-					
-					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[contains(text(), 'Disculpen las molestias')]")));
-					w2.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//span[contains(text(), 'Apologize for the inconvenience')]")));
-					log("Redsys ha fallado.");
-					log("Pantalla Redsys error | 500 ");
-					Assert.assertTrue(false);
-					
-				}
-			}
-			*/
 			
 			espera(2000);
 			if(validarPantallaRecibo()) {
@@ -404,6 +368,20 @@ public class CheckOut extends TestBase{
 			numPedido = driver.findElement(By.xpath("//ul/preceding::div[5]")).getText();//driver.findElement(By.xpath("//ul/preceding::div[1]")).getText();
 		} else if(isElementPresent(By.id("ticket2-orderNumber"))) {
 			numPedido = driver.findElement(By.id("ticket2-orderNumber")).getText();
+		}
+		
+		if (isElementPresent(By.xpath("//span[contains(text(),'En la mesa 0')]"))) {
+			log("Se encontro el literal En la mesa 0");
+			Assert.assertTrue(false,"No se muestra el número de mesa correcto en el recibo de pedido confirmado.");
+		}
+		
+		if(!mesaEsperada.equalsIgnoreCase("")) { // Espero una mesa porque es un pedido con mesa
+			if (isElementPresent(By.xpath("//span[contains(text(),'En la mesa "+mesaEsperada+"')]"))) {
+				log("Mesa esperada presente en el tiquet " + mesaEsperada);
+			}
+			else {
+				log("Mesa esperada "+mesaEsperada+ " no está presente en el tiquet ");
+			}
 		}
 		
 		if(isNullOrEmpty(numPedido)) {
