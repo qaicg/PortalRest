@@ -5,11 +5,11 @@
 
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="CloudQuality04 - Test completo PortalRest">
+<suite name="QA04 - Test completo PortalRest">
     <suite-files>
         <suite-file path="src/Ventas/VentasCloudQuality04.xml"></suite-file>
         <suite-file path="src/Clientes/ClientesCloudQuality04.xml"></suite-file>
         <suite-file path="src/VentasConPropinas/PropinasCloudQuality04.xml"></suite-file>
-         <suite-file path="src/VentasConPropinas/TarifasCloudQuality04.xml"></suite-file>
+         <suite-file path="src/Tarifas/TarifasCloudQuality04.xml"></suite-file>
     </suite-files>
 </suite>

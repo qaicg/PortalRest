@@ -6,7 +6,7 @@
   <!-- Determinar el servidor -->
   <parameter name="servidor" value="cloudquality04" />
 
-  <test name="Valida que se carga la carta con la tarifa 1 seleccionada y que solo aparecen los artículos y precios de la tarifa 1.">
+  <test name="Valida que se carga la carta con la tarifa 1 seleccionada y que solo aparecen los artículos y precios de la tarifa 1."  enabled="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmETPsNGcmATPrNXYmMTPtZSM1ADMxMTP0NXZSRWa" />
 		<parameter name="shop" value="72729" />
 		<parameter name="tarifaSelected" value="1"></parameter>
@@ -19,7 +19,7 @@
 		</classes>  
   </test> <!-- Test -->
   
-    <test name="Valida que se carga la carta con la tarifa 2 seleccionada y que solo aparecen los artículos y precios de la tarifa 2.">
+    <test name="Valida que se carga la carta con la tarifa 2 seleccionada y que solo aparecen los artículos y precios de la tarifa 2."  enabled="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmITPsNGcmATPrNXYmMTPtZSM1ADMxMTP0NXZSRWa" />
 		<parameter name="shop" value="72729" />
 		<parameter name="tarifaSelected" value="1"></parameter>
@@ -32,7 +32,7 @@
 		</classes>  
   </test> <!-- Test -->
   
-   <test name="Valida que se carga la carta con la tarifa 3 seleccionada y que solo aparecen los artículos y precios de la tarifa 3.">
+   <test name="Valida que se carga la carta con la tarifa 3 seleccionada y que solo aparecen los artículos y precios de la tarifa 3."  enabled="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmMTPsNGcmATPrNXYmMTPtZSM1ADMxMTP0NXZSRWa" />
 		<parameter name="shop" value="72729" />
 		<parameter name="tarifaSelected" value="1"></parameter>

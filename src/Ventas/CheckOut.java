@@ -308,12 +308,16 @@ public class CheckOut extends TestBase{
 		//TENEMOS PANTALLA DE REDSYS ABIERTA.
 		if (nuevaTarjeta) {
 			espera(2000);
-			w2.until(ExpectedConditions.presenceOfElementLocated(By.id("inputCard")));
+			w2.until(ExpectedConditions.presenceOfElementLocated(By.id("card-number")));
+			//w2.until(ExpectedConditions.presenceOfElementLocated(By.id("inputCard")));
 			log("- La tarjeta es nueva " + testCardNumber);
-			driver.findElement(By.id("inputCard")).sendKeys(testCardNumber);
-			driver.findElement(By.id("cad1")).sendKeys(cad1);
-			driver.findElement(By.id("cad2")).sendKeys(cad2);
-			driver.findElement(By.id("codseg")).sendKeys(cvv);
+			driver.findElement(By.id("card-number")).sendKeys(testCardNumber);
+			driver.findElement(By.id("card-expiration")).sendKeys(cad1);
+			driver.findElement(By.id("card-expiration")).sendKeys(cad2);
+			driver.findElement(By.id("card-cvv")).sendKeys(cvv);
+			//driver.findElement(By.id("cad1")).sendKeys(cad1);
+			//driver.findElement(By.id("cad2")).sendKeys(cad2);
+			//driver.findElement(By.id("codseg")).sendKeys(cvv);
 			driver.findElement(By.id("divImgAceptar")).click();
 			espera(2000);
 			w.until(ExpectedConditions.presenceOfElementLocated(By.id("boton"))).click(); //ACEPTAMOS SIMULADOR FINANET
@@ -426,14 +430,8 @@ public class CheckOut extends TestBase{
 		String basketDateElementXpath = null;
 		String basketTitle = w2.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'basket-ticket-title')]"))).getAttribute("innerText");
 
-		if(Data.getInstance().isServerCloudQuality04()) {
-			log("the test server:  cloudquality04"); 
-			basketDateElementXpath = "//div[contains(@class,'basket-ticket-header-wrapper')]";
-		} else if(Data.getInstance().isServerCloudQuality03()) {
-			log("the test server:  cloudquality03");
-			basketDateElementXpath = "//div[contains(@class,'basket-ticket-row')]";
-		}
-		
+		basketDateElementXpath = "//div[contains(@class,'basket-ticket-header-wrapper')]";
+			
 		//Testear que tenemos la información de la fecha pedido
 		String basketDate = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath(basketDateElementXpath))).getAttribute("innerText"); 
 		

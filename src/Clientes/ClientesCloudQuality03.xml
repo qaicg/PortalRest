@@ -143,7 +143,7 @@
 		</classes>
 	</test> <!-- CreaCliente -->
 	
-	<!-- El test no funciona-->
+	<!-- El test no funciona
 	<test thread-count="5" name="Loguea un cliente con éxito con Google" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
@@ -158,8 +158,9 @@
 			<class name="Clientes.LoginGoogle" />
 			<class name="Verificaciones.VerificarFichaRestaurante" />
 		</classes>
-	</test> <!-- CreaCliente -->
-
+	</test>  CreaCliente -->
+	
+	
 	<test thread-count="5" name="Loguea un cliente con éxito con ICGCloud" enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
