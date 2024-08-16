@@ -24,7 +24,7 @@ public class ValidacionPedidos extends TestBase {
   	
   	String SQL = "select dd.DocId,dd.ContactId,dd.Alias,dd.ShopId,dd.PosId,dd.CashBoxId,dd.Serie,dd.Number,dd.Z,dd.Date,dd.DocDate,dd.CurrencyId,dd.ExchangeRate, "
   			+ "dd.IsTaxIncluded ,dd.TaxesAmount ,dd.NetAmount,dd.BaseAmount ,dd.ServiceTypeId, dd.ServiceNumber from Doc__Doc dd, Con__Contact cc "
-  			+ "where dd.DocId ="+Data.getInstance().getUltimoDocIdPlus()+"  and dd.ContactId =  cc.ContactId and cc.Email ='"+customerMail+"' and dd.IsTaxIncluded =1 "
+  			+ "where dd.DocId ="+Data.getInstance().getUltimoDocIdPlus()+"  and dd.ContactId =  cc.ContactId  and dd.IsTaxIncluded =1 "
   			+ "and dd.NetAmount = "+netAmount.replaceAll("€","").replaceAll(",",".").trim()
   			+" and dd.ServiceTypeId = "+tipoServicio+" and dd.ServiceNumber <> 0 and dd.ChannelId=1";
   	

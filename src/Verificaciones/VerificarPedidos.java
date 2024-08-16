@@ -51,6 +51,7 @@ public class VerificarPedidos  extends TestBase {
 				
 			}
 			
+			espera(2000); 
 			WebElement pedidoInfo = driver.findElement(By.xpath("//*[@class='scrollable-content']//child::app-order[1]"));
 			pedidoInfo.click();
 			espera(2000); // Wait for order button
