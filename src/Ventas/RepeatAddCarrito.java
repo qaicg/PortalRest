@@ -134,7 +134,7 @@ public class RepeatAddCarrito extends TestBase {
 			log("la verificacion del pedido con numero " + numeroPedidoActual + " ha ido bien");
 			
 			w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'btn-centered')]/child::div")));
-			repeatOrderButton = driver.findElement(By.xpath("//button[contains(@class,'btn-centered')]/child::div"));
+			repeatOrderButton = driver.findElement(By.xpath("//div[contains(text(),'Repetir pedido')]"));
 			repeatOrderButton.click();
 			
 			log("Vuelver a repetir el pedido  " + numeroPedidoActual + " con los productos " + productos + " y precio " + totalEsperado);

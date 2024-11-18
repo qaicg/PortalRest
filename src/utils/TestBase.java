@@ -6,29 +6,24 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.ResultSet;
-import java.sql.Time;
-import java.text.DecimalFormat;
 import java.text.Normalizer;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -43,8 +38,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -56,21 +51,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.devtools.v108.media.model.Timestamp;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.IRetryAnalyzer;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -79,7 +71,6 @@ import org.testng.internal.Utils;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
-import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 //import com.aventstack.extentreports.Status;
@@ -87,7 +78,6 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 //import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.github.javafaker.Faker;
-import com.mongodb.DB;
 //import com.google.gson.annotations.Until;
 //import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
@@ -180,6 +170,28 @@ public class TestBase extends StringUtils {
 			Data.getInstance().getSparkReporter().config().setEncoding("ANSI");
 			Data.getInstance().getExtentReport().attachReporter(Data.getInstance().getSparkReporter());	
 			Data.getInstance().setExtentTestSuite(Data.getInstance().getExtentReport().createTest(suiteName));
+			String portalRestWSVersion="";
+			String urlService="";
+			
+			if(Data.getInstance().isServerCloudQuality03()) {
+			
+				urlService="https://cloudquality03.hiopos.com/PortalRestWS/session/version";
+			}else {
+				urlService="https://cloudquality04.hiopos.com/PortalRestWS/session/version";
+			}
+				
+			
+			try {
+				portalRestWSVersion = getPortalRestWSVersion(urlService);
+				ExtentTest wsServiceTest = Data.getInstance().getExtentTestSuite().createNode("PortalRestWS Service ").info(urlService);
+				wsServiceTest.info(portalRestWSVersion);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				ExtentTest wsServiceTest = Data.getInstance().getExtentTestSuite().createNode("PortalRestWS Service ").fail(urlService);
+
+			}
+			 
 			
 		
 		String screenShotDirectory = new File(System.getProperty("user.dir")).getAbsolutePath()
@@ -194,6 +206,16 @@ public class TestBase extends StringUtils {
 		}
 		
 		
+	}
+
+	private String getPortalRestWSVersion(String urlString) throws IOException {
+		URL url = new URL(urlString);
+		URLConnection con = url.openConnection();
+		InputStream in = con.getInputStream();
+		String encoding = con.getContentEncoding();
+		encoding = encoding == null ? "UTF-8" : encoding;
+		String body = IOUtils.toString(in, encoding);
+		return body;
 	}
 
 	@BeforeTest
@@ -329,7 +351,7 @@ public class TestBase extends StringUtils {
 			
 			//driver.manage().deleteAllCookies();
 			
-			//File htmlFile = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\test-output\\report"+new Date().getTime()+".html");
+			File htmlFile = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\test-output\\report"+new Date().getTime()+".html");
 			//espera(2000);
 			//Desktop.getDesktop().browse(htmlFile.toURI());
 	
@@ -506,8 +528,25 @@ public class TestBase extends StringUtils {
 
 	public void abrirMiMonedero(String miMonedero) {
 		clicJS(driver.findElement(By.xpath("//mat-icon[text()='menu']")));
-		w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//button[text()='" + miMonedero + "']")));
-		clicJS(driver.findElement(By.xpath("//button[text()='" + miMonedero + "']")));
+		espera(5000);
+		
+		
+		if(isElementPresent(By.xpath("//*[text()='" + miMonedero + "']"))) {
+			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[text()='" + miMonedero + "']")));
+			espera(500);
+			clicJS(driver.findElement(By.xpath("//*[text()='" + miMonedero + "']")));
+		}else {
+			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[text()='Mi perfil']")));
+			espera(500);
+			clicJS(driver.findElement(By.xpath("//*[text()='Mi perfil']")));
+			w.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[text()=' Mi monedero ']")));
+			espera(500);
+			clicJS(driver.findElement(By.xpath("//*[text()=' Mi monedero ']")));
+		}
+		
+		
+		
+		
 		clicJS(driver.findElement(By.xpath("//mat-icon[text()='info']")));
 		espera(500);
 	}
@@ -515,7 +554,7 @@ public class TestBase extends StringUtils {
 	public void abrirMisDirecciones(String miPerfil, String misDirecciones) {
 		clicJS(driver.findElement(By.xpath("//mat-icon[text()='menu']")));
 		clicJS(driver.findElement(By.xpath("//button[text()='" + miPerfil + "']")));
-		clicJS(driver.findElement(By.xpath("//button[contains(text(),'" + misDirecciones + "')]")));
+		clicJS(driver.findElement(By.xpath("//*[contains(text(),'" + misDirecciones + "')]")));
 		espera(500);
 	}
 
@@ -525,7 +564,8 @@ public class TestBase extends StringUtils {
 			espera(500);
 			clicJS(driver.findElement(By.xpath("//button[text()='" + miPerfil + "']")));
 			espera(500);
-			clicJS(driver.findElement(By.xpath("//button[contains(text(),'" + misPedidos + "')]")));
+			//clicJS(driver.findElement(By.xpath("//button[contains(text(),'" + misPedidos + "')]")));
+			clicJS(driver.findElement(By.xpath("//*[contains(text(),'" + misPedidos + "')]")));
 			espera(500);
 		} else {
 			//Validar si estamos en la ficha principal del restaurante
@@ -564,7 +604,7 @@ public class TestBase extends StringUtils {
 		espera(1000);
 		clicJS(driver.findElement(By.xpath("//button[text()='" + miPerfil + "']")));
 		espera(1000);
-		clicJS(driver.findElement(By.xpath("//button[contains(text(),'" + personal + "')]")));
+		clicJS(driver.findElement(By.xpath("//*[contains(text(),'" + personal + "')]")));
 		espera(1000);
 	}
 	

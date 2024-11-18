@@ -36,11 +36,14 @@ public class CrearCliente extends TestBase {
 	  WebDriverWait w = new WebDriverWait(TestBase.driver,Duration.ofSeconds(10));
 	  w.until(ExpectedConditions.presenceOfElementLocated (By.className("generic-title")));
 	  espera(1000);
-	  if(getDummyData.getLimite()) {
-		  List<String> dummyInformation = getDummyData.getDummyInformation();
+	 
+	  if(getDummyData.getLimite()) { // Metodo de obtención de datos n1
+		 // List<String> dummyInformation = getDummyData.getDummyInformation();
+		  List<String> dummyInformation = getDummyData.getDummyJsonInformation();
 		  
 		  dummyUserName = dummyInformation.get(0);
 		  dummyTelefono = dummyInformation.get(4);
+		  
 		  dummyPostalCode = dummyInformation.get(3);
 		  
 		  dummyEmail = stripAccents(dummyInformation.get(5));
@@ -49,7 +52,7 @@ public class CrearCliente extends TestBase {
 		  dummyPassword = dummyInformation.get(6);
 
 	  
-	  } else {
+	  } else { //Metodo de obtención de datos n2
 		  dummyUserName = getDummyData.getDummyUserName();
 		  dummyTelefono = getDummyData.getDummyTelefono();
 		  dummyPostalCode = getDummyData.getDummyPostalCode();

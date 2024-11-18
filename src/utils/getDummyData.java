@@ -13,7 +13,9 @@ import javax.net.ssl.HttpsURLConnection;
 import org.antlr.v4.runtime.Parser.TrimToSizeListener;
 import org.testng.Reporter;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 //import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
@@ -78,6 +80,76 @@ public class getDummyData {
 
 		return element.getAsString();
 	}
+	
+	public static List<String> getDummyJsonInformation(){
+		List<String> informationUser = new ArrayList<String>();
+		String persona = (getJSON("https://randomuser.me/api/"));
+        JsonObject jsonObject = JsonParser.parseString(persona).getAsJsonObject();
+        JsonArray resultsArray = jsonObject.getAsJsonArray("results");
+
+        JsonObject firstResult = resultsArray.get(0).getAsJsonObject();
+        
+        String name = firstResult.getAsJsonObject("name").get("first").getAsString();
+        name = name + " " +firstResult.getAsJsonObject("name").get("last").getAsString();
+        
+		 
+		String allAddress = firstResult.getAsJsonObject("location").getAsJsonObject().get("street").getAsJsonObject().get("name").getAsString();
+		
+        String email = firstResult.get("email").getAsString();
+
+		String password = firstResult.get("login").getAsJsonObject().get("password").getAsString()+"!aAb.";
+		
+		String phone = firstResult.get("phone").getAsString();
+		
+		
+		
+		
+		
+		phone= phone.replaceAll(" ", "").replaceAll("\\+", "").replaceAll("\\-", "").replaceAll("\\(", "").replaceAll("\\)", "");
+		phone = phone.substring(0, 9);
+		phone = limpiarYReemplazar(phone);
+		
+		String direccionSimple =  firstResult.getAsJsonObject("location").getAsJsonObject().get("street").getAsJsonObject().get("name").getAsString();
+		
+		String codigoPostal = firstResult.getAsJsonObject("location").get("postcode").getAsString();
+				
+		informationUser.add(name); //index: 0
+		informationUser.add(allAddress); //index: 1
+		informationUser.add(direccionSimple); //index: 2
+		informationUser.add(codigoPostal); //index: 3
+		informationUser.add(phone); //index: 4
+		informationUser.add(email); //index: 5
+		informationUser.add(password+"Ab1!"); //index: 6
+		
+		if(informationUser.size() == 0) {
+			log("La generacion de datos ha fallado");
+			limite = true;
+			Assert.assertTrue(false);
+		}
+
+		return informationUser;
+
+	}
+	
+	 public static String limpiarYReemplazar(String input) {
+	        // Usamos un StringBuilder para construir la cadena resultante
+	        StringBuilder resultado = new StringBuilder();
+
+	        for (char c : input.toCharArray()) {
+	            if (Character.isDigit(c)) {
+	                // Si es un dígito, lo añadimos tal cual
+	                resultado.append(c);
+	            } else if (Character.isAlphabetic(c)) {
+	                // Si es una letra, la reemplazamos por '0'
+	                resultado.append('0');
+	            } else {
+	                // Si es otro carácter (como espacio o símbolo), lo ignoramos
+	                // o puedes manejarlo según tu criterio
+	            }
+	        }
+	        
+	        return resultado.toString();
+	 }
 	
 	public static List<String> getDummyInformation() {
 		List<String> informationUser = new ArrayList<String>();

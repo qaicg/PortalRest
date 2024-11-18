@@ -58,6 +58,7 @@ public class CheckOut extends TestBase{
 		this.totalEsperado = totalEsperado;
 		//SI ES NUEVO USUARIO EL CORREO QUE NOS VIENE DEL TEST NO ES VÁLIDO.
 		Data.getInstance().setUltimoDocId(getLastDoc__Doc(shop));//RECUPERAMOS ULTIMO DOCDOCID DEL CLIENTE ANTES DE REALIZAR EL PEDIDO	
+		//w = new WebDriverWait(TestBase.driver, Duration.ofSeconds(120));
 		WebElement checkoutButton = w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'basket-button')]")));
 		checkoutButton.click();
 		espera(1000);

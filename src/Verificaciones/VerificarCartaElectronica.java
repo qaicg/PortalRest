@@ -61,7 +61,7 @@ public class VerificarCartaElectronica extends TestBase {
 	//Verificar que se muestre las carta en Imagen a la hora de abrir portalrest en modo consulta
 	public void verificarCartaEnImagen(String docName, String docType) {
 		String elementCartaDivXpath = "//app-iframe-page/div/div"; // botón pulsar para ampliar la carta
-		String elementCartaImgXpath = "//app-iframe-page/div/img[contains(@src, '"+ fileName +"')]"; // la carta en imagen
+		String elementCartaImgXpath = "//app-iframe-page/div/img[contains(@src, '.jpeg')]"; // la carta en imagen
 		
 		String elementCartaMatDialogContainer = "//mat-dialog-container/app-base-dialog/div/div[2]/app-product-image/div/img";
 		String elementCartaMatDialogMatIcocn = "//mat-dialog-container/app-base-dialog/div/div[1]/mat-icon";

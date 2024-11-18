@@ -109,8 +109,9 @@ public class CargarSaldoIcgCloud extends TestBase {
 		
 		//espera(500);
 		w.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(@class,'btn btn-confirm') and text()='"+cargarSaldoString+"']")));
-		WebElement cargarSaldoButton = driver.findElement(By.xpath("//button[contains(@class,'btn btn-confirm') and text()='"+cargarSaldoString+"']"));
-		cargarSaldoButton.click();
+		espera(1000);
+		WebElement cargarSaldoButton = driver.findElement(By.xpath("//button[contains(@class,'btn btn-confirm') and text()='Cargar saldo']"));
+		clicJS(cargarSaldoButton);
 		
 		if(isElementPresent(By.xpath("//div[contains(@class, 'mat-form-field-infix')]/child::input"))) {	
 			
