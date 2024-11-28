@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +40,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -78,11 +82,18 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 //import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.github.javafaker.Faker;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 //import com.google.gson.annotations.Until;
 //import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
 //import org.apache.commons.lang3.StringUtils.*;
 //import com.vimalselvam.testng.listener.ExtentTestNgFormatter;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 //import Cadenas.Es;
 //import Objects.ProductItem;
@@ -162,38 +173,15 @@ public class TestBase extends StringUtils {
 	}
 
 	@BeforeSuite
-	@Parameters({"suiteName"})
-	public void initialize(String suiteName) {
+	@Parameters({"suiteName","servidor"})
+	public void initialize(String suiteName, String servidor) {
 		
 		    Data.getInstance().initializeExtentReport();
 			Data.getInstance().setSparkReporter(new ExtentSparkReporter("target/Spark/Spark.html"));
 			Data.getInstance().getSparkReporter().config().setEncoding("ANSI");
 			Data.getInstance().getExtentReport().attachReporter(Data.getInstance().getSparkReporter());	
 			Data.getInstance().setExtentTestSuite(Data.getInstance().getExtentReport().createTest(suiteName));
-			String portalRestWSVersion="";
-			String urlService="";
 			
-			if(Data.getInstance().isServerCloudQuality03()) {
-			
-				urlService="https://cloudquality03.hiopos.com/PortalRestWS/session/version";
-			}else {
-				urlService="https://cloudquality04.hiopos.com/PortalRestWS/session/version";
-			}
-				
-			
-			try {
-				portalRestWSVersion = getPortalRestWSVersion(urlService);
-				ExtentTest wsServiceTest = Data.getInstance().getExtentTestSuite().createNode("PortalRestWS Service ").info(urlService);
-				wsServiceTest.info(portalRestWSVersion);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				ExtentTest wsServiceTest = Data.getInstance().getExtentTestSuite().createNode("PortalRestWS Service ").fail(urlService);
-
-			}
-			 
-			
-		
 		String screenShotDirectory = new File(System.getProperty("user.dir")).getAbsolutePath()
 				+ "/test-output/failure_screenshots/";
 		File filePath = new File(screenShotDirectory);
@@ -205,10 +193,20 @@ public class TestBase extends StringUtils {
 			e.printStackTrace();
 		}
 		
+
+		//VERSIONS
+		ExtentTest wsServiceTest = Data.getInstance().getExtentTestSuite().createNode("Versions deployed");	
+		Map<String,String> currentVersions = getCurrentVersions(servidor);
 		
+		 for (Map.Entry<String, String> entry : currentVersions.entrySet()) {
+	            String key = entry.getKey();
+	            String value = entry.getValue();
+	            wsServiceTest.info(key + ":"+value);
+	        }
+
 	}
 
-	private String getPortalRestWSVersion(String urlString) throws IOException {
+	private String getPortalRestWSVersion1(String urlString) throws IOException {
 		URL url = new URL(urlString);
 		URLConnection con = url.openConnection();
 		InputStream in = con.getInputStream();
@@ -217,6 +215,8 @@ public class TestBase extends StringUtils {
 		String body = IOUtils.toString(in, encoding);
 		return body;
 	}
+	
+	
 
 	@BeforeTest
 	@Parameters({"modoSinVentana", "cloudLicenceBeta", "servidor"})
@@ -1057,4 +1057,131 @@ public class TestBase extends StringUtils {
 		String currentUser = System.getProperty("user.name");
 		return currentUser;
 	}
+	
+
+	 
+	  public static Map<String,String> getCurrentVersions(String servidor){
+		  Map<String,String> currentVersions = new HashMap<String,String>();
+
+		  String server = "https://"+ servidor +".hiopos.com";
+		  String license = setLicense(servidor);
+		  
+		  //Get ErpCloud version
+		  currentVersions.put("ErpCloudVersion", getErpCloudVersion(server));
+		  
+		  //Get PortalRestWS
+		  currentVersions.put("PortalRestWS", getPortalRestWSVersion(server));
+		  
+		  //Get portalECommerce
+		  currentVersions.put("PortalECommerce", getPortalECommerceVersion(server));
+		  
+		  //Get PortalRestWeb
+		  currentVersions.put("PortalRestWeb", getPortalRestWebVersion(server));
+		  
+		  //Get cloudCentral
+		  currentVersions.put("CloudCentral", getCloudCentral(server));
+		  
+		  //Get License 
+		  currentVersions.put("License", getLicenseVersion(license));		  
+		  
+		  return currentVersions;
+	  }
+	  
+	  public static String setLicense(String servidor) {
+		  
+		  String license = "1";
+		  
+		  if(servidor.equals(EnumServidor.QUALITY03.getServerName())) license = "https://cloudlicense.icg.eu/";
+		  else if(servidor.equals(EnumServidor.QUALITY04.getServerName())) license = "https://cloudlicensebeta.icg.eu/";
+		  
+		  if(license.equals("1")) System.out.println("ERROR - Cannot set license url");
+		  
+		  return license;
+	  }
+	  
+	  public static String getErpCloudVersion(String server) {		  
+		  String service = "/ErpCloud/session/version";	  
+		  String erpCloudVersion = response(server,service);	
+		  
+		  JsonObject json = json(erpCloudVersion);	
+		  erpCloudVersion = json.get("result").getAsString();
+	      return erpCloudVersion;       
+	  }
+	  
+	  public static String getPortalRestWSVersion(String server) {
+		  String service = "/PortalRestWS/session/version";
+		  String PRTWS = response(server,service);	
+		  
+		  JsonObject json = json(PRTWS);	
+		  PRTWS = json.get("result").getAsString();
+	      return PRTWS;   
+	  }
+	  
+	  public static String getPortalECommerceVersion(String server) {		  
+		  String service = "/PortalECommerceWS/session/version";	  
+		  String portalECommerceVersion = response(server,service);	
+		  
+		  JsonObject json = json(portalECommerceVersion);	
+		  portalECommerceVersion = json.get("result").getAsString();
+	      return portalECommerceVersion;       
+	  }
+	  
+	  public static String getPortalRestWebVersion(String server) {
+		  String service = "/portalrest/globalconfig.js";
+		  String portalRestWeb = response(server,service);	
+		  portalRestWeb = portalRestWeb.replace("  var globalUrls = ", "").replace(";", "");
+		  
+		  JsonObject json = json(portalRestWeb);	
+		  portalRestWeb = json.get("version").getAsString();
+	      return portalRestWeb;   
+	  }    
+	  
+	  public static String getCloudCentral(String server) {
+		  String service = "/CloudCentral/info/version";
+		  String CloudCentral = response(server,service);	
+		  
+	      return CloudCentral;   
+	  } 
+	  
+	  public static String getLicenseVersion(String licenseUrl) {
+		  String service = "";
+		  String license = response(licenseUrl,service);	
+		  
+		  Document doc = Jsoup.parse(license);
+		  Elements version = doc.select("meta[name=version]");
+		  String licenseVersion = version.attr("content");
+		  
+	      return licenseVersion;   
+	  }
+	  
+	  
+	  
+	  public static  String response(String server, String service) {
+		  String  versions = "";	  
+		  OkHttpClient client = new OkHttpClient();
+				Request request = new Request.Builder()
+				  .url(server+service)
+				  .addHeader("Content-Type", "application/json")
+				  .build();
+				try {
+					Response response = client.newCall(request).execute();
+					versions = response.body().string();
+			        response.body().close();
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.out.println("ERROR - Cannot obtain "+ service +" version");
+					e.printStackTrace();
+					Assert.assertTrue(false);
+				}  
+		  
+		  return versions;	  
+	  }
+	  
+	  public static JsonObject json(String json) {
+		  Gson gson = new Gson();
+		  JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+		  return jsonObject;
+	  }
+	
 }
