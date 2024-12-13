@@ -1073,7 +1073,7 @@ public class TestBase extends StringUtils {
 		  currentVersions.put("PortalRestWS", getPortalRestWSVersion(server));
 		  
 		  //Get portalECommerce
-		  currentVersions.put("PortalECommerce", getPortalECommerceVersion(server));
+		  //currentVersions.put("PortalECommerce", getPortalECommerceVersion(server));
 		  
 		  //Get PortalRestWeb
 		  currentVersions.put("PortalRestWeb", getPortalRestWebVersion(server));
