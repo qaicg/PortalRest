@@ -103,8 +103,7 @@ import configuration.EnumServidor;
 import configuration.Server;
 //import enums.CookiesPortalRest;
 //import lombok.var;
-import main.Correo;
-import main.Reader;
+
 
 //import java.util.*;
 
@@ -141,17 +140,13 @@ public class TestBase extends StringUtils {
 	@Parameters({"servidor"})
 	public void configure(String servidor) {
 		
-		ConfigServer configServer = new ConfigServer();
-		List<Server> serverList = configServer.getServerList();
-		configServer.setServerList();
 		
-		Server myServerTesting = configServer.findServer(servidor); //Buscar el servidor para llevar sus parametros de configuración
 		
-		if(myServerTesting.getName().equals(EnumServidor.QUALITY03.getServerName())) {
+		if(servidor.equals(EnumServidor.QUALITY03.getServerName())) {
 			log("Estamos con el servidor --> " + EnumServidor.QUALITY03.getServerName());
 			Data.getInstance().setServerCloudQuality03(true);
 		}		
-		else if(myServerTesting.getName().equals(EnumServidor.QUALITY04.getServerName())) {
+		else if(servidor.equals(EnumServidor.QUALITY04.getServerName())) {
 			log("Estamos con el servidor --> " + EnumServidor.QUALITY04.getServerName());
 			Data.getInstance().setServerCloudQuality04(true);
 		}
@@ -161,15 +156,7 @@ public class TestBase extends StringUtils {
 			Assert.assertTrue(false, "Error de configuración: No se ha encontrado el servidor definido en el testsuite: " + servidor);
 		}
 
-		boolean test = myServerTesting.isTest();
 		
-		
-		
-		if(serverList.stream().filter(srv -> srv.getName().contains(servidor)).findAny().get().getName().contains(servidor)) {
-			Data.getInstance().setEntornoTest(test);
-			
-			Data.getInstance().setConfigServer(myServerTesting);
-		}
 	}
 
 	@BeforeSuite
@@ -233,8 +220,18 @@ public class TestBase extends StringUtils {
 		}
 
 		//System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
-		System.setProperty("webdriver.chrome.driver", "C:\\driver\\ChromeDriver-104.0.5112.79\\chromedriver.exe");
+		//System.setProperty("webdriver.chrome.driver", "C:\\driver\\ChromeDriver-104.0.5112.79\\chromedriver.exe");
+		String os = System.getProperty("os.name").toLowerCase();
+		if(os.contains("win")){
+			System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
+		}else {
+			System.setProperty("webdriver.chrome.driver", "/home/qa/ChromeDriver/chromedriver");
+
+		}
 		
+	    
+		System.setProperty("webdriver.chrome.whitelistedIps", "");
+
 		options = new ChromeOptions();
 		//pathprofile = "C:\\Users\\"+TestBase.getCurrentUser()+"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
 		//options.addArguments("user-data-dir=" + pathprofile);
@@ -242,6 +239,7 @@ public class TestBase extends StringUtils {
 		options.addArguments("--start-maximized");
 		//options.addArguments("profile-directory=Default");
 		options.addArguments("--disable-geolocation");
+		options.addArguments("--remote-allow-origins=*");
 		
 		//Clean cookies
 		//options.addArguments("— disk-cache-size=0");
@@ -449,7 +447,7 @@ public class TestBase extends StringUtils {
 		espera(5000);
 		if(!isElementPresent(elementPantallaPrincipal)) {
 			log("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
-			Data.getInstance().getExtentTest().error("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
+			Data.getInstance().getExtentTest().fail("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
 			Assert.assertTrue(false);
 		}
 		
@@ -478,7 +476,7 @@ public class TestBase extends StringUtils {
 				
 				if(!isElementPresent(elementPantallaPrincipal)) {
 					log("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
-					Data.getInstance().getExtentTest().error("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
+					Data.getInstance().getExtentTest().fail("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
 					
 					Assert.assertTrue(false);
 				}
@@ -780,29 +778,7 @@ public class TestBase extends StringUtils {
 		return locale;
 	}
 	
-    public Correo openLastMessageFromMailSac(String userEmail, String userPassword) {
-    	Correo correo = null;
-    	try {
-    		if(isNullOrEmpty(userEmail)) {
-    			log("Error: No se puede connectarse en mailsac.com sin el email del usuario");
-    			Assert.assertTrue(false);
-    		}
-    		
-    		if(isNullOrEmpty(userPassword)) {
-    			log("Error: No se puede connectarse en mailsac.com sin la contraseña");
-    			Assert.assertTrue(false);
-    		}
-    		espera(5000);
-    		correo = Reader.getLastMail(userEmail, userPassword);
-    		//espera(2000);
-    		
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-    	
-    	return correo;
-    	
-    }
+
     
     public static void waitUntilPresence (String xpathCssSelector, boolean failIfNotPresent, @Optional("false") boolean useCssSelector) {
     	WebElement element = null;

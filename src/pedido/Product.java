@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.testng.Assert;
+
 //import com.mysql.cj.protocol.Warning;
 
 import Objects.ProductItem;
-import graphql.Assert;
 //import utils.TestBase;
 import utils.Utils;
 

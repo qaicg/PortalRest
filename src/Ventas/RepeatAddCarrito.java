@@ -1,6 +1,11 @@
 package Ventas;
 
-import org.testng.annotations.AfterTest;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -8,29 +13,7 @@ import org.testng.annotations.Test;
 //import com.aventstack.extentreports.model.Log;
 import com.mysql.cj.util.StringUtils;
 
-import org.testng.AssertJUnit;
-import org.testng.ITestContext;
-
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.Test;
-
-import Objects.ProductItem;
 import Verificaciones.VerificarPedidos;
-import graphql.Assert;
-import utils.RetryTestsFailed;
 import utils.TestBase;
 
 //ESTA CLASSE SE UTILIZA PARA : 
