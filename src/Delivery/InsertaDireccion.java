@@ -20,12 +20,12 @@ public class InsertaDireccion extends TestBase{
     	espera(500);
     	log("Registramos nueva dirección");
     	String address=direccion.split(", ")[0];
-    	driver.findElement(By.xpath("//textArea[@formControlName='roadName']")).sendKeys(address);
+    	driver.findElement(By.xpath("//textArea[@qaid='editaddress-roadname']")).sendKeys(address);
     	String number=direccion.split(", ")[1];
-    	driver.findElement(By.xpath("//input[@formControlName='roadNumber']")).sendKeys(number);
-    	driver.findElement(By.xpath("//input[@formControlName='city']")).sendKeys(ciudad);
-    	driver.findElement(By.xpath("//input[@formControlName='postalCode']")).sendKeys(cp);
-    	driver.findElement(By.xpath("//textArea[@formControlName='observations']")).sendKeys("Observaciones de prueba.");
+    	driver.findElement(By.xpath("//input[@qaid='editaddress-roadnumber']")).sendKeys(number);
+    	driver.findElement(By.xpath("//input[@qaid='editaddress-city']")).sendKeys(ciudad);
+    	driver.findElement(By.xpath("//input[@qaid='editaddress-postalcode']")).sendKeys(cp);
+    	driver.findElement(By.xpath("//textArea[@qaid='editaddress-observations']")).sendKeys("Observaciones de prueba.");
     	espera(500);
     	driver.findElement(By.xpath("//app-square-progress-button[@class='square-progress-button']")).click();
     	espera(500);
