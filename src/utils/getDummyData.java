@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.antlr.v4.runtime.Parser.TrimToSizeListener;
+import org.testng.Assert;
 import org.testng.Reporter;
 
 import com.google.gson.JsonArray;
@@ -20,7 +20,6 @@ import com.google.gson.JsonParser;
 //import com.google.inject.spi.Element;
 import com.mysql.cj.util.StringUtils;
 
-import graphql.Assert;
 
 public class getDummyData {
 	

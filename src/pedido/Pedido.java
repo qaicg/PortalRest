@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.testng.Assert;
+
 import com.mysql.cj.util.StringUtils;
 
-import graphql.Assert;
 import utils.Utils;
 
 public class Pedido {

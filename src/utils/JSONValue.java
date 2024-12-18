@@ -1,8 +1,6 @@
 package utils;
 
-
 import org.json.JSONObject;
-
 
 public class JSONValue {
   public static String value (String cookieValue, String shop, String remember) {

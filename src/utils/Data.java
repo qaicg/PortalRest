@@ -6,7 +6,6 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 import Objects.Customer;
 import Objects.LoyaltyCard;
-import Reservas.BookingInformation;
 //import configuration.ConfigServer;
 import configuration.Server;
 import pedido.Pedido;
@@ -33,7 +32,6 @@ public class Data {
 	private Customer user;
 
 	private String pedidoActual;
-    private BookingInformation bookingInformation;
     
  //   private ConfigServer configServer;
     private Server configServer;    
@@ -157,14 +155,7 @@ public ExtentReports getExtentReport() {
 		this.pedido = pedido;
 	}
 
-	public BookingInformation getBookingInformation() {
-		return bookingInformation;
-	}
-
-	public void setBookingInformation(BookingInformation bookingInformation) {
-		this.bookingInformation = bookingInformation;
-	}
-
+	
 	public String getBD() {
 		return BD;
 	}

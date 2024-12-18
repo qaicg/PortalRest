@@ -29,7 +29,6 @@ import org.testng.annotations.Test;
 
 import Objects.ProductItem;
 import Verificaciones.VerificarPedidos;
-import graphql.Assert;
 import utils.RetryTestsFailed;
 import utils.TestBase;
 
@@ -152,7 +151,7 @@ public class RepeatAddCarrito extends TestBase {
 			
 		} else {
 			log("No se ha podido vericar el pedido antes de repetirlo  con los productos " + productos + " y precio " + totalEsperado);
-			Assert.assertTrue(false);
+			org.testng.Assert.assertTrue(false);
 		}
 	}
 	

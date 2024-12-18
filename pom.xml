@@ -44,14 +44,18 @@
 	</dependency>
 	
 
+<dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+    <version>31.1-jre</version> <!-- Use the latest stable version -->
+</dependency>
 
-  	
   
   	
   	<dependency>
 	    <groupId>com.aventstack</groupId>
 	    <artifactId>extentreports</artifactId>
-	    <version>5.0.9</version>
+	    <version>4.0.9</version>
 	</dependency>
 	
 	<dependency>
@@ -132,6 +136,12 @@
 	    <version>2.10.1</version>
 	</dependency>
 	
+<!-- https://mvnrepository.com/artifact/org.json/json -->
+<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20240303</version>
+</dependency>
 
 	
 	<!-- StringUtils -->

@@ -1,22 +1,13 @@
 package menu;
 
-import java.lang.reflect.Field;
-
-
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.json.Cookie;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.devtools.idealized.Javascript;
+import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 
-import PaymentMethod.PaymentCard;
 import enums.PaymentGateways;
-import graphql.Assert;
 import utils.CookiesPortalRest;
 import utils.Data;
 import utils.TestBase;

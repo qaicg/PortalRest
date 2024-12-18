@@ -77,9 +77,6 @@ import org.xml.sax.InputSource;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
-//import com.aventstack.extentreports.Status;
-//import com.aventstack.extentreports.reporter.ExtentAventReporter;
-//import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
@@ -103,8 +100,7 @@ import configuration.EnumServidor;
 import configuration.Server;
 //import enums.CookiesPortalRest;
 //import lombok.var;
-import main.Correo;
-import main.Reader;
+
 
 //import java.util.*;
 
@@ -233,13 +229,15 @@ public class TestBase extends StringUtils {
 		}
 
 		//System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
-		System.setProperty("webdriver.chrome.driver", "C:\\driver\\ChromeDriver-104.0.5112.79\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\driver\\chromedriver.exe");
 		
 		options = new ChromeOptions();
 		//pathprofile = "C:\\Users\\"+TestBase.getCurrentUser()+"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
 		//options.addArguments("user-data-dir=" + pathprofile);
 		options.addArguments("chrome.switches", "--disable-extensions");
 		options.addArguments("--start-maximized");
+		options.addArguments("--remote-allow-origins=*");
+
 		//options.addArguments("profile-directory=Default");
 		options.addArguments("--disable-geolocation");
 		
@@ -449,7 +447,7 @@ public class TestBase extends StringUtils {
 		espera(5000);
 		if(!isElementPresent(elementPantallaPrincipal)) {
 			log("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
-			Data.getInstance().getExtentTest().error("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
+			Data.getInstance().getExtentTest().fail("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
 			Assert.assertTrue(false);
 		}
 		
@@ -478,7 +476,7 @@ public class TestBase extends StringUtils {
 				
 				if(!isElementPresent(elementPantallaPrincipal)) {
 					log("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
-					Data.getInstance().getExtentTest().error("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
+					Data.getInstance().getExtentTest().fail("Error: No se ha podido volver a la página inicial tras actualizar la aplicación con F5 después de pulsar el logo del restaurante.");
 					
 					Assert.assertTrue(false);
 				}
@@ -780,29 +778,7 @@ public class TestBase extends StringUtils {
 		return locale;
 	}
 	
-    public Correo openLastMessageFromMailSac(String userEmail, String userPassword) {
-    	Correo correo = null;
-    	try {
-    		if(isNullOrEmpty(userEmail)) {
-    			log("Error: No se puede connectarse en mailsac.com sin el email del usuario");
-    			Assert.assertTrue(false);
-    		}
-    		
-    		if(isNullOrEmpty(userPassword)) {
-    			log("Error: No se puede connectarse en mailsac.com sin la contraseña");
-    			Assert.assertTrue(false);
-    		}
-    		espera(5000);
-    		correo = Reader.getLastMail(userEmail, userPassword);
-    		//espera(2000);
-    		
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-    	
-    	return correo;
-    	
-    }
+
     
     public static void waitUntilPresence (String xpathCssSelector, boolean failIfNotPresent, @Optional("false") boolean useCssSelector) {
     	WebElement element = null;

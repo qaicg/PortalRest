@@ -30,6 +30,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 //import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
+import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.TestNG;
 import org.testng.annotations.Optional;
@@ -40,7 +41,6 @@ import org.xml.sax.InputSource;
 //import org.xml.sax.SAXException;
 
 //import freemarker.core.OutputFormat;
-import graphql.Assert;
 
 public class testFailedRunner {
 	 //EJECUTA LOS ULTIMOS TESTS FALLADOS 
