@@ -77,9 +77,6 @@ import org.xml.sax.InputSource;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
-//import com.aventstack.extentreports.Status;
-//import com.aventstack.extentreports.reporter.ExtentAventReporter;
-//import com.aventstack.extentreports.reporter.ExtentKlovReporter;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
@@ -237,6 +234,8 @@ public class TestBase extends StringUtils {
 		//options.addArguments("user-data-dir=" + pathprofile);
 		options.addArguments("chrome.switches", "--disable-extensions");
 		options.addArguments("--start-maximized");
+		options.addArguments("--remote-allow-origins=*");
+
 		//options.addArguments("profile-directory=Default");
 		options.addArguments("--disable-geolocation");
 		options.addArguments("--remote-allow-origins=*");
