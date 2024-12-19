@@ -312,46 +312,46 @@ public class DireccionCliente extends TestBase {
 		else 
 			errorString = "modificar";
 		
-    	if(!setInputValueJS(By.xpath("//textArea[@formControlName='roadName']"), address)) {
+    	if(!setInputValueJS(By.xpath("//textArea[@qaid='editaddress-roadname']"), address)) {
     		log("No se ha podido'"+ errorString + "' el nombre de la dirección.");
     		Assert.assertTrue(false);
     	}
     	
-    	if(!setInputValueJS(By.xpath("//input[@formControlName='roadNumber']"), number)) {
+    	if(!setInputValueJS(By.xpath("//input[@qaid='editaddress-roadnumber']"), number)) {
     		log("No se ha podido'"+ errorString + "' el numero de la calle.");
     		Assert.assertTrue(false);
     	}
     	
-    	if(!setInputValueJS(By.xpath("//input[@formControlName='city']"), ciudad)) {
+    	if(!setInputValueJS(By.xpath("//input[@qaid='editaddress-city']"), ciudad)) {
     		log("No se ha podido'"+ errorString + "' el nombre de la ciudad.");
     		Assert.assertTrue(false);
     	}
     	
-    	if(!setInputValueJS(By.xpath("//input[@formControlName='postalCode']"), cp)) {
+    	if(!setInputValueJS(By.xpath("//input[@qaid='editaddress-postalcode']"), cp)) {
     		log("No se ha podido'"+ errorString + "' el codígo postal.");
     		Assert.assertTrue(false);
     		
-    	if(!setInputValueJS(By.xpath("//input[@formControlName='block']"), bloque))
+    	if(!setInputValueJS(By.xpath("//input[@qaid='editaddress-block']"), bloque))
     		log("No se ha podido'"+ errorString + "' el bloque.");
     		Assert.assertTrue(false);
     	}
     	
-    	if(!setInputValueJS(By.xpath("//input[@formControlName='stairCase']"), escalera)) {
+    	if(!setInputValueJS(By.xpath("//input[@qaid='editaddress-staircase']"), escalera)) {
     		log("No se ha podido'"+ errorString + "' la escalera.");
     		Assert.assertTrue(false);
     	}
     	
-    	if(!setInputValueJS(By.xpath("//input[@formControlName='floor']"), planta)) {
+    	if(!setInputValueJS(By.xpath("//input[@qaid='editaddress-floor']"), planta)) {
     		log("No se ha podido'"+ errorString + "' el nombre de la planta.");
     		Assert.assertTrue(false);
     	}
     	
-    	if(!setInputValueJS(By.xpath("//input[@formControlName='door']"), puerta)) {
+    	if(!setInputValueJS(By.xpath("//input[@qaid='editaddress-door']"), puerta)) {
     		log("No se ha podido'"+ errorString + "' el nombre de la puerta.");
     		Assert.assertTrue(false);
     	}
     	
-    	if(!setInputValueJS(By.xpath("//textArea[@formControlName='observations']"), observaciones)) {
+    	if(!setInputValueJS(By.xpath("//textArea[@qaid='editaddress-observations']"), observaciones)) {
     		log("No se ha podido'"+ errorString + "' las observaciones.");
     		Assert.assertTrue(false);
 		}
