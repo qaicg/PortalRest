@@ -58,18 +58,17 @@ public class DatabaseConnection {
 	}	
 	
 	private void setConfigBBDD(String database) {
-		urlConexion = Data.getInstance().getConfigServer().getUrlConnexion() + database; //"jdbc:mysql://213.99.41.60:3306/"+database;
-		userName = Data.getInstance().getConfigServer().getUserName();//"cloud";
-		password = Data.getInstance().getConfigServer().getPassword();
-		BBDD =  database;
 		
+		BBDD =  database;
 		Data.getInstance().setBD(BBDD);
 		
 	}	
 	//REALIZA CONEXIÓN AL ENTORNO CONFIGURADO
 	public void conectar() {
 		  try {
-			  connection = DriverManager.getConnection(urlConexion, userName, password); 
+			  connection = DriverManager.getConnection(Data.getInstance().getConfigServer().getUrlConnexion()+Data.getInstance().getBD(),
+					  Data.getInstance().getConfigServer().getUserName(), 
+					  Data.getInstance().getConfigServer().getPassword()); 
 			} catch (SQLException e) {
 			    throw new IllegalStateException("Cannot connect the database!", e);
 			} 

@@ -142,10 +142,20 @@ public class TestBase extends StringUtils {
 		if(servidor.equals(EnumServidor.QUALITY03.getServerName())) {
 			log("Estamos con el servidor --> " + EnumServidor.QUALITY03.getServerName());
 			Data.getInstance().setServerCloudQuality03(true);
+			Server server= new Server();
+			server.setUrlConnexion("jdbc:mysql://213.99.41.60:3306/");
+			server.setUserName("cloud");
+			server.setPassword("gKeQf6xfsIHLJXVy");
+			Data.getInstance().setConfigServer(server);
 		}		
 		else if(servidor.equals(EnumServidor.QUALITY04.getServerName())) {
 			log("Estamos con el servidor --> " + EnumServidor.QUALITY04.getServerName());
-			Data.getInstance().setServerCloudQuality04(true);
+			Data.getInstance().setServerCloudQuality04(true);	
+			Server server= new Server();
+			server.setUrlConnexion("jdbc:mysql://213.99.41.61:3306/");
+			server.setUserName("cloud");
+			server.setPassword("d4PKLWwrhFcdwnB1");
+			Data.getInstance().setConfigServer(server);
 		}
 		else {
 			System.out.println("No tenemos entorno definido, asumiremos que el entorno es Quality03");

@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -104,7 +105,12 @@ public class getDummyData {
 		
 		
 		phone= phone.replaceAll(" ", "").replaceAll("\\+", "").replaceAll("\\-", "").replaceAll("\\(", "").replaceAll("\\)", "");
-		phone = phone.substring(0, 9);
+		if(phone.length()==9) {
+			phone = phone.substring(0, 9);
+		}else {
+			phone=String.valueOf(generateRandomNumber(9));
+		}
+		
 		phone = limpiarYReemplazar(phone);
 		
 		String direccionSimple =  firstResult.getAsJsonObject("location").getAsJsonObject().get("street").getAsJsonObject().get("name").getAsString();
@@ -128,6 +134,13 @@ public class getDummyData {
 		return informationUser;
 
 	}
+	
+	private static long generateRandomNumber(int n) {
+	    long min = (long) Math.pow(10, n - 1);
+	    return ThreadLocalRandom.current().nextLong(min, min * 10);
+	}
+	
+	
 	
 	 public static String limpiarYReemplazar(String input) {
 	        // Usamos un StringBuilder para construir la cadena resultante
