@@ -171,7 +171,8 @@ public class TestBase extends StringUtils {
 	public void initialize(String suiteName, String servidor) {
 		
 		    Data.getInstance().initializeExtentReport();
-			Data.getInstance().setSparkReporter(new ExtentSparkReporter("target/Spark/Spark.html"));
+		    String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(Calendar.getInstance().getTime());
+			Data.getInstance().setSparkReporter(new ExtentSparkReporter("target/Spark/"+servidor+"/spark.html"));
 			Data.getInstance().getSparkReporter().config().setEncoding("ANSI");
 			Data.getInstance().getExtentReport().attachReporter(Data.getInstance().getSparkReporter());	
 			Data.getInstance().setExtentTestSuite(Data.getInstance().getExtentReport().createTest(suiteName));
@@ -358,7 +359,6 @@ public class TestBase extends StringUtils {
 			
 			//driver.manage().deleteAllCookies();
 			
-			File htmlFile = new File("C:\\Users\\"+TestBase.getCurrentUser()+"\\portalrestproject\\test-output\\report"+new Date().getTime()+".html");
 			//espera(2000);
 			//Desktop.getDesktop().browse(htmlFile.toURI());
 	
@@ -925,12 +925,12 @@ public class TestBase extends StringUtils {
 	
 	 public static void openSpark() {
 			
-			File filePath = new File("target/Spark/Spark.html");
-			try {
-				Desktop.getDesktop().browse(filePath.toURI());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			File filePath = new File("target/Spark/Spark.html");
+//			try {
+//				Desktop.getDesktop().browse(filePath.toURI());
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 	 }
 	
 	 //******** Getters y setters*************************

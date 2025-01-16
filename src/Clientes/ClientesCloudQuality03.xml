@@ -34,7 +34,7 @@
 	<!-- Determinar el servidor -->
 	<parameter name="servidor" value="cloudquality03" />
 	
-	<test thread-count="5" name="Creación de nuevo cliente PRT"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Creación de nuevo cliente PRT"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="aceptoTerminos" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />       
@@ -63,7 +63,7 @@
 	</test> <!-- CreaCliente -->
 
 
-	<test thread-count="5" name="Loguea un cliente con éxito con PRT"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente con éxito con PRT"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -92,7 +92,7 @@
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Loguea un cliente erróneo con PRT"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente erróneo con PRT"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -112,7 +112,7 @@
 	</test> <!-- CreaCliente -->
 
 
-	<test thread-count="5" name="Recordar cliente con PRT"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Recordar cliente con PRT"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -144,7 +144,7 @@
 	</test> <!-- CreaCliente -->
 	
 	<!-- El test no funciona
-	<test thread-count="5" name="Loguea un cliente con éxito con Google"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente con éxito con Google"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -161,7 +161,7 @@
 	</test>  CreaCliente -->
 	
 	
-	<test thread-count="5" name="Loguea un cliente con éxito con ICGCloud"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente con éxito con ICGCloud"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -191,7 +191,7 @@
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Loguea un cliente erróneo con ICGCloud"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Loguea un cliente erróneo con ICGCloud"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -211,7 +211,7 @@
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Recordar cliente con ICGCloud"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Recordar cliente con ICGCloud"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="true" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -241,7 +241,7 @@
 		</classes>
 	</test> <!-- CreaCliente -->
 
-	<test thread-count="5" name="Login ICGCloud usuario PRT"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Login ICGCloud usuario PRT"  enabled="true" preserve-order="true">
 		<parameter name="resultadoEsperado" value="false" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="expectedTitle" value="PortalRest2" />
@@ -261,7 +261,7 @@
 	</test> <!-- CreaCliente -->
 
  	<!--Validar Informacion Personal del cliente logeado en PRT -->
-	<test name="Prueba de Validacion: Información personal del cliente logeado en PRT"  enabled="false" preserve-order="true">
+	<test name="Prueba de Validacion: Información personal del cliente logeado en PRT"  enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa" />
 		<parameter name="shop" value="52704" />
 		<parameter name="name" value="portaltest88" />
@@ -284,7 +284,7 @@
 	</test>	
  
 	<!--Validar Informacion Personal del cliente logeado en PRT ICGCLOUD -->
-	<test name="Prueba de Validacion: Información personal del cliente logeado en PRT ICGCLOUD"  enabled="false" preserve-order="true">
+	<test name="Prueba de Validacion: Información personal del cliente logeado en PRT ICGCLOUD"  enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="shop" value="54066" />
 		
@@ -308,7 +308,7 @@
 	</test>	
 	<!-- -->
 
-  	<test  name="Prueba de registrar un nuevo usuario(ICGCLOUD) y comprobar su informacion personal"  enabled="false" preserve-order="true">
+  	<test  name="Prueba de registrar un nuevo usuario(ICGCLOUD) y comprobar su informacion personal"  enabled="true" preserve-order="true">
   		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZiM0kjNyITP0NXZSRWa" />
 		<parameter name="shop" value="54066" />
   	   	<parameter name="ICGCloud" value="true"/>
@@ -324,7 +324,7 @@
 	    </classes>
  	</test>
  
- 	<test  name="Prueba de registrar un nuevo usuario y comprobar su informacion personal"  enabled="false" preserve-order="true">
+ 	<test  name="Prueba de registrar un nuevo usuario y comprobar su informacion personal"  enabled="true" preserve-order="true">
 	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
 	   	<parameter name="shop" value="52704"/>
    		<parameter name="ICGCloud" value=""/>
@@ -340,7 +340,7 @@
 	    </classes>
  	</test>
   
-    <test thread-count="5" name="Creación de nuevo cliente ICGCloud"  enabled="false"  preserve-order="true">
+    <test thread-count="5" name="Creación de nuevo cliente ICGCloud"  enabled="true"  preserve-order="true">
 	  <parameter name="resultadoEsperado" value="true"/>
 	  <parameter name="aceptoTerminos" value="true"/>
 	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa"/>
@@ -364,7 +364,7 @@
   </test> 
 
  	<!--Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT -->
- 	<test thread-count="5" name="Registrar nuevo usuario con correo y telefono que existen en la tienda PRT "  enabled="false" preserve-order="true">
+ 	<test thread-count="5" name="Registrar nuevo usuario con correo y telefono que existen en la tienda PRT "  enabled="true" preserve-order="true">
  		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="resultadoEsperado" value="false" />
@@ -384,7 +384,7 @@
 	</test><!--Registrar nuevo usuario  con correo y telefono que existen en la tienda PRT -->
 	
 	<!-- Registrar nuevo usuario  con correo que ya está en uso en la tienda PRT(ICGCloud) -->
-	<test thread-count="5" name="Creación de nuevo cliente ICGCloud con correo que ya está en uso"  enabled="false" preserve-order="true">
+	<test thread-count="5" name="Creación de nuevo cliente ICGCloud con correo que ya está en uso"  enabled="true" preserve-order="true">
 	  <parameter name="resultadoEsperado" value="false"/>
 	  <parameter name="aceptoTerminos" value="true"/>
 	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZiM0kjNyITP0NXZSRWa"/>
@@ -406,7 +406,7 @@
  	</test> <!-- Registrar nuevo usuario  con correo que ya está en uso en la tienda PRT(ICGCloud) -->
 
  	<!--Registrar nuevo usuario sin aceptar terminos y condiciones de uso en la tienda PRT -->
- 	<test thread-count="5" name="Registrar nuevo usuario sin aceptar terminos y condiciones de uso en PRT "  enabled="false" preserve-order="true">
+ 	<test thread-count="5" name="Registrar nuevo usuario sin aceptar terminos y condiciones de uso en PRT "  enabled="true" preserve-order="true">
  		<parameter name="expectedTitle" value="PortalRest2" />
 		<parameter name="classExpected" value="shop-data-title" />
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZSM2QTMyITP0NXZSRWa" />
@@ -449,7 +449,7 @@
  	</test><!-- Registrar nuevo usuario sin aceptar terminos y condiciones de uso en PRT(ICGCloud) -->
 
 	<!-- Registrar direccion -->
- 	<test  name="Prueba de registrar una direcciones(Creacion de direccion)"  enabled="false" preserve-order="true">
+ 	<test  name="Prueba de registrar una direcciones(Creacion de direccion)"  enabled="true" preserve-order="true">
 	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
 	   	<parameter name="shop" value="52704"/>
    		<parameter name="validationCliente" value="true" />
@@ -474,7 +474,7 @@
  	</test> <!-- Registrar  direccion -->
 
 	<!-- Modificar direccion -->
- 	<test  name="Prueba de Modificar direcciones(Modificacion de direccion)"  enabled="false" preserve-order="true">
+ 	<test  name="Prueba de Modificar direcciones(Modificacion de direccion)"  enabled="true" preserve-order="true">
 	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
 	   	<parameter name="shop" value="52704"/>
    		<parameter name="validationCliente" value="true" />
@@ -506,7 +506,7 @@
  	</test> <!-- Modificar  direccion -->
 
 	<!-- Eliminar direccion -->
- 	<test  name="Prueba de Eliminar direcciones(Suprimir direccion)"  enabled="false" preserve-order="true">
+ 	<test  name="Prueba de Eliminar direcciones(Suprimir direccion)"  enabled="true" preserve-order="true">
 	   	<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZSM2QTMyITP0NXZSRWa"/>  
 	   	<parameter name="shop" value="52704"/>
    		<parameter name="validationCliente" value="true" />

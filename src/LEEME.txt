@@ -24,7 +24,7 @@
   https://howtodoinjava.com/testng/testng-before-and-after-annotations/
   https://howtodoinjava.com/testng/testng-dependent-tests-examples/
   https://www.toolsqa.com/testng/testng-test-priority/
-  https://www.guru99.com/testng-report.html
+  https://www.guru99.com/testng-report.html    .
   https://www.toolsqa.com/testng/testng-asserts/
   
   Tutoriales Selenium
