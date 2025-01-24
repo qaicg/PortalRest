@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" [
+	<!ENTITY dependenciasGeneral SYSTEM "Ventas\\dependenciaGeneral.xml" > <!ENTITY entity-name "entity-value">
+]-->
+
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="QA04 - Test parcial PortalRest">
+<parameter name="modoSinVentana" value="true"></parameter>
+    <suite-files>
+        <suite-file path="src/Tarifas/TarifasCloudQuality04.xml"></suite-file>
+    </suite-files>
+</suite>

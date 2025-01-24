@@ -244,7 +244,7 @@ public class TestBase extends StringUtils {
 		//pathprofile = "C:\\Users\\"+TestBase.getCurrentUser()+"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\";
 		//options.addArguments("user-data-dir=" + pathprofile);
 		options.addArguments("chrome.switches", "--disable-extensions");
-		options.addArguments("--start-maximized");
+		
 		options.addArguments("--remote-allow-origins=*");
 
 		//options.addArguments("profile-directory=Default");
@@ -257,6 +257,8 @@ public class TestBase extends StringUtils {
 		if (Data.getInstance().isModoSinVentana() || modoSinVentana) {
 			options.addArguments("--headless");// ESTOS PARAMETROS EJECUTAN EL NAVEGADOR SIN PANTALLA
 			options.addArguments("--disable-gpu");// ESTOS PARAMETROS EJECUTAN EL NAVEGADOR SIN PANTALLA
+		}else {
+			options.addArguments("--start-maximized");
 		}
 		
 		//Ejecutar los tests desde CloudLicenseBeta
