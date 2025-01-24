@@ -6,8 +6,7 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
 <suite name="QA03 - Test completo PortalRest">
- 
- 
+ <parameter name="modoSinVentana" value="true"></parameter>
    <suite-files>
         <suite-file path="src/Ventas/VentasCloudQuality03.xml"></suite-file>
         <suite-file path="src/Clientes/ClientesCloudQuality03.xml"></suite-file>
