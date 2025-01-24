@@ -430,7 +430,7 @@
 	<test thread-count="5" name="Creación de nuevo cliente ICGCloud sin aceptar terminos y condiciones de uso"  enabled="true" preserve-order="true">
 	  <parameter name="resultadoEsperado" value="false"/>
 	  <parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DATPrNXYmETPtZyMzEzNxITP0NXZSRWa"/>
-  	  <parameter name="shop" value="51983"/>
+<!--  	  <parameter name="shop" value="51983"/>-->
 	  <parameter name="expectedTitle" value="PortalRest2"/>
 	  <parameter name="classExpected" value = "shop-data-title"/>
 	  <parameter name="login" value="Registrarme"/>

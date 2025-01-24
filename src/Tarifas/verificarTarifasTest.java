@@ -29,6 +29,7 @@ public class verificarTarifasTest extends TestBase {
 		}
 		
 		//Encuentro el listado de productos
+		espera(2000);
 		
 		List<WebElement> elements = driver.findElements(By.xpath("//app-product-item-list"));
 		

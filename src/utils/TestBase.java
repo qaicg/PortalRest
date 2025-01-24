@@ -256,7 +256,10 @@ public class TestBase extends StringUtils {
 
 		if (Data.getInstance().isModoSinVentana() || modoSinVentana) {
 			options.addArguments("--headless");// ESTOS PARAMETROS EJECUTAN EL NAVEGADOR SIN PANTALLA
+			options.addArguments("--window-size=1920,1080");
+			options.addArguments("--no-sandbox");
 			options.addArguments("--disable-gpu");// ESTOS PARAMETROS EJECUTAN EL NAVEGADOR SIN PANTALLA
+			//options.addArguments("--force-device-scale-factor=0.50");
 		}else {
 			options.addArguments("--start-maximized");
 		}
