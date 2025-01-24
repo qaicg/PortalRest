@@ -84,7 +84,7 @@ public class PaymentResource {
 		
 		public static String textMessageErrorAlCancelarPago = "Operación cancelada. El usuario no desea seguir."; //Mesage al confirmar la cancelación de la transacción parte del cliente
 		
-		public static String resultPagoErrorBizumXpath = "//div[contains(@class, 'result-header')]//div[contains(@class, 'result-code error')]//text[contains(@lngid, 'errorBizum9673')]"; //Información que el pago del pedido ha sido cancelado por parte del cliente.
+		public static String resultPagoErrorBizumXpath = "//div[contains(@class, 'result-header')]//div[contains(@class, 'result-code error')]"; //Información que el pago del pedido ha sido cancelado por parte del cliente.
 		
 		//** Numero no activado para compra Bizum
 		public static String numeroNoActivadoEnBizumXpath = "//span[contains(@id, 'mensaje-error-no-disp')]";
