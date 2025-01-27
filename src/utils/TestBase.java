@@ -395,6 +395,7 @@ public class TestBase extends StringUtils {
 	}
 
 	public void log(String s) {
+		System.out.println(new Date());
 		System.out.println(s);
 		try {
 			Data.getInstance().getExtentTest().info(s);
