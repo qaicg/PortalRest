@@ -280,19 +280,11 @@ public class TestBase extends StringUtils {
 
 		
 
-		try {
-			//Clean cookies
-			driver.manage().deleteAllCookies();
-			Data.getInstance().setExtentTest(Data.getInstance().getExtentTestSuite().createNode(testContext.getName()));
-			td.displayTray("Iniciando test " + testContext.getName());
-			log("Iniciando " + testContext.getName());
-
-		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			//clear_cache();
-			e.printStackTrace();
-			
-		}
+		//Clean cookies
+		driver.manage().deleteAllCookies();
+		Data.getInstance().setExtentTest(Data.getInstance().getExtentTestSuite().createNode(testContext.getName()));
+		//td.displayTray("Iniciando test " + testContext.getName());
+		log("Iniciando " + testContext.getName());
 		
 		initServerTestCloudQuality(servidor);
 	}
@@ -356,21 +348,10 @@ public class TestBase extends StringUtils {
 
 	@AfterSuite
 	public void endSession() {
-		try {
-			log("Ejecución de pruebas finalizada");
-			td.displayTray("Ejecución de pruebas finalizada");
-			Data.getInstance().getExtentTestSuite().createNode("Test Finalizado");
-			Data.getInstance().getExtentReport().flush();
-			
-			//driver.manage().deleteAllCookies();
-			
-			//espera(2000);
-			//Desktop.getDesktop().browse(htmlFile.toURI());
-	
-		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} // catch (IOException e) {
+		log("Ejecución de pruebas finalizada");
+		//td.displayTray("Ejecución de pruebas finalizada");
+		Data.getInstance().getExtentTestSuite().createNode("Test Finalizado");
+		Data.getInstance().getExtentReport().flush();
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		// }

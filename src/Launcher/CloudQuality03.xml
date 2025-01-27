@@ -11,7 +11,7 @@
         <suite-file path="src/Ventas/VentasCloudQuality03.xml"></suite-file>
         <suite-file path="src/Clientes/ClientesCloudQuality03.xml"></suite-file>
         <suite-file path="src/VentasConPropinas/PropinasCloudQuality03.xml"></suite-file>
-    </suite-files>
+    </suite-files> 
     
     
 </suite>
