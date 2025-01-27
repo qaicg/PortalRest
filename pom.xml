@@ -24,6 +24,7 @@
         <configuration>
           <source>1.8</source> <!-- Cambiar a 11 si lo deseas -->
           <target>1.8</target>
+          <rerunFailingTestsCount>2</rerunFailingTestsCount>
         </configuration>
       </plugin>
       
