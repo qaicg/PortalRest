@@ -31,7 +31,6 @@
 	<parameter name="pedidoMasTarde" value="false" /> <!-- realizar pedido por mas tarde con avisar por email al cliente -->
 	<parameter name="pedidoDiaHora" value="false" /> <!-- Realizar pedido seleccionando dia y hora por la entregada -->
 	
-	<parameter name="modoSinVentana" value="false" /> <!--modo sin ventana para test case o test suite -->
 
 	<!-- Determinar el servidor -->
 	<parameter name="servidor" value="cloudquality04" />
