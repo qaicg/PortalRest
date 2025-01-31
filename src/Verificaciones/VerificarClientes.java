@@ -36,6 +36,7 @@ public class VerificarClientes extends TestBase {
 
 		} else {
 			log("Cliente erróneo: Correo entrada " + email + " obtenido " + user);
+		    
 			Assert.assertTrue(false);
 		}
 

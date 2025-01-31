@@ -1166,7 +1166,7 @@
 		</classes>
 	</test>
 	
-	<test name="Prueba de venta simple con 4 artículos normales y Registro de nuevo usuario en el carrito desde PRT(FRS sin HioPosCloud)"              enabled="true" preserve-order="true">
+	<test name="Prueba de venta simple con 4 artículos normales y Registro de nuevo usuario en el carrito desde PRT(FRS sin HioPosCloud)"  enabled="true" preserve-order="true">
 		<parameter name="Url" value="https://www.portalrest.com/index.html?data=%3DETP2J3cmATPrNXYmITPtZCO1EzM4ITP0NXZSRWa" />
 		<parameter name="shop" value="66920" />
 		

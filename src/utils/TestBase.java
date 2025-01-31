@@ -305,15 +305,16 @@ public class TestBase extends StringUtils {
 				FileUtils.copyFile(scrFile, destFile);
 				//Reporter.log("<a href='" + destFile.getAbsolutePath() + "'> <img src='" + destFile.getAbsolutePath()
 				//		+ "' height='100' width='100'/> </a>");
-			
+				Data.getInstance().getExtentTest().addScreenCaptureFromPath(destFile.getAbsolutePath());
 				Data.getInstance().getExtentTest().fail("details", MediaEntityBuilder.createScreenCaptureFromPath(destFile.getAbsolutePath()).build());
+				Assert.assertTrue(false);
 				
 			} catch (IOException e) {
 				System.out.println("Failed in getResult function.");
 				e.printStackTrace();
 			}
 			
-			throw new Exception("was bound to fail!!!");
+			throw new Exception("");
 		}
 
 	}
