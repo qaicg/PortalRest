@@ -172,7 +172,15 @@ public class TestBase extends StringUtils {
 		
 		    Data.getInstance().initializeExtentReport();
 		    String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(Calendar.getInstance().getTime());
-			Data.getInstance().setSparkReporter(new ExtentSparkReporter("target/Spark/"+servidor+"/spark.html"));
+		    
+		    if(suiteName.contains("_Retry")) {
+				Data.getInstance().setSparkReporter(new ExtentSparkReporter("target/Spark/"+servidor+"/Retry_Spark.html"));
+
+		    }else {
+				Data.getInstance().setSparkReporter(new ExtentSparkReporter("target/Spark/"+servidor+"/spark.html"));
+
+		    }
+			
 			Data.getInstance().getSparkReporter().config().setEncoding("ANSI");
 			Data.getInstance().getExtentReport().attachReporter(Data.getInstance().getSparkReporter());	
 			Data.getInstance().setExtentTestSuite(Data.getInstance().getExtentReport().createTest(suiteName));

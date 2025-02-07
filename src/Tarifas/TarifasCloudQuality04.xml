@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite parallel="false" name="Suite">
  
- <parameter name="suiteName" value="Tarifas cloudQuality04" /> <!--Titulo de la página -->
+ <parameter name="suiteName" value="Tarifas_cloudQuality04" /> <!--Titulo de la página -->
  <parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
   <!-- Determinar el servidor -->
   <parameter name="servidor" value="cloudquality04" />

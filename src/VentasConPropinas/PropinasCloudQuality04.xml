@@ -9,7 +9,7 @@
 		<listener class-name="retryFailedTest.AnnotationTransformer" />
 		
 	</listeners>
-	<parameter name="suiteName" value="Propinas CloudQuality04" /> <!--Titulo de la página -->
+	<parameter name="suiteName" value="Propinas_CloudQuality04" /> <!--Titulo de la página -->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 	<parameter name="formaPago" value="Redsys Test" /> <!--Nombre de la forma de pago con la que se finalizara por defecto una venta -->

@@ -6,11 +6,11 @@
 
 	<listeners>
 		<listener class-name="com.vimalselvam.testng.listener.ExtentTestNgFormatter" /> 
-		
-	</listeners>
+<!--		<listener class-name="listeners.MyTestListener" />-->
+		</listeners>
 
 	<parameter name="login" value="Registrarme" />
-	<parameter name="suiteName" value="Clientes CloudQuality04" /> <!--Titulo de la página -->
+	<parameter name="suiteName" value="Clientes_CloudQuality04" /> <!--Titulo de la página -->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 

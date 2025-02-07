@@ -7,12 +7,11 @@
 
 <suite name="*Test* Pruebas de ventas en PortalRest  (**Servidor MASTER QA04 -> https://cloudquality04.hiopos.com/portalrest**)" thread-count="1" preserve-order="true">
 
-	<listeners>
-		<!-- Repetir los tests que fallan x  veces -->
-	</listeners>	
+		<listeners>
+		    <listener class-name="listeners.MyTestListener" />
+		</listeners>
 	
-	
-	<parameter name="suiteName" value="Ventas cloudQuality04" /> <!--Titulo de la página -->
+	<parameter name="suiteName" value="Ventas_cloudQuality04" /> <!--Titulo de la página -->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia -->
 	<parameter name="formaPago" value="Redsys Test" /> <!--Nombre de la forma de pago con la que se finalizara por defecto una venta -->
