@@ -11,6 +11,11 @@
 		
 		
 	</listeners>	
+	
+	
+<!--	<parameter name="modoSinVentana" value="false"></parameter>-->
+	
+	
 	<parameter name="suiteName" value="Ventas cloudQuality03" /> <!--Titulo de la página -->
 	<parameter name="expectedTitle" value="PortalRest2" /> <!--Titulo de la página -->
 	<parameter name="xpathExpected" value="//li[contains(@class,'familyItem')]" /> <!--Clase en la que encontramos cada elemento familia !-->

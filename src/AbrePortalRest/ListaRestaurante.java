@@ -116,7 +116,7 @@ public class ListaRestaurante extends TestBase{
 		org.testng.Assert.assertTrue(howButtonSelect.get(0).getText().contentEquals(literalButtonSelect), "Error: No hemos encontrado El literal " + literalButtonSelect + " esperado en el botón uno de ¿Cómo? ");
 		
 		//clicar en el local
-		if(Data.getInstance().getConfigServer().getName() == EnumServidor.QUALITY04.getServerName()) {
+		if(Data.getInstance().getConfigServer().getName() == EnumServidor.QUALITY04.getServerName() || Data.getInstance().getConfigServer().getName() == EnumServidor.QUALITY03.getServerName()) {
 			String buttonEnLocalXpath = "//button[@class='how-when-button ng-star-inserted']//div/div[contains(text(), 'En el local')]";
 			WebElement buttonEnLocal = getElementByFluentWait(By.xpath(buttonEnLocalXpath), 30, 5);
 			clicJS(buttonEnLocal);
