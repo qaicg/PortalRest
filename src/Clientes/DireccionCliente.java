@@ -137,19 +137,21 @@ public class DireccionCliente extends TestBase {
 		espera(1000);
     	
     	selectAddress("delete", direccion); //Supprimir la direccion
-		espera(500);
+		espera(2000);
 		    	
     	atras();
-    	espera(500);
+    	espera(2000);
     	atras();
-    	espera(500);
+    	espera(2000);
     	abrirMisDirecciones(miPefil, misDireccoines);
-    	espera(500);
+    	espera(2000);
 
     	if (!isElementPresent(By.xpath("//div[contains(@class,'user-address-container')]"))) {   		
     		w2.until(ExpectedConditions.presenceOfElementLocated(By.tagName("app-simple-address-list")));
     	}
 	    
+    	espera(2000);
+    	
     	if(isAddressValidated(direccion)) {
     		log("Error. Sigo viendo la dirección despues de borrarla");
     		Assert.assertTrue(false);    		
@@ -158,7 +160,7 @@ public class DireccionCliente extends TestBase {
     	log("Se confirma visualmente que la dirección "+direccion+" ya no aparece en el listado");
     	
     	setAddressAndNumber(direccion, numero);
-    	
+    	espera(2000);
     	if(isAddressValidatedDB(address, number, email, shop)) {
     		log("Error. La dirección se encuentra activa en BBDD");
 			Assert.assertTrue(false);
@@ -203,12 +205,12 @@ public class DireccionCliente extends TestBase {
         		String addressLine = listaDirecciones.get(i).findElements(By.xpath(".//div[contains(@class,'user-address-line')]")).get(0).getAttribute("innerText");
         		if(addressLine.equalsIgnoreCase(address) && isElementPresent(by)) {
         			clicJS(listaDirecciones.get(i).findElement(by)); //SELECCIONO BORRAR DIRECCION
-        			espera(500);
+        			espera(1000);
         			
         			if(action.equalsIgnoreCase("delete")) {
 	        			clicJS(driver.findElement(By.xpath("//div[@class='msg-dialog-buttons']//button[2]"))); //CONFIRMO QUE QUIERO BORRAR
 	        			log("Dirección "+addressLine+" borrada");
-	        			espera(500);
+	        			espera(1000);
         			}
         			break;
         		}
